@@ -350,7 +350,9 @@ public class MovieSessionService implements IService<MovieSession> {
             CinemaHall cinemaHall = cinemaHallService.getCinemaHallById(rs.getLong("hall_id"));
 
             if (film == null || cinemaHall == null) {
-                log.warn("Missing required entities for movie session id: " + rs.getLong("id"));
+                log.warn("Missing required entities for movie session id: " + rs.getLong("id")
+                        + " - Film ID: " + rs.getLong("movie_id")
+                        + ", CinemaHall ID: " + rs.getLong("hall_id"));
                 return null;
             }
 
@@ -534,7 +536,7 @@ public class MovieSessionService implements IService<MovieSession> {
      */
     public List<Film> getFilmsByCinemaId(Long cinemaId) {
         List<Film> films = new ArrayList<>();
-        String query = "SELECT DISTINCT f.* FROM films f " +
+        String query = "SELECT DISTINCT f.* FROM movies f " +
                 "JOIN screenings ms ON f.id = ms.movie_id " +
                 "JOIN cinema_halls ch ON ms.hall_id = ch.id " +
                 "WHERE ch.cinema_id = ?";

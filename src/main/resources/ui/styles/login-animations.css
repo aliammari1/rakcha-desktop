@@ -87,7 +87,7 @@
 
 /* Background Gradient Animation */
 .animated-background {
-    -fx-background-color: linear-gradient(45deg, #0a0a0a 0%, #1a0a0a 25%, #2a0f0f 50%, #1a0606 75%, #0a0a0a 100%);
+    -fx-background-color: linear-gradient(to bottom right, #0a0a0a 0%, #1a0a0a 25%, #2a0f0f 50%, #1a0606 75%, #0a0a0a 100%);
 }
 
 /* Glow Effects */
@@ -126,7 +126,7 @@
     -fx-background-color: transparent;
 }
 
-.date-picker > .text-field {
+.date-picker>.text-field {
     -fx-background-color: transparent;
     -fx-text-fill: white;
     -fx-prompt-text-fill: #555555;

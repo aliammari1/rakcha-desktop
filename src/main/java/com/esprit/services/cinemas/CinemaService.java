@@ -2,6 +2,7 @@ package com.esprit.services.cinemas;
 
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.users.CinemaManager;
+import com.esprit.models.users.User;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
@@ -30,31 +31,38 @@ public class CinemaService implements IService<Cinema> {
 
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
-        "id", "name", "address", "manager_id", "logo_url", "status"
+            "id", "name", "address", "manager_id", "logo_url", "status"
     };
     private final Connection connection;
     private final UserService userService;
 
     /**
-     * Initialize the service by obtaining a database connection, creating a UserService, and ensuring the cinema table exists.
+     * Initialize the service by obtaining a database connection, creating a
+     * UserService, and ensuring the cinema table exists.
      *
-     * <p>Establishes the JDBC connection used by the service, instantiates dependencies, and creates the `cinema` table
-     * if it does not already exist.</p>
+     * <p>
+     * Establishes the JDBC connection used by the service, instantiates
+     * dependencies, and creates the `cinema` table
+     * if it does not already exist.
+     * </p>
      */
     public CinemaService() {
         this.connection = DataSource.getInstance().getConnection();
         this.userService = new UserService();
     }
 
-
     /**
      * Insert a new Cinema record into the database.
      * <p>
-     * If the cinema's status is null, the status is set to "Pending" before insertion.
+     * If the cinema's status is null, the status is set to "Pending" before
+     * insertion.
      *
-     * @param cinema the Cinema to persist; must have a non-null manager with a non-null id
-     * @throws IllegalArgumentException if the cinema has no manager or the manager has no id
-     * @throws RuntimeException         if a database error prevents creating the cinema
+     * @param cinema the Cinema to persist; must have a non-null manager with a
+     *               non-null id
+     * @throws IllegalArgumentException if the cinema has no manager or the manager
+     *                                  has no id
+     * @throws RuntimeException         if a database error prevents creating the
+     *                                  cinema
      */
     @Override
     /**
@@ -77,7 +85,6 @@ public class CinemaService implements IService<Cinema> {
                 throw new IllegalArgumentException("Cinema must have a valid manager with an ID");
             }
 
-
             stmt.setString(4, cinema.getLogoUrl());
             stmt.setString(5, cinema.getStatus() != null ? cinema.getStatus() : "Pending");
             stmt.executeUpdate();
@@ -89,13 +96,14 @@ public class CinemaService implements IService<Cinema> {
 
     }
 
-
     /**
      * Update the database record identified by the given cinema's id.
      * <p>
-     * Updates the record's name, address, logoPath, and status to match the provided Cinema object.
+     * Updates the record's name, address, logoPath, and status to match the
+     * provided Cinema object.
      *
-     * @param cinema the Cinema whose id identifies the record to update; its name, address, logoPath, and status will be saved
+     * @param cinema the Cinema whose id identifies the record to update; its name,
+     *               address, logoPath, and status will be saved
      */
     @Override
     /**
@@ -119,7 +127,6 @@ public class CinemaService implements IService<Cinema> {
         }
 
     }
-
 
     /**
      * Deletes the specified cinema from the database using its id.
@@ -145,7 +152,6 @@ public class CinemaService implements IService<Cinema> {
 
     }
 
-
     @Override
     /**
      * Retrieves cinemas with pagination support.
@@ -159,11 +165,10 @@ public class CinemaService implements IService<Cinema> {
 
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
-            !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
             log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-
 
         try {
             // Get total count
@@ -174,7 +179,7 @@ public class CinemaService implements IService<Cinema> {
             final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
 
             try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
-                 ResultSet rs = stmt.executeQuery()) {
+                    ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Cinema cinema = buildCinema(rs);
                     if (cinema != null) {
@@ -185,7 +190,6 @@ public class CinemaService implements IService<Cinema> {
 
             }
 
-
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
         } catch (final SQLException e) {
@@ -195,20 +199,25 @@ public class CinemaService implements IService<Cinema> {
 
     }
 
-
     /**
      * Retrieve a page of cinemas sorted by the specified column.
      * <p>
-     * Validates the requested sort column against the allowed set; if invalid, the result
-     * uses the service's default sorting. The returned Page contains the cinemas for the
+     * Validates the requested sort column against the allowed set; if invalid, the
+     * result
+     * uses the service's default sorting. The returned Page contains the cinemas
+     * for the
      * requested page and page size.
      *
      * @param pageRequest pagination information (page index and page size)
-     * @param orderBy     column name to sort by (must be one of the allowed sort columns)
-     * @return a Page of cinemas sorted by the requested column for the given page; if the
-     * sort column is invalid, the page is returned using the default sort. In case
-     * of a query error the page contains whatever rows were retrieved (may be empty)
-     * and its total count equals the number of returned items.
+     * @param orderBy     column name to sort by (must be one of the allowed sort
+     *                    columns)
+     * @return a Page of cinemas sorted by the requested column for the given page;
+     *         if the
+     *         sort column is invalid, the page is returned using the default sort.
+     *         In case
+     *         of a query error the page contains whatever rows were retrieved (may
+     *         be empty)
+     *         and its total count equals the number of returned items.
      */
     public Page<Cinema> sort(PageRequest pageRequest, String orderBy) {
         List<Cinema> cinemas = new ArrayList<>();
@@ -238,7 +247,6 @@ public class CinemaService implements IService<Cinema> {
         return new Page<>(cinemas, pageRequest.getPage(), pageRequest.getSize(), cinemas.size());
     }
 
-
     /**
      * Retrieves a cinema by its ID.
      *
@@ -260,7 +268,6 @@ public class CinemaService implements IService<Cinema> {
 
         return null;
     }
-
 
     /**
      * Retrieves a cinema by its name.
@@ -284,24 +291,37 @@ public class CinemaService implements IService<Cinema> {
         return null;
     }
 
-
     /**
      * Construct a Cinema object from the current row of the given ResultSet.
      *
-     * @param rs the ResultSet positioned at the row to map; must contain columns: id, name, address, manager_id, logo_path, status
-     * @return the mapped Cinema, or `null` if the referenced manager is not found or a SQL error occurs
+     * @param rs the ResultSet positioned at the row to map; must contain columns:
+     *           id, name, address, manager_id, logo_path, status
+     * @return the mapped Cinema, or `null` if the referenced manager is not found
+     *         or a SQL error occurs
      */
     private Cinema buildCinema(ResultSet rs) {
         try {
-            CinemaManager manager = (CinemaManager) userService.getUserById(rs.getLong("manager_id"));
-            if (manager == null) {
-                log.warn("Cinema manager not found for cinema id: " + rs.getLong("id"));
-                return null;
+            User user = userService.getUserById(rs.getLong("manager_id"));
+            CinemaManager manager = null;
+            if (user instanceof CinemaManager) {
+                manager = (CinemaManager) user;
+            } else if (user != null) {
+                log.warn("User with id " + rs.getLong("manager_id") + " is associated with cinema " + rs.getLong("id")
+                        + " but is not a CinemaManager (Role: " + user.getRole() + ")");
+                // Manager remains null to avoid ClassCastException in model
             }
 
-
+            if (manager == null && user == null) {
+                log.warn("Cinema manager not found for cinema id: " + rs.getLong("id"));
+                // We choose to return null for the cinema or return cinema with null manager?
+                // Returning null cinema hides it. Returning cinema with null manager shows it
+                // but empty manager field.
+                // User said "i dont see all cinemas", so we should probably return the cinema
+                // even if manager is invalid.
+            }
+            // Continuing to build cinema, manager might be null
             return Cinema.builder().id(rs.getLong("id")).name(rs.getString("name")).address(rs.getString("address"))
-                .manager(manager).logoUrl(rs.getString("logo_url")).status(rs.getString("status")).build();
+                    .manager(manager).logoUrl(rs.getString("logo_url")).status(rs.getString("status")).build();
         } catch (SQLException e) {
             log.error("Error building cinema from ResultSet", e);
             return null;
@@ -352,7 +372,7 @@ public class CinemaService implements IService<Cinema> {
         List<Cinema> cinemas = new ArrayList<>();
         String query = "SELECT * FROM cinemas";
         try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Cinema cinema = buildCinema(rs);
                 if (cinema != null) {
@@ -383,7 +403,7 @@ public class CinemaService implements IService<Cinema> {
     public int count() {
         String query = "SELECT COUNT(*) FROM cinemas";
         try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }

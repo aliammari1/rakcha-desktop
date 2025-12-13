@@ -53,7 +53,7 @@
 
     <Circle fx:id="shape4" radius="25" layoutX="1050" layoutY="500"
             styleClass="pulsing-shape, glow-red"
-            style="-fx-fill: linear-gradient(center 50%, radius 50%, rgba(255, 102, 102, 0.7), rgba(139, 0, 0, 0.3));
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, rgba(255, 102, 102, 0.7), rgba(139, 0, 0, 0.3));
                    -fx-stroke: #ff6666;
                    -fx-stroke-width: 2;
                    -fx-effect: dropshadow(gaussian, rgba(255, 102, 102, 0.8), 18, 0, 0, 0);

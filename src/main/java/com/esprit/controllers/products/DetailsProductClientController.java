@@ -178,7 +178,7 @@ public class DetailsProductClientController implements Initializable {
     private HBox createProductCard(final Product produit) {
         // Créer une carte pour le produit avec ses informations
         final HBox cardContainer = new HBox();
-        cardContainer.setStyle("-fx-padding: 10px 0 0  50px;"); // Ajout de remplissage à gauche pour le décalage
+        cardContainer.getStyleClass().add("product-details-container");
         final AnchorPane card = new AnchorPane();
         // Image du Product
         final ImageView imageView = new ImageView();
@@ -203,20 +203,18 @@ public class DetailsProductClientController implements Initializable {
 
         // Nom du Product
         final Label nameLabel = new Label(produit.getName());
-        nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-        nameLabel.setStyle("-fx-text-fill: #333333;");
+        nameLabel.getStyleClass().add("product-title");
         nameLabel.setLayoutX(400);
         nameLabel.setLayoutY(30);
         nameLabel.setMaxWidth(200); // Ajuster la largeur maximale selon vos besoins
         nameLabel.setWrapText(true); // Activer le retour à la ligne automatique
         // Prix du Product
         final Label priceLabel = new Label(" " + produit.getPrice() + " DT");
-        priceLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        priceLabel.getStyleClass().add("product-price");
         priceLabel.setLayoutX(410);
         priceLabel.setLayoutY(200);
         final Label descriptionLabel = new Label(produit.getDescription());
-        descriptionLabel.setFont(Font.font("Arial", 14));
-        descriptionLabel.setTextFill(Color.web("#392c2c")); // Définir la même couleur de texte que descriptionText
+        descriptionLabel.getStyleClass().add("product-description");
         descriptionLabel.setLayoutX(410);
         descriptionLabel.setLayoutY(95);
         descriptionLabel.setMaxWidth(250); // Ajuster la largeur maximale selon vos besoins
@@ -225,14 +223,7 @@ public class DetailsProductClientController implements Initializable {
         final Button addToCartButton = new Button("Add to Cart", new FontIcon("mdi2c-cart-plus"));
         addToCartButton.setLayoutX(435);
         addToCartButton.setLayoutY(300);
-        // addToCartButton.getStyleClass().add("sale"); // Style du bouton
-        addToCartButton.setStyle("""
-                -fx-background-color: #dd4f4d;
-                    -fx-text-fill: #FFFFFF;
-                    -fx-font-size: 12px;
-                    -fx-font-weight: bold;
-                    -fx-padding: 10px 10px;\
-                """);
+        addToCartButton.getStyleClass().addAll("hero-btn", "primary");
         addToCartButton.setOnAction(event -> {
             final long produitId = produit.getId();
             final int quantity = 1; // Vous pouvez ajuster la quantité en fonction de vos besoins
@@ -254,8 +245,7 @@ public class DetailsProductClientController implements Initializable {
         final String format = "%.1f/5"
                 .formatted(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR).doubleValue());
         final Label etoilelabel = new Label(format);
-        etoilelabel.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-        etoilelabel.setStyle("-fx-text-fill: #333333;");
+        etoilelabel.getStyleClass().add("product-rating-label");
         etoilelabel.setLayoutX(410);
         etoilelabel.setLayoutY(230);
         final FontIcon iconeetoile = new FontIcon();

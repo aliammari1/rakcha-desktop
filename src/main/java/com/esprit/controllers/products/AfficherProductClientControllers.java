@@ -10,6 +10,7 @@ import com.esprit.services.products.ShoppingCartService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.Chat;
 import com.esprit.utils.PageRequest;
+import com.esprit.utils.SessionManager;
 import com.esprit.utils.SlideOverNavigator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -365,8 +366,7 @@ public class AfficherProductClientControllers implements Initializable {
         addToCartButton.setLayoutY(330);
         addToCartButton.getStyleClass().add("sale");
         addToCartButton.setOnAction(event -> {
-            final Stage stage = (Stage) this.shoppingcartFlowPane.getScene().getWindow();
-            AfficherProductClientControllers.LOGGER.info(stage.getUserData().toString());
+            AfficherProductClientControllers.LOGGER.info(SessionManager.getCurrentUser().toString());
             final long produitId = Product.getId();
             final int quantity = 1; // Vous pouvez ajuster la quantité en fonction de vos besoins
             this.ajouterAuShoppingCart(produitId, quantity);
@@ -441,7 +441,7 @@ public class AfficherProductClientControllers implements Initializable {
             final ShoppingCart shoppingcart = new ShoppingCart();
             shoppingcart.setProduct(produit);
             shoppingcart.setQuantity(quantity);
-            final Client client = (Client) this.shoppingcartFlowPane.getScene().getWindow().getUserData();
+            final Client client = (Client) SessionManager.getCurrentUser();
             shoppingcart.setUser(client);
             shoppingcartService.create(shoppingcart);
             this.afficherShoppingCart(produit); // Utilisez le produit ajouté pour afficher dans le shoppingcart
@@ -993,7 +993,7 @@ public class AfficherProductClientControllers implements Initializable {
             alert.showAndWait();
         } else {
             // Créez un objet Comment
-            final Client client = (Client) this.txtAreaComments.getScene().getWindow().getUserData();
+            final Client client = (Client) SessionManager.getCurrentUser();
             final Review comment = new Review(client, userMessage, produitService.getProductById(this.produitId));
             final ReviewService commentService = new ReviewService();
             // Ajoutez le comment à la base de données

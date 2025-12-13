@@ -12,6 +12,7 @@ import com.esprit.services.series.SeriesService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.Page;
 import com.esprit.utils.PageRequest;
+import com.esprit.utils.SessionManager;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
@@ -317,11 +318,11 @@ public class HomeAdminController implements Initializable {
             mainScrollPane.setFitToHeight(false);
             mainScrollPane.setPannable(true);
             mainScrollPane.setStyle(
-                "-fx-background-color: transparent;" +
-                    "-fx-background: transparent;" +
-                    "-fx-focus-color: transparent;" +
-                    "-fx-faint-focus-color: transparent;" +
-                    "");
+                    "-fx-background-color: transparent;" +
+                            "-fx-background: transparent;" +
+                            "-fx-focus-color: transparent;" +
+                            "-fx-faint-focus-color: transparent;" +
+                            "");
         }
 
         // Configure recent users scroll pane
@@ -332,10 +333,10 @@ public class HomeAdminController implements Initializable {
             recentUsersScrollPane.setFitToHeight(false);
             recentUsersScrollPane.setPannable(true);
             recentUsersScrollPane.setStyle(
-                "-fx-background-color: transparent;" +
-                    "-fx-background: transparent;" +
-                    "-fx-focus-color: transparent;" +
-                    "-fx-faint-focus-color: transparent;");
+                    "-fx-background-color: transparent;" +
+                            "-fx-background: transparent;" +
+                            "-fx-focus-color: transparent;" +
+                            "-fx-faint-focus-color: transparent;");
         }
 
         // Configure recent content scroll pane
@@ -346,10 +347,10 @@ public class HomeAdminController implements Initializable {
             recentContentScrollPane.setFitToHeight(false);
             recentContentScrollPane.setPannable(true);
             recentContentScrollPane.setStyle(
-                "-fx-background-color: transparent;" +
-                    "-fx-background: transparent;" +
-                    "-fx-focus-color: transparent;" +
-                    "-fx-faint-focus-color: transparent;");
+                    "-fx-background-color: transparent;" +
+                            "-fx-background: transparent;" +
+                            "-fx-focus-color: transparent;" +
+                            "-fx-faint-focus-color: transparent;");
         }
 
         // Configure system logs scroll pane
@@ -360,10 +361,10 @@ public class HomeAdminController implements Initializable {
             systemLogsScrollPane.setFitToHeight(false);
             systemLogsScrollPane.setPannable(true);
             systemLogsScrollPane.setStyle(
-                "-fx-background-color: transparent;" +
-                    "-fx-background: transparent;" +
-                    "-fx-focus-color: transparent;" +
-                    "-fx-faint-focus-color: transparent;");
+                    "-fx-background-color: transparent;" +
+                            "-fx-background: transparent;" +
+                            "-fx-focus-color: transparent;" +
+                            "-fx-faint-focus-color: transparent;");
         }
 
     }
@@ -388,8 +389,8 @@ public class HomeAdminController implements Initializable {
             try {
                 if (rootContainer != null && rootContainer.getScene() != null) {
                     Stage stage = (Stage) rootContainer.getScene().getWindow();
-                    if (stage != null && stage.getUserData() instanceof User) {
-                        User currentUser = (User) stage.getUserData();
+                    if (SessionManager.getCurrentUser() != null) {
+                        User currentUser = SessionManager.getCurrentUser();
                         welcomeLabel.setText("Welcome back, Admin " + currentUser.getFirstName() + "!");
                     } else {
                         welcomeLabel.setText("Welcome back, System Administrator!");
@@ -439,7 +440,7 @@ public class HomeAdminController implements Initializable {
             Page<Product> products = productService.read(pageRequest);
             totalProducts = products.getTotalElements();
             updateStatCard(totalProductsLabel, totalProducts, productGrowthLabel,
-                calculateGrowthPercentage("products"));
+                    calculateGrowthPercentage("products"));
 
             // Load series statistics
             try {
@@ -534,14 +535,14 @@ public class HomeAdminController implements Initializable {
         for (int i = 0; i <= 20; i++) {
             long currentValue = startValue + (difference * i / 20);
             KeyFrame keyFrame = new KeyFrame(
-                duration.multiply((double) i / 20),
-                e -> {
-                    label.setText(String.valueOf(currentValue));
-                    if (currentValue == endValue) {
-                        label.getStyleClass().add("counter-animation");
-                    }
+                    duration.multiply((double) i / 20),
+                    e -> {
+                        label.setText(String.valueOf(currentValue));
+                        if (currentValue == endValue) {
+                            label.getStyleClass().add("counter-animation");
+                        }
 
-                });
+                    });
             timeline.getKeyFrames().add(keyFrame);
         }
 
@@ -556,7 +557,7 @@ public class HomeAdminController implements Initializable {
      *
      * @param metric the name of the metric (informational; currently unused)
      * @return a growth percentage as a double between -10.0 and +10.0 (negative for
-     * decline, positive for growth)
+     *         decline, positive for growth)
      */
     private double calculateGrowthPercentage(String metric) {
         // In a real implementation, this would compare with previous period data
@@ -568,7 +569,7 @@ public class HomeAdminController implements Initializable {
      * count and a small random offset.
      *
      * @return the simulated total orders equal to `totalProducts * 3` plus a random
-     * integer between 0 (inclusive) and 50 (exclusive)
+     *         integer between 0 (inclusive) and 50 (exclusive)
      */
     private long calculateTotalOrders() {
         // In real implementation, this would query order service
@@ -609,10 +610,10 @@ public class HomeAdminController implements Initializable {
                 addEnhancedActivityItem("🔐 Admin dashboard accessed", currentTime, "success");
                 addEnhancedActivityItem("📊 Statistics refreshed", getTimeAgo(2), "info");
                 addEnhancedActivityItem("👤 New user registration: " + generateRandomUserName(), getTimeAgo(5),
-                    "success");
+                        "success");
                 addEnhancedActivityItem("🎬 Movie catalog updated", getTimeAgo(15), "info");
                 addEnhancedActivityItem("🛒 Order #" + (1000 + random.nextInt(9000)) + " processed", getTimeAgo(30),
-                    "success");
+                        "success");
                 addEnhancedActivityItem("⚠️ System backup completed", getTimeAgo(60), "warning");
                 addEnhancedActivityItem("🔧 Database optimization finished", getTimeAgo(120), "info");
 
@@ -881,12 +882,12 @@ public class HomeAdminController implements Initializable {
         }
 
         String[] activities = {
-            "👤 User login detected",
-            "🎬 New movie added to catalog",
-            "🛒 Product purchase completed",
-            "📱 Mobile app access",
-            "🔧 System maintenance check",
-            "📊 Analytics report generated"
+                "👤 User login detected",
+                "🎬 New movie added to catalog",
+                "🛒 Product purchase completed",
+                "📱 Mobile app access",
+                "🔧 System maintenance check",
+                "📊 Analytics report generated"
         };
 
         String activity = activities[random.nextInt(activities.length)];
@@ -930,14 +931,14 @@ public class HomeAdminController implements Initializable {
         };
 
         activityItem.setStyle(String.format(
-            "-fx-padding: 12 15 12 15; " +
-                "-fx-background-color: %s; " +
-                "-fx-background-radius: 12; " +
-                "-fx-border-color: rgba(255, 255, 255, 0.1); " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 12; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);",
-            backgroundColor));
+                "-fx-padding: 12 15 12 15; " +
+                        "-fx-background-color: %s; " +
+                        "-fx-background-radius: 12; " +
+                        "-fx-border-color: rgba(255, 255, 255, 0.1); " +
+                        "-fx-border-width: 1; " +
+                        "-fx-border-radius: 12; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);",
+                backgroundColor));
 
         // Status indicator circle
         Circle indicator = new Circle(4);
@@ -948,24 +949,24 @@ public class HomeAdminController implements Initializable {
             default -> "#66ccff";
         };
         indicator.setStyle("-fx-fill: " + indicatorColor + "; -fx-effect: dropshadow(gaussian, " + indicatorColor
-            + ", 8, 0, 0, 0);");
+                + ", 8, 0, 0, 0);");
         indicator.getStyleClass().add("pulsing-indicator");
 
         // Activity text
         Label activityLabel = new Label(activity);
         activityLabel.setStyle(
-            "-fx-text-fill: white; " +
-                "-fx-font-family: 'Arial'; " +
-                "-fx-font-size: 13px; " +
-                "-fx-font-weight: normal;");
+                "-fx-text-fill: white; " +
+                        "-fx-font-family: 'Arial'; " +
+                        "-fx-font-size: 13px; " +
+                        "-fx-font-weight: normal;");
 
         // Timestamp
         Label timestampLabel = new Label(timestamp);
         timestampLabel.setStyle(
-            "-fx-text-fill: #aaaaaa; " +
-                "-fx-font-family: 'Arial'; " +
-                "-fx-font-size: 11px; " +
-                "-fx-font-style: italic;");
+                "-fx-text-fill: #aaaaaa; " +
+                        "-fx-font-family: 'Arial'; " +
+                        "-fx-font-size: 11px; " +
+                        "-fx-font-style: italic;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -1006,51 +1007,51 @@ public class HomeAdminController implements Initializable {
         HBox userCard = new HBox(12);
         userCard.setAlignment(Pos.CENTER_LEFT);
         userCard.setStyle(
-            "-fx-padding: 10 15 10 15; " +
-                "-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.15), rgba(50, 0, 0, 0.1)); "
-                +
-                "-fx-background-radius: 10; " +
-                "-fx-border-color: rgba(139, 0, 0, 0.3); " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 10; " +
-                "-fx-cursor: hand; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 2);");
+                "-fx-padding: 10 15 10 15; " +
+                        "-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.15), rgba(50, 0, 0, 0.1)); "
+                        +
+                        "-fx-background-radius: 10; " +
+                        "-fx-border-color: rgba(139, 0, 0, 0.3); " +
+                        "-fx-border-width: 1; " +
+                        "-fx-border-radius: 10; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 2);");
 
         // User avatar (placeholder)
         Circle avatar = new Circle(18);
         avatar.setStyle(
-            "-fx-fill: linear-gradient(to bottom right, #ff6666, #cc3333); " +
-                "-fx-stroke: white; " +
-                "-fx-stroke-width: 2; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 6, 0, 0, 1);");
+                "-fx-fill: linear-gradient(to bottom right, #ff6666, #cc3333); " +
+                        "-fx-stroke: white; " +
+                        "-fx-stroke-width: 2; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 6, 0, 0, 1);");
 
         // User info
         VBox userInfo = new VBox(2);
         Label nameLabel = new Label(user.getFirstName() + " " + user.getLastName());
         nameLabel.setStyle(
-            "-fx-text-fill: white; " +
-                "-fx-font-family: 'Arial'; " +
-                "-fx-font-size: 13px; " +
-                "-fx-font-weight: bold;");
+                "-fx-text-fill: white; " +
+                        "-fx-font-family: 'Arial'; " +
+                        "-fx-font-size: 13px; " +
+                        "-fx-font-weight: bold;");
 
         Label emailLabel = new Label(user.getEmail());
         emailLabel.setStyle(
-            "-fx-text-fill: #cccccc; " +
-                "-fx-font-family: 'Arial'; " +
-                "-fx-font-size: 11px;");
+                "-fx-text-fill: #cccccc; " +
+                        "-fx-font-family: 'Arial'; " +
+                        "-fx-font-size: 11px;");
 
         userInfo.getChildren().addAll(nameLabel, emailLabel);
 
         // Status indicator
         Label statusLabel = new Label("ACTIVE");
         statusLabel.setStyle(
-            "-fx-text-fill: #00ff7f; " +
-                "-fx-font-family: 'Arial'; " +
-                "-fx-font-size: 10px; " +
-                "-fx-font-weight: bold; " +
-                "-fx-background-color: rgba(0, 255, 127, 0.2); " +
-                "-fx-background-radius: 8; " +
-                "-fx-padding: 2 6 2 6;");
+                "-fx-text-fill: #00ff7f; " +
+                        "-fx-font-family: 'Arial'; " +
+                        "-fx-font-size: 10px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-background-color: rgba(0, 255, 127, 0.2); " +
+                        "-fx-background-radius: 8; " +
+                        "-fx-padding: 2 6 2 6;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -1060,20 +1061,20 @@ public class HomeAdminController implements Initializable {
         // Add hover effect
         userCard.setOnMouseEntered(e -> {
             userCard.setStyle(userCard.getStyle()
-                + "-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.25), rgba(50, 0, 0, 0.15));");
+                    + "-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.25), rgba(50, 0, 0, 0.15));");
         });
 
         userCard.setOnMouseExited(e -> {
             userCard.setStyle(
-                "-fx-padding: 10 15 10 15; " +
-                    "-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.15), rgba(50, 0, 0, 0.1)); "
-                    +
-                    "-fx-background-radius: 10; " +
-                    "-fx-border-color: rgba(139, 0, 0, 0.3); " +
-                    "-fx-border-width: 1; " +
-                    "-fx-border-radius: 10; " +
-                    "-fx-cursor: hand; " +
-                    "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 2);");
+                    "-fx-padding: 10 15 10 15; " +
+                            "-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.15), rgba(50, 0, 0, 0.1)); "
+                            +
+                            "-fx-background-radius: 10; " +
+                            "-fx-border-color: rgba(139, 0, 0, 0.3); " +
+                            "-fx-border-width: 1; " +
+                            "-fx-border-radius: 10; " +
+                            "-fx-cursor: hand; " +
+                            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 2);");
         });
 
         recentUsersContainer.getChildren().add(userCard);
@@ -1095,10 +1096,10 @@ public class HomeAdminController implements Initializable {
         HBox contentCard = new HBox(10);
         contentCard.setAlignment(Pos.CENTER_LEFT);
         contentCard.setStyle(
-            "-fx-padding: 8 12 8 12; " +
-                "-fx-background-color: rgba(40, 40, 40, 0.7); " +
-                "-fx-background-radius: 8; " +
-                "-fx-cursor: hand;");
+                "-fx-padding: 8 12 8 12; " +
+                        "-fx-background-color: rgba(40, 40, 40, 0.7); " +
+                        "-fx-background-radius: 8; " +
+                        "-fx-cursor: hand;");
 
         Label iconLabel = new Label(icon);
         iconLabel.setStyle("-fx-font-size: 16px;");
@@ -1106,16 +1107,16 @@ public class HomeAdminController implements Initializable {
         VBox contentInfo = new VBox(1);
         Label nameLabel = new Label(name);
         nameLabel.setStyle(
-            "-fx-text-fill: white; " +
-                "-fx-font-family: 'Arial'; " +
-                "-fx-font-size: 12px; " +
-                "-fx-font-weight: bold;");
+                "-fx-text-fill: white; " +
+                        "-fx-font-family: 'Arial'; " +
+                        "-fx-font-size: 12px; " +
+                        "-fx-font-weight: bold;");
 
         Label typeLabel = new Label(type);
         typeLabel.setStyle(
-            "-fx-text-fill: #888888; " +
-                "-fx-font-family: 'Arial'; " +
-                "-fx-font-size: 10px;");
+                "-fx-text-fill: #888888; " +
+                        "-fx-font-family: 'Arial'; " +
+                        "-fx-font-size: 10px;");
 
         contentInfo.getChildren().addAll(nameLabel, typeLabel);
         contentCard.getChildren().addAll(iconLabel, contentInfo);
@@ -1157,23 +1158,23 @@ public class HomeAdminController implements Initializable {
         };
 
         levelLabel.setStyle(
-            "-fx-text-fill: " + levelColor + "; " +
-                "-fx-font-family: 'Courier New'; " +
-                "-fx-font-size: 9px; " +
-                "-fx-font-weight: bold; " +
-                "-fx-min-width: 60px;");
+                "-fx-text-fill: " + levelColor + "; " +
+                        "-fx-font-family: 'Courier New'; " +
+                        "-fx-font-size: 9px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-min-width: 60px;");
 
         Label messageLabel = new Label(message);
         messageLabel.setStyle(
-            "-fx-text-fill: #dddddd; " +
-                "-fx-font-family: 'Courier New'; " +
-                "-fx-font-size: 10px;");
+                "-fx-text-fill: #dddddd; " +
+                        "-fx-font-family: 'Courier New'; " +
+                        "-fx-font-size: 10px;");
 
         Label timeLabel = new Label(timestamp);
         timeLabel.setStyle(
-            "-fx-text-fill: #888888; " +
-                "-fx-font-family: 'Courier New'; " +
-                "-fx-font-size: 9px;");
+                "-fx-text-fill: #888888; " +
+                        "-fx-font-family: 'Courier New'; " +
+                        "-fx-font-size: 9px;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -1234,15 +1235,15 @@ public class HomeAdminController implements Initializable {
 
             // Random red-themed colors
             String[] colors = {
-                "#ff4444", "#ff6666", "#ff3333", "#ff5555",
-                "#cc3333", "#aa2222", "#ff7777", "#bb0000"
+                    "#ff4444", "#ff6666", "#ff3333", "#ff5555",
+                    "#cc3333", "#aa2222", "#ff7777", "#bb0000"
             };
             String color = colors[random.nextInt(colors.length)];
 
             particle.setStyle(String.format(
-                "-fx-fill: radial-gradient(center 50%% 50%%, radius 50%%, %s, %s66); " +
-                    "-fx-effect: dropshadow(gaussian, %s, 12, 0, 0, 0);",
-                color, color, color));
+                    "-fx-fill: radial-gradient(center 50%% 50%%, radius 50%%, %s, %s66); " +
+                            "-fx-effect: dropshadow(gaussian, %s, 12, 0, 0, 0);",
+                    color, color, color));
 
             particle.setOpacity(0.4 + random.nextDouble() * 0.4);
             particle.getStyleClass().addAll("floating-particle", "dynamic-particle-" + (i % 3 + 1));
@@ -1283,8 +1284,8 @@ public class HomeAdminController implements Initializable {
             if (i % 3 == 0) {
                 // Create polygon
                 Polygon polygon = new Polygon();
-                polygon.getPoints().addAll(new Double[]{
-                    0.0, 20.0, 10.0, 0.0, 20.0, 20.0, 10.0, 30.0
+                polygon.getPoints().addAll(new Double[] {
+                        0.0, 20.0, 10.0, 0.0, 20.0, 20.0, 10.0, 30.0
                 });
                 shape = polygon;
             } else if (i % 3 == 1) {
@@ -1302,15 +1303,15 @@ public class HomeAdminController implements Initializable {
             shape.setLayoutY(random.nextDouble() * 650);
 
             // Apply styling
-            String[] colors = {"#8b0000", "#a00000", "#660000", "#cc0000"};
+            String[] colors = { "#8b0000", "#a00000", "#660000", "#cc0000" };
             String color = colors[random.nextInt(colors.length)];
 
             shape.setStyle(String.format(
-                "-fx-fill: linear-gradient(to bottom right, %s80, %s40); " +
-                    "-fx-stroke: %s; " +
-                    "-fx-stroke-width: 1; " +
-                    "-fx-effect: dropshadow(gaussian, %s66, 8, 0, 0, 0);",
-                color, color, color, color));
+                    "-fx-fill: linear-gradient(to bottom right, %s80, %s40); " +
+                            "-fx-stroke: %s; " +
+                            "-fx-stroke-width: 1; " +
+                            "-fx-effect: dropshadow(gaussian, %s66, 8, 0, 0, 0);",
+                    color, color, color, color));
 
             shape.setOpacity(0.3 + random.nextDouble() * 0.3);
             shape.getStyleClass().addAll("rotating-shape", "dynamic-shape-" + (i % 2 + 1));
@@ -1408,7 +1409,7 @@ public class HomeAdminController implements Initializable {
      * seconds multiplied by the particle's index.
      */
     private void setupParticleAnimations() {
-        Circle[] particles = {particle1, particle2, particle3, particle4, particle5, particle6};
+        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 };
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
@@ -1463,7 +1464,7 @@ public class HomeAdminController implements Initializable {
      * </p>
      */
     private void setupShapeAnimations() {
-        javafx.scene.Node[] shapes = {shape1, shape2, shape3, shape4, shape5, shape6};
+        javafx.scene.Node[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 };
 
         for (int i = 0; i < shapes.length; i++) {
             if (shapes[i] != null) {
@@ -1535,8 +1536,8 @@ public class HomeAdminController implements Initializable {
      * successive card.
      */
     private void setupStatCardAnimations() {
-        VBox[] statCards = {userStatsCard, movieStatsCard, productStatsCard, orderStatsCard, seriesStatsCard,
-            cinemaStatsCard};
+        VBox[] statCards = { userStatsCard, movieStatsCard, productStatsCard, orderStatsCard, seriesStatsCard,
+                cinemaStatsCard };
 
         for (int i = 0; i < statCards.length; i++) {
             if (statCards[i] != null) {
@@ -1743,8 +1744,8 @@ public class HomeAdminController implements Initializable {
      * minutes.
      *
      * @return A short relative time string: "N min ago" for less than 60 minutes,
-     * "N hr ago" for less than 1440 minutes (hours truncated), or "N day
-     * ago" otherwise (days truncated).
+     *         "N hr ago" for less than 1440 minutes (hours truncated), or "N day
+     *         ago" otherwise (days truncated).
      */
     private String getTimeAgo(int minutesAgo) {
         if (minutesAgo < 60) {
@@ -1763,18 +1764,18 @@ public class HomeAdminController implements Initializable {
      * @return a full name composed of a randomly selected first name and last name
      */
     private String generateRandomUserName() {
-        String[] firstNames = {"John", "Jane", "Alex", "Sarah", "Mike", "Lisa", "David", "Emma"};
-        String[] lastNames = {"Smith", "Johnson", "Brown", "Davis", "Wilson", "Miller", "Taylor", "Anderson"};
+        String[] firstNames = { "John", "Jane", "Alex", "Sarah", "Mike", "Lisa", "David", "Emma" };
+        String[] lastNames = { "Smith", "Johnson", "Brown", "Davis", "Wilson", "Miller", "Taylor", "Anderson" };
 
         return firstNames[random.nextInt(firstNames.length)] + " " +
-            lastNames[random.nextInt(lastNames.length)];
+                lastNames[random.nextInt(lastNames.length)];
     }
 
     /**
      * Create a placeholder User with a generated name and email.
      *
      * @return a User whose firstName and lastName are set to a generated full name
-     * and whose email is generated as `first.last@example.com`
+     *         and whose email is generated as `first.last@example.com`
      */
     private User createPlaceholderUser() {
         User user = new User() {
@@ -1821,8 +1822,8 @@ public class HomeAdminController implements Initializable {
      * Retrieve a snapshot of the most recently loaded users.
      *
      * @return a new modifiable List containing the recent users in insertion order;
-     * modifying the returned list does not affect the controller's internal
-     * state
+     *         modifying the returned list does not affect the controller's internal
+     *         state
      */
     public List<User> getRecentUsers() {
         return new ArrayList<>(recentUsers);
@@ -1832,7 +1833,7 @@ public class HomeAdminController implements Initializable {
      * Return a snapshot of the controller's recently loaded films.
      *
      * @return a new List containing the recent Film objects; modifying the returned
-     * list does not affect the controller's internal list
+     *         list does not affect the controller's internal list
      */
     public List<Film> getRecentFilms() {
         return new ArrayList<>(recentFilms);
@@ -1842,7 +1843,7 @@ public class HomeAdminController implements Initializable {
      * Provide a defensive copy of the most recently loaded products.
      *
      * @return a list containing the most recently loaded Product objects; modifying
-     * the returned list does not affect the controller's internal list
+     *         the returned list does not affect the controller's internal list
      */
     public List<Product> getRecentProducts() {
         return new ArrayList<>(recentProducts);
@@ -1852,7 +1853,7 @@ public class HomeAdminController implements Initializable {
      * Exposes a snapshot of the most recently loaded series.
      *
      * @return a new List containing the current recent Series; modifying the
-     * returned list does not affect the controller's internal list
+     *         returned list does not affect the controller's internal list
      */
     public List<Series> getRecentSeries() {
         return new ArrayList<>(recentSeries);
@@ -1862,7 +1863,7 @@ public class HomeAdminController implements Initializable {
      * Provide a copy of the most recently loaded cinemas.
      *
      * @return a new List containing the recent Cinema objects; modifying this list
-     * does not affect the controller's internal state
+     *         does not affect the controller's internal state
      */
     public List<Cinema> getRecentCinemas() {
         return new ArrayList<>(recentCinemas);
@@ -2014,11 +2015,11 @@ public class HomeAdminController implements Initializable {
             alert.setTitle("Analytics & Reports");
             alert.setHeaderText("System Analytics & Reports");
             alert.setContentText("Detailed analytics and reporting functionality will be implemented here.\n\n" +
-                "Available Reports:\n" +
-                "• User Activity Reports\n" +
-                "• Content Performance Analytics\n" +
-                "• Revenue & Sales Reports\n" +
-                "• System Performance Metrics");
+                    "Available Reports:\n" +
+                    "• User Activity Reports\n" +
+                    "• Content Performance Analytics\n" +
+                    "• Revenue & Sales Reports\n" +
+                    "• System Performance Metrics");
             alert.showAndWait();
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error opening reports: " + e.getMessage(), e);

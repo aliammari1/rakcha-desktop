@@ -5,117 +5,178 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.*?>
+
 <StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
-      prefWidth="1507.0"
-      xmlns="http://javafx.com/javafx/21"
-      fx:controller="com.esprit.controllers.products.AfficherProductClientControllers"
-      fx:id="rootStackPane"
-      stylesheets="@../styles/filmStyle.css, @../styles/produitStyle.css">
-<VBox>
+           prefWidth="1507.0"
+           xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.products.AfficherProductClientControllers"
+           fx:id="rootStackPane"
+           styleClass="immersive-root"
+           stylesheets="@../styles/dashboard.css, @../styles/film-animations.css, @../styles/produitStyle.css">
 
-  <HBox VBox.vgrow="ALWAYS">
-    <!-- SideBar -->
-    <fx:include source="/ui/sidebar.fxml"/>
+  <!-- Cinematic Background with Gradient Mesh -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg">
+    <!-- Ambient Light Orbs -->
+    <Circle radius="250" layoutX="200" layoutY="200" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="350" layoutX="1400" layoutY="700" styleClass="ambient-orb orb-secondary" opacity="0.12"/>
+    <Circle radius="180" layoutX="900" layoutY="100" styleClass="ambient-orb orb-accent" opacity="0.1"/>
 
-    <!-- Main Content -->
-    <VBox spacing="20" HBox.hgrow="ALWAYS">
-      <padding>
-        <Insets top="25" right="25" bottom="25" left="25"/>
-      </padding>
-
-      <!-- Header Section -->
-      <HBox spacing="15" alignment="CENTER_LEFT">
-        <ImageView fitHeight="69.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-          <Image url="@Logo.png"/>
-        </ImageView>
-        <VBox>
-          <Label text="Loujain Hajlaoui"/>
-          <Label text="User"/>
-        </VBox>
-        <Region HBox.hgrow="ALWAYS"/>
-
-        <!-- Search and Filter Controls -->
-        <ComboBox fx:id="tricomboBox" prefHeight="40.0" prefWidth="139.0" styleClass="sale"/>
-        <TextField fx:id="SearchBar" prefHeight="42.0" prefWidth="248.0"
-                   promptText="Search here ......................"/>
-        <Button mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
-          <graphic>
-            <FontIcon iconLiteral="mdi2m-magnify:20:#f5f5f5"/>
-          </graphic>
-        </Button>
-        <FontIcon fx:id="idfilter" iconLiteral="mdi2f-filter:20:#b92d2d"
-                  onMouseClicked="#filtrer"/>
-        <FontIcon iconLiteral="mdi2s-shopping:20:#b92d2d" onMouseClicked="#shoppingcart"/>
-      </HBox>
-
-      <!-- Content Area -->
-      <HBox spacing="20" VBox.vgrow="ALWAYS">
-        <!-- Products List -->
-        <ScrollPane fx:id="produitscrollpane" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
-                    HBox.hgrow="ALWAYS"
-                    styleClass="bg-white" stylesheets="@../styles/filmStyle.css">
-          <FlowPane fx:id="produitFlowPane" VBox.vgrow="ALWAYS" prefWrapLength="1200" hgap="10" vgap="10"/>
-        </ScrollPane>
-
-        <!-- Right Side Panel -->
-        <VBox spacing="15" maxWidth="350.0">
-          <!-- Shopping Cart -->
-          <FlowPane fx:id="panierFlowPane" VBox.vgrow="ALWAYS"
-                    styleClass="bg-white" stylesheets="@../styles/produitStyle.css"
-                    visible="false"/>
-
-          <!-- Top 3 Products -->
-          <VBox fx:id="top3anchorpane" styleClass="bg-white" spacing="15">
-            <padding>
-              <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
-
-            <Label text="Top 3 best rating products:" styleClass="section-title">
-              <font>
-                <Font name="System Bold" size="18.0"/>
-              </font>
-            </Label>
-
-            <FlowPane fx:id="topthreeVbox" VBox.vgrow="ALWAYS"/>
-          </VBox>
-        </VBox>
-      </HBox>
-    </VBox>
-  </HBox>
-
-  <!-- Filter Dialog -->
-  <AnchorPane fx:id="filterAnchor" styleClass="bg-white" visible="false">
-    <VBox spacing="10">
-      <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-      </padding>
-      <Button onAction="#filtercinema" styleClass="sale" text="Filter"/>
-      <FontIcon iconLiteral="mdi2c-close:20:white" onMouseClicked="#CloseFilter"/>
-    </VBox>
+    <!-- Floating Icons -->
+    <FontIcon iconLiteral="mdi2s-shopping:40" layoutX="100" layoutY="600" styleClass="floating-icon" opacity="0.08"/>
+    <FontIcon iconLiteral="mdi2t-tag:30" layoutX="1300" layoutY="200" styleClass="floating-icon" opacity="0.06"/>
   </AnchorPane>
 
-  <!-- Comments Section -->
-  <AnchorPane fx:id="AnchorComments" styleClass="bg-white" visible="false">
-    <VBox spacing="15">
+  <BorderPane styleClass="main-shell">
+    <left>
+      <!-- SideBar -->
+      <fx:include source="/ui/sidebar.fxml"/>
+    </left>
+
+    <center>
+      <!-- Main Content -->
+      <VBox spacing="20" style="-fx-background-color: transparent;">
+        <padding>
+          <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
+
+        <!-- Header Section -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="immersive-header">
+          <Label text="Marketplace" style="-fx-text-fill: white;" styleClass="brand-title">
+            <font>
+              <Font name="Arial Rounded MT Bold" size="32.0"/>
+            </font>
+          </Label>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <!-- Search and Filter Controls -->
+          <HBox spacing="10" alignment="CENTER">
+            <StackPane styleClass="glass-panel" style="-fx-padding: 0;">
+                <ComboBox fx:id="tricomboBox" prefHeight="40.0" prefWidth="150.0" styleClass="glass-combo" promptText="Sort By"/>
+            </StackPane>
+
+            <HBox styleClass="glass-panel" alignment="CENTER_LEFT" style="-fx-padding: 0 10 0 10; -fx-background-radius: 25;">
+               <TextField fx:id="SearchBar" prefHeight="40.0" prefWidth="250.0"
+                          promptText="Search products..." styleClass="search-input"
+                          style="-fx-background-color: transparent; -fx-text-fill: white; -fx-prompt-text-fill: #aaa;"/>
+               <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;">
+                 <graphic>
+                   <FontIcon iconLiteral="mdi2m-magnify:20:white"/>
+                 </graphic>
+               </Button>
+            </HBox>
+
+            <Button styleClass="glass-btn" onMouseClicked="#filtrer">
+                <graphic>
+                    <FontIcon fx:id="idfilter" iconLiteral="mdi2f-filter:20:white"/>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="Filter Products"/>
+                </tooltip>
+            </Button>
+
+            <Button styleClass="hero-btn primary" onMouseClicked="#shoppingcart">
+                <graphic>
+                    <FontIcon iconLiteral="mdi2c-cart:20:white"/>
+                </graphic>
+                <text>Cart</text>
+            </Button>
+          </HBox>
+        </HBox>
+
+        <!-- Content Area -->
+        <HBox spacing="20" VBox.vgrow="ALWAYS">
+          <!-- Products List -->
+          <ScrollPane fx:id="produitscrollpane" hbarPolicy="NEVER" VBox.vgrow="ALWAYS"
+                      HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: transparent; -fx-background: transparent;">
+            <FlowPane fx:id="produitFlowPane" VBox.vgrow="ALWAYS" prefWrapLength="1200" hgap="20" vgap="20"
+                      style="-fx-background-color: transparent;"/>
+          </ScrollPane>
+
+          <!-- Right Side Panel -->
+          <VBox spacing="20" maxWidth="350.0" minWidth="300.0">
+             <!-- Shopping Cart (Hidden when empty/closed) -->
+            <StackPane>
+                <FlowPane fx:id="panierFlowPane" VBox.vgrow="ALWAYS"
+                          styleClass="glass-panel"
+                          visible="false"/>
+            </StackPane>
+
+
+            <!-- Top 3 Products -->
+            <VBox fx:id="top3anchorpane" styleClass="glass-panel" spacing="15">
+              <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+              </padding>
+
+              <HBox alignment="CENTER_LEFT" spacing="10">
+                  <FontIcon iconLiteral="mdi2t-trophy:20:#ffd700"/>
+                  <Label text="Top Rated" styleClass="section-title" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+              </HBox>
+
+              <FlowPane fx:id="topthreeVbox" VBox.vgrow="ALWAYS"/>
+            </VBox>
+          </VBox>
+        </HBox>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Filter Dialog Overlay -->
+  <StackPane fx:id="filterAnchor" visible="false" style="-fx-background-color: rgba(0,0,0,0.7);">
+      <VBox spacing="15" styleClass="glass-panel" maxWidth="400" maxHeight="300" alignment="CENTER">
+        <padding>
+          <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+        <Label text="Filter Options" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <Separator opacity="0.3"/>
+
+        <!-- Filter controls would go here (simplified for now) -->
+        <Button onAction="#filtercinema" styleClass="hero-btn primary" text="Apply Filters" maxWidth="200"/>
+
+        <Button onMouseClicked="#CloseFilter" styleClass="glass-btn" text="Close">
+            <graphic>
+                <FontIcon iconLiteral="mdi2c-close:18:white"/>
+            </graphic>
+        </Button>
+      </VBox>
+  </StackPane>
+
+  <!-- Comments Section Overlay -->
+  <StackPane fx:id="AnchorComments" visible="false" style="-fx-background-color: rgba(0,0,0,0.8);">
+    <VBox spacing="15" styleClass="glass-panel" maxWidth="600" maxHeight="700">
       <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
       </padding>
 
       <HBox alignment="CENTER_RIGHT">
-        <FontIcon iconLiteral="mdi2c-close:20:white" onMouseClicked="#Close"/>
+         <Label text="Comments" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+         <Button styleClass="icon-btn" onMouseClicked="#Close">
+             <graphic>
+                <FontIcon iconLiteral="mdi2c-close:24:white"/>
+             </graphic>
+         </Button>
       </HBox>
 
-      <ScrollPane fx:id="idcomment" VBox.vgrow="ALWAYS">
-        <AnchorPane minHeight="366.0"/>
+      <ScrollPane fx:id="idcomment" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background: transparent;">
+        <AnchorPane minHeight="366.0" style="-fx-background-color: transparent;"/>
       </ScrollPane>
 
-      <HBox spacing="10" alignment="CENTER">
-        <TextArea fx:id="txtAreaComments" HBox.hgrow="ALWAYS"/>
-        <FontIcon iconLiteral="mdi2f-forward" onMouseClicked="#AddComment"/>
+      <HBox spacing="10" alignment="CENTER" styleClass="glass-panel" style="-fx-padding: 10;">
+        <TextArea fx:id="txtAreaComments" HBox.hgrow="ALWAYS" promptText="Write a review..."
+                  prefRowCount="2" styleClass="text-area-red"/>
+        <Button styleClass="hero-btn primary" onMouseClicked="#AddComment">
+             <graphic>
+                 <FontIcon iconLiteral="mdi2s-send:20:white"/>
+             </graphic>
+        </Button>
       </HBox>
     </VBox>
-  </AnchorPane>
-</VBox>
+  </StackPane>
+
 </StackPane>

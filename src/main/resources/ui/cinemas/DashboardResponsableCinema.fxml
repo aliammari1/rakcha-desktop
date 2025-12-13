@@ -4,176 +4,228 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.net.URL?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
-      prefWidth="1507.0"
-      xmlns="http://javafx.com/javafx/21"
-      fx:controller="com.esprit.controllers.cinemas.DashboardResponsableController">
 
-  <HBox VBox.vgrow="ALWAYS">
-    <!-- SideBar -->
-    <fx:include source="/ui/sidebar.fxml"/>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0" prefWidth="1507.0"
+           xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.cinemas.DashboardResponsableController"
+           style="-fx-background-color: linear-gradient(to bottom right, #0a0a0a, #1a0808, #120404, #0a0a0a);"
+           stylesheets="@../styles/profile-cinematic.css, @../styles/login-animations.css, @../styles/dashboard.css">
 
-    <!-- Main Content -->
-    <StackPane HBox.hgrow="ALWAYS">
-      <!-- Cinema Form -->
-      <VBox fx:id="cinemaFormPane" spacing="20" maxWidth="450.0" styleClass="bg-white"
-            visible="false">
-        <padding>
-          <Insets top="25" right="25" bottom="25" left="25"/>
-        </padding>
+    <!-- Animated Background Layer -->
+    <AnchorPane styleClass="profile-animated-background" mouseTransparent="true">
+        <!-- Film Strip Decorations - Top -->
+        <HBox layoutX="50" layoutY="10" spacing="15" opacity="0.1">
+            <Rectangle width="20" height="30" style="-fx-fill: #1a1a1a; -fx-stroke: #333333; -fx-stroke-width: 1;"/>
+            <Rectangle width="20" height="30" style="-fx-fill: #1a1a1a; -fx-stroke: #333333; -fx-stroke-width: 1;"/>
+            <Rectangle width="20" height="30" style="-fx-fill: #1a1a1a; -fx-stroke: #333333; -fx-stroke-width: 1;"/>
+            <Rectangle width="20" height="30" style="-fx-fill: #1a1a1a; -fx-stroke: #333333; -fx-stroke-width: 1;"/>
+            <Rectangle width="20" height="30" style="-fx-fill: #1a1a1a; -fx-stroke: #333333; -fx-stroke-width: 1;"/>
+            <Rectangle width="20" height="30" style="-fx-fill: #1a1a1a; -fx-stroke: #333333; -fx-stroke-width: 1;"/>
+        </HBox>
 
-        <Label text="ADD CINEMA" textFill="#fce19a">
-          <font>
-            <Font name="Arial Rounded MT Bold" size="36.0"/>
-          </font>
-        </Label>
+        <!-- Geometric Animated Shapes -->
+        <Polygon fx:id="shape1" points="100.0,200.0,130.0,170.0,160.0,200.0,130.0,230.0"
+                 styleClass="rotating-shape, pulsing-shape"
+                 style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.3), rgba(100, 0, 0, 0.2)); -fx-stroke: #8b0000; -fx-stroke-width: 2; -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.5), 10, 0, 0, 0);"
+                 opacity="0.5"/>
 
-        <GridPane vgap="20" hgap="10">
-          <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0">
-            <font>
-              <Font name="Arial Rounded MT Bold" size="17.0"/>
-            </font>
-          </Label>
-          <TextField fx:id="tfNom" styleClass="text-field-red" GridPane.rowIndex="0"
-                     GridPane.columnIndex="1"/>
+        <Circle fx:id="bgShape2" radius="25" layoutX="1150" layoutY="150"
+                styleClass="pulsing-shape"
+                style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, rgba(255, 80, 80, 0.4), rgba(139, 0, 0, 0.1)); -fx-stroke: #ff6666; -fx-stroke-width: 2; -fx-effect: dropshadow(gaussian, rgba(255, 80, 80, 0.5), 12, 0, 0, 0);"
+                opacity="0.5"/>
 
-          <Label text="Address:" GridPane.rowIndex="1" GridPane.columnIndex="0">
-            <font>
-              <Font name="Arial Rounded MT Bold" size="17.0"/>
-            </font>
-          </Label>
-          <TextField fx:id="tfAdresse" styleClass="text-field-red" GridPane.rowIndex="1"
-                     GridPane.columnIndex="1"/>
+        <Rectangle fx:id="bgShape3" width="35" height="35" layoutX="1200" layoutY="550"
+                   styleClass="rotating-shape"
+                   style="-fx-fill: linear-gradient(to bottom right, rgba(180, 0, 0, 0.4), rgba(90, 0, 0, 0.2)); -fx-stroke: #cc2222; -fx-stroke-width: 2; -fx-rotate: 45; -fx-effect: dropshadow(gaussian, rgba(180, 0, 0, 0.5), 10, 0, 0, 0);"
+                   opacity="0.5"/>
 
-          <Label text="Logo:" GridPane.rowIndex="2" GridPane.columnIndex="0">
-            <font>
-              <Font name="Arial Rounded MT Bold" size="17.0"/>
-            </font>
-          </Label>
+        <Polygon fx:id="bgShape4" points="150.0,600.0,170.0,570.0,200.0,585.0,185.0,620.0"
+                 styleClass="rotating-shape, pulsing-shape"
+                 style="-fx-fill: linear-gradient(to bottom right, rgba(160, 0, 0, 0.3), rgba(80, 0, 0, 0.2)); -fx-stroke: #aa0000; -fx-stroke-width: 2; -fx-effect: dropshadow(gaussian, rgba(160, 0, 0, 0.4), 8, 0, 0, 0);"
+                 opacity="0.4"/>
+    </AnchorPane>
 
-          <VBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="1">
-            <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0"
-                       pickOnBounds="true" preserveRatio="true" styleClass="image-view-red"/>
-            <FontIcon iconLiteral="mdi2d-download:30" fill="#ae2d3c"
-                      onMouseClicked="#selectImage"/>
-          </VBox>
-        </GridPane>
+    <!-- Main Content VBox -->
+    <VBox spacing="0">
+        <HBox VBox.vgrow="ALWAYS">
+            <!-- SideBar -->
+            <fx:include source="/ui/sidebar.fxml"/>
 
-        <Button onAction="#addCinema" styleClass="sale" text="ADD">
-          <stylesheets>
-            <URL value="@../styles/dashboard.css"/>
-            <URL value="@../styles/filmStyle.css"/>
-          </stylesheets>
-        </Button>
-      </VBox>
+            <!-- Main Content Area -->
+            <StackPane HBox.hgrow="ALWAYS" style="-fx-padding: 30;">
 
-      <!-- Cinema List -->
-      <VBox fx:id="cinemaListPane" styleClass="signout" visible="false">
-        <padding>
-          <Insets top="25" right="25" bottom="25" left="25"/>
-        </padding>
-        <FlowPane fx:id="cinemaFlowPane" VBox.vgrow="ALWAYS"/>
-      </VBox>
+                <!-- Content Flow (HBox for side-by-side, managed bindings for collapse) -->
+                <HBox spacing="20" alignment="TOP_LEFT" pickOnBounds="false">
 
-      <!-- Session Form -->
-      <VBox fx:id="sessionFormPane" spacing="20" maxWidth="500.0" styleClass="bg-white"
-            visible="false">
-        <padding>
-          <Insets top="25" right="25" bottom="25" left="25"/>
-        </padding>
+                    <!-- Cinema List (FlowPane) -->
+                    <VBox fx:id="cinemaListPane" styleClass="profile-card" visible="false" managed="${cinemaListPane.visible}" spacing="20" HBox.hgrow="ALWAYS">
+                         <padding>
+                            <Insets top="25" right="25" bottom="25" left="25"/>
+                         </padding>
+                         <Label text="YOUR CINEMAS" styleClass="section-label" style="-fx-font-size: 24px; -fx-text-fill: #fce19a;"/>
+                         <ScrollPane fitToWidth="true" styleClass="profile-scroll-pane" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent;">
+                             <FlowPane fx:id="cinemaFlowPane" hgap="20" vgap="20" style="-fx-background-color: transparent;"/>
+                         </ScrollPane>
+                    </VBox>
 
-        <Label text="ADD SESSION" textFill="#fce19a">
-          <font>
-            <Font name="Arial Rounded MT Bold" size="36.0"/>
-          </font>
-        </Label>
+                    <!-- Cinema Form -->
+                    <VBox fx:id="cinemaFormPane" spacing="20" maxWidth="500.0" minWidth="350" styleClass="profile-card" visible="false" managed="${cinemaFormPane.visible}">
+                        <padding>
+                            <Insets top="30" right="40" bottom="30" left="40"/>
+                        </padding>
 
-        <GridPane vgap="20" hgap="10">
-          <Label text="Cinema:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-          <ComboBox fx:id="comboCinema" styleClass="combo-box-red" GridPane.rowIndex="0"
-                    GridPane.columnIndex="1"/>
+                        <Label text="ADD CINEMA" styleClass="section-label" style="-fx-font-size: 28px; -fx-text-fill: #fce19a;"/>
 
-          <Label text="Movie:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-          <ComboBox fx:id="comboMovie" styleClass="combo-box-red" GridPane.rowIndex="1"
-                    GridPane.columnIndex="1"/>
+                        <GridPane vgap="20" hgap="15">
+                            <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <TextField fx:id="tfNom" styleClass="cinematic-text-field" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-          <Label text="Movie room:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-          <ComboBox fx:id="comboRoom" styleClass="combo-box-red" GridPane.rowIndex="2"
-                    GridPane.columnIndex="1"/>
+                            <Label text="Address:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <TextField fx:id="tfAdresse" styleClass="cinematic-text-field" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-          <Label text="Date:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-          <DatePicker fx:id="dpDate" styleClass="date-picker-red" GridPane.rowIndex="3"
-                      GridPane.columnIndex="1"/>
+                            <Label text="Logo:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <VBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="1" alignment="CENTER_LEFT">
+                                <StackPane styleClass="profile-avatar-container">
+                                    <ImageView fx:id="image" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true"/>
+                                </StackPane>
+                                 <Button text="Upload Logo" onMouseClicked="#selectImage" styleClass="cinematic-secondary-button">
+                                    <graphic>
+                                        <FontIcon iconLiteral="mdi2d-download:16:#ff6666"/>
+                                    </graphic>
+                                 </Button>
+                            </VBox>
+                        </GridPane>
 
-          <Label text="Departure time:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-          <TextField fx:id="tfDepartureTime" styleClass="text-field-red"
-                     GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                        <Button onAction="#addCinema" styleClass="cinematic-primary-button" text="ADD CINEMA" maxWidth="Infinity"/>
+                    </VBox>
 
-          <Label text="End time:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-          <TextField fx:id="tfEndTime" styleClass="text-field-red" GridPane.rowIndex="5"
-                     GridPane.columnIndex="1"/>
+                    <!-- Session Form -->
+                    <VBox fx:id="sessionFormPane" spacing="20" maxWidth="550.0" minWidth="400" styleClass="profile-card" visible="false" managed="${sessionFormPane.visible}">
+                        <padding>
+                            <Insets top="30" right="40" bottom="30" left="40"/>
+                        </padding>
 
-          <Label text="Price:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
-          <TextField fx:id="tfPrice" styleClass="text-field-red" GridPane.rowIndex="6"
-                     GridPane.columnIndex="1"/>
-        </GridPane>
+                        <Label text="ADD SESSION" styleClass="section-label" style="-fx-font-size: 28px; -fx-text-fill: #fce19a;"/>
 
-        <Button onAction="#addMovieSession" styleClass="sale" text="ADD"/>
-      </VBox>
+                        <GridPane vgap="20" hgap="15">
+                            <Label text="Cinema:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <ComboBox fx:id="comboCinema" styleClass="combo-box-red" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-      <!-- Session Table -->
-      <TableView fx:id="SessionTableView" visible="false">
-        <columns>
-          <TableColumn fx:id="colMovie" text="Movie"/>
-          <TableColumn fx:id="colCinema" text="Cinema"/>
-          <TableColumn fx:id="colMovieRoom" text="Movie Room"/>
-          <TableColumn fx:id="colDate" text="Date"/>
-          <TableColumn fx:id="colDepartTime" text="Departure Time"/>
-          <TableColumn fx:id="colEndTime" text="End Time"/>
-          <TableColumn fx:id="colPrice" text="Price"/>
-          <TableColumn fx:id="colAction" text="Action"/>
-        </columns>
-      </TableView>
+                            <Label text="Movie:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <ComboBox fx:id="comboMovie" styleClass="combo-box-red" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-      <!-- Room Form -->
-      <VBox fx:id="addRoomForm" spacing="20" maxWidth="390.0" styleClass="bg-white"
-            visible="false">
-        <padding>
-          <Insets top="25" right="25" bottom="25" left="25"/>
-        </padding>
+                            <Label text="Movie room:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <ComboBox fx:id="comboRoom" styleClass="combo-box-red" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-        <Label text="ADD Movie Room" textFill="#fce19a">
-          <font>
-            <Font name="Arial Rounded MT Bold" size="36.0"/>
-          </font>
-        </Label>
+                            <Label text="Date:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <DatePicker fx:id="dpDate" styleClass="profile-date-picker" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-        <GridPane vgap="20" hgap="10">
-          <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-          <TextField fx:id="tfNomSalle" styleClass="text-field-red" GridPane.rowIndex="0"
-                     GridPane.columnIndex="1"/>
+                            <Label text="Departure time:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <TextField fx:id="tfDepartureTime" styleClass="cinematic-text-field" promptText="HH:MM:SS" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-          <Label text="Number of places:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-          <TextField fx:id="tfNbrPlaces" styleClass="text-field-red" GridPane.rowIndex="1"
-                     GridPane.columnIndex="1"/>
-        </GridPane>
+                            <Label text="End time:" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <TextField fx:id="tfEndTime" styleClass="cinematic-text-field" promptText="HH:MM:SS" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
 
-        <Button onAction="#AjouterCinemaHall" styleClass="sale" text="ADD"/>
-      </VBox>
-    </StackPane>
-  </HBox>
+                            <Label text="Price:" GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <TextField fx:id="tfPrice" styleClass="cinematic-text-field" promptText="0.00" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                        </GridPane>
 
-  <!-- Navigation Controls -->
-  <HBox spacing="10" alignment="CENTER_LEFT">
-    <FontIcon fx:id="backButton" iconLiteral="mdi2a-arrow-left:30" fill="#ae2d3c"
-              onMouseClicked="#back" visible="false"/>
-    <FontIcon fx:id="backSession" iconLiteral="mdi2a-arrow-left:30" fill="#ae2d3c"
-              onMouseClicked="#back2" visible="false"/>
-    <Button fx:id="sessionButton" onAction="#showSessions" styleClass="sale" text="Sessions"
-            visible="false"/>
-  </HBox>
+                        <Button onAction="#addMovieSession" styleClass="cinematic-primary-button" text="ADD SESSION" maxWidth="Infinity"/>
+                    </VBox>
 
-</VBox>
+                    <!-- Session Table -->
+                    <VBox visible="${SessionTableView.visible}" managed="${SessionTableView.visible}" styleClass="profile-card" HBox.hgrow="ALWAYS">
+                         <TableView fx:id="SessionTableView" visible="false" VBox.vgrow="ALWAYS" styleClass="table-view-dark">
+                            <columns>
+                                <TableColumn fx:id="colMovie" text="Movie"/>
+                                <TableColumn fx:id="colCinema" text="Cinema"/>
+                                <TableColumn fx:id="colMovieRoom" text="Movie Room"/>
+                                <TableColumn fx:id="colDate" text="Date"/>
+                                <TableColumn fx:id="colDepartTime" text="Start"/>
+                                <TableColumn fx:id="colEndTime" text="End"/>
+                                <TableColumn fx:id="colPrice" text="Price"/>
+                                <TableColumn fx:id="colAction" text="Action"/>
+                            </columns>
+                             <columnResizePolicy>
+                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                             </columnResizePolicy>
+                        </TableView>
+                    </VBox>
+
+                    <!-- Room Form -->
+                    <VBox fx:id="addRoomForm" spacing="20" maxWidth="450.0" minWidth="300" styleClass="profile-card" visible="false" managed="${addRoomForm.visible}">
+                        <padding>
+                            <Insets top="30" right="40" bottom="30" left="40"/>
+                        </padding>
+                        <Label text="ADD MOVIE ROOM" styleClass="section-label" style="-fx-font-size: 28px; -fx-text-fill: #fce19a;"/>
+
+                        <GridPane vgap="20" hgap="15">
+                            <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <TextField fx:id="tfNomSalle" styleClass="cinematic-text-field" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                            <Label text="Capacity:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+                            <TextField fx:id="tfNbrPlaces" styleClass="cinematic-text-field" promptText="Number of seats" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        </GridPane>
+
+                        <Button onAction="#AjouterCinemaHall" styleClass="cinematic-primary-button" text="ADD ROOM" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Room Table -->
+                    <VBox visible="${RoomTableView.visible}" managed="${RoomTableView.visible}" styleClass="profile-card" HBox.hgrow="ALWAYS" maxWidth="800">
+                        <TableView fx:id="RoomTableView" visible="false" VBox.vgrow="ALWAYS" styleClass="table-view-dark">
+                            <columns>
+                                <TableColumn fx:id="colNameRoom" text="Room Name"/>
+                                <TableColumn fx:id="colNbrPlaces" text="Capacity"/>
+                                <TableColumn fx:id="colActionRoom" text="Action"/>
+                            </columns>
+                            <columnResizePolicy>
+                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TableView>
+                    </VBox>
+
+                </HBox>
+
+                <!-- Facebook Overlay (Absolute center) -->
+                <AnchorPane fx:id="facebookAnchor" visible="false" style="-fx-background-color: rgba(0, 0, 0, 0.7);">
+                    <children>
+                         <StackPane AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                             <VBox alignment="CENTER" spacing="20.0" styleClass="ai-insight-card" maxWidth="500" maxHeight="350">
+                                  <padding>
+                                     <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                  </padding>
+                                  <Label text="Publish to Facebook" styleClass="section-label" style="-fx-font-size: 20px; -fx-text-fill: white;"/>
+                                  <TextArea fx:id="txtareaStatut" promptText="What's on your mind?" wrapText="true" VBox.vgrow="ALWAYS" styleClass="cinematic-text-field" style="-fx-border-color: #555; -fx-border-width: 1;"/>
+                                  <HBox alignment="CENTER" spacing="20.0">
+                                     <Button onAction="#PublierStatut" styleClass="cinematic-primary-button" text="Publish" />
+                                     <Button onAction="#closeAnchor" styleClass="cinematic-secondary-button" text="Close" />
+                                  </HBox>
+                             </VBox>
+                         </StackPane>
+                    </children>
+                </AnchorPane>
+            </StackPane>
+        </HBox>
+
+        <!-- Navigation Controls Footer -->
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10 0 10 20; -fx-background-color: rgba(0,0,0,0.3);">
+            <Button fx:id="backButton" onMouseClicked="#back" visible="false" managed="${backButton.visible}" styleClass="cinematic-secondary-button" text="← Back"/>
+            <Button fx:id="backSession" onMouseClicked="#back2" visible="false" managed="${backSession.visible}" styleClass="cinematic-secondary-button" text="← Back to Cinemas"/>
+            <Button fx:id="sessionButton" onAction="#showSessions" visible="false" managed="${sessionButton.visible}" styleClass="cinematic-primary-button" text="Manage Sessions"/>
+        </HBox>
+    </VBox>
+
+    <!-- Floating Particles Layer -->
+    <AnchorPane fx:id="particlePane" mouseTransparent="true" style="-fx-background-color: transparent;">
+        <Circle fx:id="particle1" radius="4" layoutX="300" layoutY="150" styleClass="profile-particle"/>
+        <Circle fx:id="particle2" radius="5" layoutX="900" layoutY="200" styleClass="profile-particle"/>
+        <Circle fx:id="particle3" radius="3" layoutX="1100" layoutY="400" styleClass="profile-particle"/>
+        <Circle fx:id="particle4" radius="4" layoutX="500" layoutY="600" styleClass="profile-particle"/>
+        <Circle fx:id="particle5" radius="3.5" layoutX="1200" layoutY="650" styleClass="profile-particle"/>
+    </AnchorPane>
+
+</StackPane>

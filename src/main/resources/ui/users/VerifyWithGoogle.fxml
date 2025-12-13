@@ -5,66 +5,219 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<HBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="520.0"
-      prefWidth="929.0"
-      stylesheets="@../styles/auth.css"
-      xmlns="http://javafx.com/javafx/21"
-      fx:controller="com.esprit.controllers.users.VerifyWithGoogle">
+<?import javafx.scene.shape.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="rootContainer" maxWidth="1200.0" maxHeight="680.0"
+           minWidth="1200.0"
+           minHeight="680.0" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.users.VerifyWithGoogle"
+           style="-fx-background-color: linear-gradient(to bottom right, #0a0a0a, #1a0a0a, #2a0f0f, #1a0606, #0a0a0a);
+           -fx-effect: dropshadow(gaussian, #8b0000, 50, 0, 0, 0);
+           -fx-background-animation: true;"
+           stylesheets="@../styles/login-animations.css">
 
-  <!-- Left Side - Form -->
-  <VBox spacing="20" minWidth="461.0" styleClass="form-section">
-    <padding>
-      <Insets top="40" right="40" bottom="40" left="40"/>
-    </padding>
+  <!-- Background Animations Container -->
+  <AnchorPane style="-fx-background-color: transparent;" maxWidth="1200.0" maxHeight="630.0"
+              styleClass="animated-background">
 
-    <!-- Form Title -->
-    <Label text="Verify Email" styleClass="title-label">
-      <font>
-        <Font name="Outfit SemiBold" size="36.0"/>
-      </font>
-    </Label>
+    <!-- Geometric Shapes -->
+    <Polygon fx:id="shape1" points="150.0,300.0,170.0,280.0,190.0,300.0,170.0,320.0"
+             styleClass="rotating-shape, pulsing-shape"
+             style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.6), rgba(100, 0, 0, 0.4));
+                   -fx-stroke: #8b0000;
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.8), 15, 0, 0, 0);
+                   -fx-z-index: 100;"
+             opacity="0.8"/>
 
-    <!-- Verification Code -->
-    <VBox spacing="15">
-      <Label text="Enter Verification Code" styleClass="field-label">
-        <font>
-          <Font name="Arial" size="16.0"/>
-        </font>
-      </Label>
-      <TextField fx:id="verification_code_textField" styleClass="text-input"
-                 promptText="Enter code sent to your email"/>
-      <Label fx:id="verification_error_label" styleClass="error-label"/>
+    <Polygon fx:id="shape2" points="950.0,200.0,980.0,180.0,1010.0,200.0,995.0,230.0,965.0,230.0"
+             styleClass="rotating-shape"
+             style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.7), rgba(100, 0, 0, 0.4));
+                   -fx-stroke: #660000;
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.7), 12, 0, 0, 0);
+                   -fx-z-index: 101;"
+             opacity="0.8"/>
+
+    <Circle fx:id="shape4" radius="25" layoutX="1050" layoutY="500"
+            styleClass="pulsing-shape, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, rgba(255, 102, 102, 0.7), rgba(139, 0, 0, 0.3));
+                   -fx-stroke: #ff6666;
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, rgba(255, 102, 102, 0.8), 18, 0, 0, 0);
+                   -fx-z-index: 103;"
+            opacity="0.7"/>
+  </AnchorPane>
+
+
+  <HBox spacing="0" maxWidth="1200.0" maxHeight="630.0" style="-fx-background-color: transparent;">
+
+    <!-- Left Side: Branding (Consistent with Login) -->
+    <VBox alignment="CENTER" spacing="25" prefWidth="400.0" maxWidth="400.0"
+          style="-fx-background-color: linear-gradient(to bottom, rgba(20, 5, 5, 0.9), rgba(40, 10, 10, 0.8), rgba(20, 5, 5, 0.9));
+                   -fx-background-radius: 0 25 25 0;
+                   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 25, 0, 5, 0);
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 0 2 0 0;
+                   -fx-border-radius: 0 25 25 0;">
+      <padding>
+        <Insets top="40" right="30" bottom="40" left="30"/>
+      </padding>
+
+      <VBox alignment="CENTER" spacing="20"
+            style="-fx-background-color: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+                       -fx-background-radius: 20;
+                       -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 15, 0, 0, 0);
+                       -fx-padding: 20;">
+        <HBox alignment="CENTER" spacing="15">
+          <FontIcon iconLiteral="mdi2p-play:40:#ff4444"
+                    style="-fx-effect: dropshadow(gaussian, #ff0000, 10, 0, 0, 0);"/>
+          <Label text="RAKCHA"
+                 styleClass="animated-text"
+                 style="-fx-text-fill: #ffffff;
+                               -fx-font-family: 'Arial Black';
+                               -fx-font-size: 32px;
+                               -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, #8b0000, 8, 0, 2, 2);"/>
+        </HBox>
+        <Label text="Secure Verification"
+               style="-fx-text-fill: #cccccc;
+                           -fx-font-family: 'Arial';
+                           -fx-font-size: 14px;
+                           -fx-font-style: italic;"/>
+      </VBox>
+
+      <VBox spacing="15" alignment="CENTER" maxWidth="340">
+        <FontIcon iconLiteral="mdi2s-shield-check:100:#ff4444"
+                  style="-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.6), 20, 0, 0, 0);"/>
+      </VBox>
+
+      <VBox spacing="15" alignment="CENTER" maxWidth="340">
+          <Label text="Check your browser"
+                 style="-fx-text-fill: #ffffff; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+          <Label text="We've opened a secure Google login page."
+                 wrapText="true" textAlignment="CENTER"
+                 style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+      </VBox>
+
     </VBox>
 
-    <Region VBox.vgrow="ALWAYS"/>
 
-    <!-- Action Buttons -->
-    <HBox spacing="15" alignment="CENTER">
-      <Button fx:id="verifyButton" onAction="#verifyAuthCode"
-              styleClass="primary-button" text="Verify"/>
-      <!--            <Button fx:id="resendButton" onAction="#resendCode" -->
-      <!--                    styleClass="secondary-button" text="Resend Code"/>-->
-    </HBox>
-  </VBox>
+    <!-- Right Side: Form -->
+    <VBox alignment="CENTER" spacing="20" prefWidth="800.0" maxWidth="800.0"
+          style="-fx-background-color: radial-gradient(center 50% 50%, radius 80%, rgba(15, 15, 15, 0.95), rgba(5, 5, 5, 0.98));
+                   -fx-background-radius: 25 0 0 25;
+                   -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 30, 0, 0, 0);">
+      <padding>
+        <Insets top="50" right="60" bottom="50" left="60"/>
+      </padding>
 
-  <!-- Right Side - Banner -->
-  <VBox styleClass="banner-section" HBox.hgrow="ALWAYS">
-    <padding>
-      <Insets top="40" right="40" bottom="40" left="40"/>
-    </padding>
 
-    <!-- Welcome Text -->
-    <Label text="Verify Your Email" styleClass="banner-title">
-      <font>
-        <Font name="Outfit SemiBold" size="35.0"/>
-      </font>
-    </Label>
+      <VBox spacing="15" alignment="CENTER">
+        <StackPane>
+          <Rectangle width="400" height="80"
+                     style="-fx-fill: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.2), transparent);
+                               -fx-background-radius: 20;"
+                     opacity="0.8"/>
+          <VBox alignment="CENTER" spacing="5">
+            <Label text="VERIFY EMAIL"
+                   styleClass="animated-text"
+                   style="-fx-text-fill: #ffffff;
+                                   -fx-font-family: 'Arial Black';
+                                   -fx-font-size: 28px;
+                                   -fx-font-weight: bold;
+                                   -fx-effect: dropshadow(gaussian, #8b0000, 6, 0, 1, 1);"/>
+            <Label text="Enter the code provided by Google"
+                   style="-fx-text-fill: #cccccc;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 14px;
+                                   -fx-font-style: italic;"/>
+          </VBox>
+        </StackPane>
+      </VBox>
 
-    <!-- Logo -->
-    <ImageView fitHeight="325.0" fitWidth="299.0"
-               pickOnBounds="true" preserveRatio="true">
-      <Image url="@Logo.png"/>
-    </ImageView>
-  </VBox>
-</HBox>
+
+      <VBox spacing="20" maxWidth="400" alignment="CENTER">
+
+        <VBox spacing="8">
+          <Label text="Authorization Code"
+                 style="-fx-text-fill: #cccccc;
+                               -fx-font-family: 'Arial';
+                               -fx-font-size: 13px;
+                               -fx-font-weight: bold;"/>
+          <StackPane>
+
+            <Rectangle width="400" height="50"
+                       style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                   -fx-stroke: #8b0000;
+                                   -fx-stroke-width: 1;
+                                   -fx-background-radius: 12;
+                                   -fx-stroke-radius: 12;
+                                   -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);"/>
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+              <FontIcon iconLiteral="mdi2k-key-variant:16:ffffff"/>
+              <TextField fx:id="verification_code_textField"
+                         styleClass="animated-input"
+                         promptText="Paste the authorization code here"
+                         style="-fx-background-color: transparent;
+                                       -fx-text-fill: white;
+                                       -fx-font-family: 'Arial';
+                                       -fx-font-size: 14px;
+                                       -fx-border-color: transparent;
+                                       -fx-focus-color: transparent;
+                                       -fx-faint-focus-color: transparent;
+                                       -fx-prompt-text-fill: #666666;"
+                         HBox.hgrow="ALWAYS"/>
+            </HBox>
+          </StackPane>
+          <Label fx:id="verification_error_label"
+                 style="-fx-text-fill: #ff4444;
+                               -fx-font-family: 'Arial';
+                               -fx-font-size: 11px;"/>
+        </VBox>
+
+
+        <StackPane>
+          <Rectangle width="400" height="55"
+                     style="-fx-fill: radial-gradient(center 50% 50%, radius 60%, rgba(139, 0, 0, 0.4), transparent);
+                               -fx-background-radius: 15;"
+                     opacity="0.8"/>
+          <Button fx:id="verifyButton" text="COMPLETE VERIFICATION" onAction="#verifyAuthCode"
+                  styleClass="animated-button"
+                  style="-fx-background-color: linear-gradient(to bottom right, #8b0000, #440000, #8b0000);
+                               -fx-text-fill: white;
+                               -fx-font-family: 'Arial Black';
+                               -fx-font-size: 16px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 15;
+                               -fx-border-color: #ff4444;
+                               -fx-border-width: 1;
+                               -fx-border-radius: 15;
+                               -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 15, 0, 0, 3);
+                               -fx-cursor: hand;
+                               -fx-padding: 18 50 18 50;"
+                  maxWidth="400"/>
+        </StackPane>
+
+      </VBox>
+    </VBox>
+  </HBox>
+
+  <!-- Foreground particles layer -->
+  <AnchorPane style="-fx-background-color: transparent;" mouseTransparent="true">
+    <Circle fx:id="particle1" radius="4" layoutX="200" layoutY="150"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #aa0000);
+                   -fx-effect: dropshadow(gaussian, #ff0000, 15, 0, 0, 0);
+                   -fx-opacity: 0.8;
+                   -fx-z-index: 200;"/>
+
+    <Circle fx:id="particle2" radius="5" layoutX="800" layoutY="250"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #880000);
+                   -fx-effect: dropshadow(gaussian, #ff0000, 18, 0, 0, 0);
+                   -fx-opacity: 0.85;
+                   -fx-z-index: 201;"/>
+  </AnchorPane>
+
+</StackPane>

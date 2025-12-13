@@ -3,84 +3,110 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
-      prefWidth="1500.0"
-      xmlns="http://javafx.com/javafx/21"
-      fx:controller="com.esprit.controllers.products.ShoppingCartProductControllers">
+<?import org.kordamp.ikonli.javafx.*?>
 
-  <HBox VBox.vgrow="ALWAYS">
-    <!-- SideBar -->
-    <fx:include source="/ui/sidebar.fxml"/>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+           prefWidth="1500.0"
+           xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.products.ShoppingCartProductControllers"
+           styleClass="immersive-root"
+           stylesheets="@../styles/dashboard.css, @../styles/film-animations.css, @../styles/produitStyle.css">
 
-    <!-- Main Content -->
-    <VBox spacing="20" HBox.hgrow="ALWAYS">
-      <padding>
-        <Insets top="25" right="25" bottom="25" left="25"/>
-      </padding>
+  <!-- Cinematic Background -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg">
+    <Circle radius="300" layoutX="1200" layoutY="600" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="200" layoutX="300" layoutY="200" styleClass="ambient-orb orb-secondary" opacity="0.12"/>
 
-      <!-- Header -->
-      <Label text="Shopping Cart" styleClass="section-title">
-        <font>
-          <Font name="Arial Rounded MT Bold" size="32.0"/>
-        </font>
-      </Label>
+    <FontIcon iconLiteral="mdi2c-cart-outline:40" layoutX="100" layoutY="150" styleClass="floating-icon" opacity="0.08"/>
+  </AnchorPane>
 
-      <!-- Content Area -->
-      <HBox spacing="20" VBox.vgrow="ALWAYS">
-        <!-- Cart Items -->
-        <VBox spacing="15" HBox.hgrow="ALWAYS">
-          <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="bg-white">
-            <FlowPane fx:id="PanierFlowPane" styleClass="flow-pane"/>
-          </ScrollPane>
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="/ui/sidebar.fxml"/>
+    </left>
 
-          <HBox spacing="10" alignment="CENTER_RIGHT">
-            <Button onAction="#Paiment" styleClass="sale" text="Proceed to Checkout">
-              <font>
-                <Font name="Arial" size="14.0"/>
-              </font>
-            </Button>
-            <Button styleClass="delete-button" text="Clear Cart">
-              <font>
-                <Font name="Arial" size="14.0"/>
-              </font>
-            </Button>
-          </HBox>
-        </VBox>
+    <center>
+      <VBox spacing="20" style="-fx-background-color: transparent;">
+        <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
 
-        <!-- Order Summary -->
-        <VBox styleClass="bg-white" maxWidth="300.0" spacing="15">
-          <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
-          </padding>
+        <!-- Header -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="immersive-header">
+           <Label text="Shopping Cart" style="-fx-text-fill: white;" styleClass="brand-title">
+             <font>
+               <Font name="Arial Rounded MT Bold" size="32.0"/>
+             </font>
+           </Label>
+        </HBox>
 
-          <Label text="Order Summary" styleClass="section-title">
-            <font>
-              <Font name="Arial Rounded MT Bold" size="24.0"/>
-            </font>
-          </Label>
+        <!-- Content Area -->
+        <HBox spacing="20" VBox.vgrow="ALWAYS">
 
-          <GridPane vgap="10">
-            <Label text="Subtotal:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <Label fx:id="subtotalLabel" text="\$0.00" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+          <!-- Cart Items Section -->
+          <VBox spacing="15" HBox.hgrow="ALWAYS">
+             <StackPane VBox.vgrow="ALWAYS" styleClass="glass-panel" style="-fx-padding: 0;">
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
+                  <FlowPane fx:id="PanierFlowPane" hgap="15" vgap="15" style="-fx-background-color: transparent; -fx-padding: 15;"/>
+                </ScrollPane>
+             </StackPane>
 
-            <Label text="Tax:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <Label fx:id="taxLabel" text="\$0.00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+             <!-- Cart Actions -->
+             <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="glass-panel" style="-fx-padding: 15;">
+                <Button styleClass="hero-btn secondary" text="Clear Cart">
+                   <graphic>
+                      <FontIcon iconLiteral="mdi2d-delete-outline:20:white"/>
+                   </graphic>
+                </Button>
+                <Button onAction="#Paiment" styleClass="hero-btn primary" text="Proceed to Checkout">
+                   <graphic>
+                      <FontIcon iconLiteral="mdi2c-credit-card-check-outline:20:white"/>
+                   </graphic>
+                </Button>
+             </HBox>
+          </VBox>
 
-            <Label text="Total:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="total-label">
-              <font>
-                <Font name="Arial Bold" size="16.0"/>
-              </font>
-            </Label>
-            <Label fx:id="totalLabel" text="\$0.00" GridPane.rowIndex="2" GridPane.columnIndex="1"
-                   styleClass="total-label">
-              <font>
-                <Font name="Arial Bold" size="16.0"/>
-              </font>
-            </Label>
-          </GridPane>
-        </VBox>
-      </HBox>
-    </VBox>
-  </HBox>
-</VBox>
+          <!-- Order Summary Panel -->
+          <VBox styleClass="glass-panel" maxWidth="350.0" minWidth="300.0" spacing="20">
+            <padding>
+              <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+
+            <Label text="Order Summary" styleClass="section-title" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+            <Separator opacity="0.3"/>
+
+            <GridPane vgap="15" hgap="10">
+              <columnConstraints>
+                 <ColumnConstraints hgrow="ALWAYS"/>
+                 <ColumnConstraints halignment="RIGHT"/>
+              </columnConstraints>
+
+              <Label text="Subtotal:" GridPane.rowIndex="0" styleClass="label-light"/>
+              <Label fx:id="subtotalLabel" text="\$0.00" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-text-fill: white;"/>
+
+              <Label text="Tax:" GridPane.rowIndex="1" styleClass="label-light"/>
+              <Label fx:id="taxLabel" text="\$0.00" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-text-fill: white;"/>
+
+              <Region GridPane.rowIndex="2" minHeight="10"/>
+
+              <Label text="Total:" GridPane.rowIndex="3" style="-fx-text-fill: #ff4444; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+              <Label fx:id="totalLabel" text="\$0.00" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                     style="-fx-text-fill: #ff4444; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+            </GridPane>
+
+            <VBox spacing="10" VBox.vgrow="ALWAYS" alignment="BOTTOM_CENTER">
+                 <Label text="Secure Checkout" style="-fx-text-fill: #aaa; -fx-font-size: 12px;"/>
+                 <HBox alignment="CENTER" spacing="10" opacity="0.6">
+                     <FontIcon iconLiteral="mdi2l-lock:16:gray"/>
+                     <Label text="Encrypted Transaction" style="-fx-text-fill: gray; -fx-font-size: 10px;"/>
+                 </HBox>
+            </VBox>
+          </VBox>
+        </HBox>
+      </VBox>
+    </center>
+  </BorderPane>
+</StackPane>

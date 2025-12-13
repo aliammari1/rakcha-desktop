@@ -3,45 +3,68 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
-      prefWidth="1507.0"
-      xmlns="http://javafx.com/javafx/21"
-      fx:controller="com.esprit.controllers.products.DetailsProductClientController">
 
-  <HBox VBox.vgrow="ALWAYS">
-    <!-- SideBar -->
-    <fx:include source="/ui/sidebar.fxml"/>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+           prefWidth="1507.0"
+           xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.products.DetailsProductClientController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/dashboard.css, @../styles/film-animations.css, @../styles/produitStyle.css">
 
-    <!-- Main Content -->
-    <VBox spacing="20" HBox.hgrow="ALWAYS">
-      <padding>
-        <Insets top="25" right="25" bottom="25" left="25"/>
-      </padding>
+  <!-- Cinematic Background -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg">
+    <Circle radius="300" layoutX="1200" layoutY="300" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="200" layoutX="200" layoutY="600" styleClass="ambient-orb orb-secondary" opacity="0.12"/>
+    <FontIcon iconLiteral="mdi2t-tag-outline:40" layoutX="1400" layoutY="100" styleClass="floating-icon" opacity="0.08"/>
+  </AnchorPane>
 
-      <!-- Product Details Area -->
-      <FlowPane fx:id="detailFlowPane" VBox.vgrow="ALWAYS"
-                hgap="20" vgap="20" styleClass="bg-white">
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="/ui/sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="20" style="-fx-background-color: transparent;">
         <padding>
-          <Insets top="20" right="20" bottom="20" left="20"/>
+            <Insets top="25" right="25" bottom="25" left="25"/>
         </padding>
-      </FlowPane>
 
-      <!-- Action Buttons -->
-      <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button styleClass="secondary-button">
-          <graphic>
-            <FontIcon iconLiteral="mdi2a-arrow-left"/>
-          </graphic>
-          <text>Back to Products</text>
-        </Button>
-        <Button styleClass="sale">
-          <graphic>
-            <FontIcon iconLiteral="mdi2s-shopping"/>
-          </graphic>
-          <text>Add to Cart</text>
-        </Button>
-      </HBox>
-    </VBox>
-  </HBox>
-</VBox>
+        <!-- Header -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="immersive-header">
+           <Button fx:id="retour" styleClass="glass-btn" style="-fx-padding: 8;">
+              <graphic>
+                <FontIcon iconLiteral="mdi2a-arrow-left:24:white"/>
+              </graphic>
+              <tooltip>
+                  <Tooltip text="Back to Products"/>
+              </tooltip>
+           </Button>
+           <Label text="Product Details" style="-fx-text-fill: white;" styleClass="brand-title">
+             <font>
+               <Font name="Arial Rounded MT Bold" size="24.0"/>
+             </font>
+           </Label>
+        </HBox>
+
+        <!-- Product Content -->
+        <StackPane VBox.vgrow="ALWAYS" styleClass="glass-panel">
+            <FlowPane fx:id="detailFlowPane" hgap="30" vgap="30" style="-fx-padding: 30;"/>
+        </StackPane>
+
+        <!-- Cart Overlay (initially hidden or dynamic) -->
+        <FlowPane fx:id="shoppingcartFlowPane" visible="false"/>
+
+        <!-- Top 3 container (legacy compatibility if needed, or hide) -->
+        <AnchorPane fx:id="top3anchorpane" visible="false"/>
+        <FlowPane fx:id="topthreeVbox" visible="false"/>
+
+        <AnchorPane fx:id="shoppingcartAnchorPane" visible="false"/>
+
+      </VBox>
+    </center>
+  </BorderPane>
+</StackPane>

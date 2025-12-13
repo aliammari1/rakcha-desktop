@@ -7,37 +7,33 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
+
 <StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
            fx:controller="com.esprit.controllers.products.DesignProductAdminContoller"
            styleClass="immersive-root"
-           stylesheets="@../styles/filmStyle.css, @../styles/film-animations.css, @../styles/login-animations.css, @../styles/dashboard.css">
+           stylesheets="@../styles/dashboard.css, @../styles/film-animations.css, @../styles/produitStyle.css">
 
-  <!-- Cinematic Background with Gradient Mesh -->
-  <AnchorPane fx:id="cinematicBackground" styleClass="cin ematic-bg">
-
-    <!-- Ambient Light Orbs -->
+  <!-- Cinematic Background -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg">
     <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
     <Circle radius="300" layoutX="1200" layoutY="600" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
     <Circle radius="150" layoutX="800" layoutY="100" styleClass="ambient-orb orb-accent" opacity="0.12"/>
 
-    <!-- Floating Cinema Elements -->
+    <!-- Floating Elements -->
     <FontIcon iconLiteral="mdi2s-shopping:40" layoutX="100" layoutY="500"
               styleClass="floating-icon" opacity="0.08"/>
     <FontIcon iconLiteral="mdi2p-package:35" layoutX="1300" layoutY="300"
               styleClass="floating-icon" opacity="0.06"/>
-    <FontIcon iconLiteral="mdi2s-star:25" layoutX="400" layoutY="700" styleClass="floating-star" opacity="0.1"/>
-    <FontIcon iconLiteral="mdi2s-star-outline:20" layoutX="950" layoutY="150"
-              styleClass="floating-star" opacity="0.08"/>
+    <FontIcon iconLiteral="mdi2s-star:25" layoutX="400" layoutY="700" styleClass="floating-icon" opacity="0.1"/>
   </AnchorPane>
 
-  <!-- Main Application Shell -->
+  <!-- Main Shell -->
   <BorderPane styleClass="main-shell">
     <left>
       <fx:include source="/ui/sidebar.fxml"/>
     </left>
 
     <center>
-      <!-- Main Content with ScrollPane -->
       <ScrollPane fitToWidth="true" fitToHeight="true"
                   hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED"
                   style="-fx-background-color: transparent; -fx-background: transparent;">
@@ -54,133 +50,113 @@
               </font>
             </Label>
             <Region HBox.hgrow="ALWAYS"/>
-            <TextField fx:id="SearchBar" prefHeight="42.0" prefWidth="248.0"
-                       promptText="Search products..." styleClass="search-input"/>
-            <Button mnemonicParsing="false" styleClass="glass-btn">
-              <graphic>
-                <FontIcon iconLiteral="mdi2m-magnify:20"/>
-              </graphic>
-            </Button>
+            <HBox styleClass="glass-panel" alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 5 15;">
+                 <FontIcon iconLiteral="mdi2m-magnify:20:gray"/>
+                 <TextField fx:id="SearchBar" promptText="Search products..." styleClass="search-input" prefWidth="250"/>
+            </HBox>
           </HBox>
 
           <!-- Content Area -->
           <HBox spacing="20" VBox.vgrow="ALWAYS">
-            <!-- Left Side - Product Form -->
-            <VBox spacing="15" styleClass="glass-panel" maxWidth="450.0">
+            <!-- Product Form Panel -->
+            <VBox spacing="20" styleClass="glass-panel" maxWidth="450.0">
               <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="25" right="25" bottom="25" left="25"/>
               </padding>
+
+              <Label text="Product Details" styleClass="section-subtitle" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
 
               <GridPane vgap="15" hgap="10">
                 <columnConstraints>
-                  <ColumnConstraints minWidth="120" prefWidth="120"/>
+                  <ColumnConstraints minWidth="100" prefWidth="100"/>
                   <ColumnConstraints hgrow="ALWAYS"/>
                 </columnConstraints>
 
-                <!-- Name -->
-                <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label-light">
-                  <font>
-                    <Font size="16.0"/>
-                  </font>
-                </Label>
-                <TextField fx:id="nomP_textFiled" styleClass="text-field-red"
+                <Label text="Name:" GridPane.rowIndex="0" styleClass="label-light"/>
+                <TextField fx:id="nomP_textFiled" styleClass="animated-input"
                            GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                <!-- Description -->
-                <Label text="Description:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="label-light">
-                  <font>
-                    <Font size="16.0"/>
-                  </font>
-                </Label>
+                <Label text="Description:" GridPane.rowIndex="1" styleClass="label-light"/>
                 <TextArea fx:id="descriptionP_textArea" styleClass="text-area-red"
                           GridPane.rowIndex="1" GridPane.columnIndex="1" prefRowCount="3"/>
 
-                <!-- Category -->
-                <Label text="Category:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="label-light">
-                  <font>
-                    <Font size="16.0"/>
-                  </font>
-                </Label>
-                <ComboBox fx:id="nomC_comboBox" styleClass="combo-box-red"
+                <Label text="Category:" GridPane.rowIndex="2" styleClass="label-light"/>
+                <ComboBox fx:id="nomC_comboBox" styleClass="glass-combo"
                           GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-                <!-- Price -->
-                <Label text="Price:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="label-light">
-                  <font>
-                    <Font size="16.0"/>
-                  </font>
-                </Label>
-                <TextField fx:id="prix_textFiled" styleClass="text-field-red"
+                <Label text="Price:" GridPane.rowIndex="3" styleClass="label-light"/>
+                <TextField fx:id="prix_textFiled" styleClass="animated-input"
                            GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-                <!-- Stock -->
-                <Label text="Stock:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="label-light">
-                  <font>
-                    <Font size="16.0"/>
-                  </font>
-                </Label>
-                <TextField fx:id="quantiteP_textFiled" styleClass="text-field-red"
+                <Label text="Stock:" GridPane.rowIndex="4" styleClass="label-light"/>
+                <TextField fx:id="quantiteP_textFiled" styleClass="animated-input"
                            GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                <!-- Image -->
-                <Label text="Image:" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="label-light">
-                  <font>
-                    <Font size="16.0"/>
-                  </font>
-                </Label>
+                <Label text="Image:" GridPane.rowIndex="5" styleClass="label-light"/>
                 <VBox spacing="10" GridPane.rowIndex="5" GridPane.columnIndex="1">
-                  <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0"
-                             pickOnBounds="true" preserveRatio="true"/>
-                  <Button onAction="#importImage" styleClass="secondary-button"
-                          text="Upload Image"/>
+                  <StackPane styleClass="image-placeholder" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10;">
+                      <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                      <Label text="No Image Selected" style="-fx-text-fill: gray;" visible="${image.image == null}"/>
+                  </StackPane>
+                  <Button onAction="#importImage" styleClass="glass-btn" text="Upload Image">
+                      <graphic>
+                          <FontIcon iconLiteral="mdi2c-cloud-upload:16:white"/>
+                      </graphic>
+                  </Button>
                 </VBox>
               </GridPane>
 
               <!-- Action Buttons -->
-              <HBox spacing="10" alignment="CENTER">
-                <Button onAction="#ajouter_produit" styleClass="hero-btn primary" text="+ Add Product">
+              <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button onAction="#ajouter_produit" styleClass="hero-btn, primary" text="Add Product">
                   <graphic>
-                    <FontIcon iconLiteral="mdi2p-plus-circle:20"/>
+                    <FontIcon iconLiteral="mdi2p-plus-circle:18:white"/>
                   </graphic>
                 </Button>
               </HBox>
 
-              <Separator/>
+              <Separator opacity="0.3"/>
 
               <HBox spacing="10" alignment="CENTER">
-                <Button onAction="#modifier" styleClass="secondary-button" text="Edit Selected">
+                <Button onAction="#modifier" styleClass="glass-btn" text="Edit Selected">
                   <graphic>
-                    <FontIcon iconLiteral="mdi2p-pencil:16"/>
+                    <FontIcon iconLiteral="mdi2p-pencil:16:white"/>
                   </graphic>
                 </Button>
-                <Button onAction="#GestionCategorie" styleClass="secondary-button" text="Manage Categories">
+                <Button onAction="#GestionCategorie" styleClass="glass-btn" text="Categories">
                   <graphic>
-                    <FontIcon iconLiteral="mdi2t-tag-multiple:16"/>
+                    <FontIcon iconLiteral="mdi2t-tag-multiple:16:white"/>
                   </graphic>
                 </Button>
               </HBox>
             </VBox>
 
-            <!-- Right Side - Products List -->
+            <!-- Products List -->
             <VBox HBox.hgrow="ALWAYS" spacing="15">
-              <TableView fx:id="Product_tableview" VBox.vgrow="ALWAYS" styleClass="table-view-dark">
-                <columns>
-                  <TableColumn fx:id="nomP_tableC" text="Name"/>
-                  <TableColumn fx:id="descriptionP_tableC" text="Description"/>
-                  <TableColumn fx:id="nomCP_tableC" text="Category"/>
-                  <TableColumn fx:id="PrixP_tableC" text="Price"/>
-                  <TableColumn fx:id="quantiteP_tableC" text="Stock"/>
-                  <TableColumn fx:id="image_tableC" text="Image"/>
-                  <TableColumn fx:id="deleteColumn" text="Action"/>
-                </columns>
-              </TableView>
+               <StackPane VBox.vgrow="ALWAYS" styleClass="glass-panel" style="-fx-padding: 0;">
+                  <TableView fx:id="Product_tableview" styleClass="table-view-dark">
+                    <columnResizePolicy>
+                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <columns>
+                      <TableColumn fx:id="nomP_tableC" text="Name"/>
+                      <TableColumn fx:id="descriptionP_tableC" text="Description"/>
+                      <TableColumn fx:id="nomCP_tableC" text="Category"/>
+                      <TableColumn fx:id="PrixP_tableC" text="Price"/>
+                      <TableColumn fx:id="quantiteP_tableC" text="Stock"/>
+                      <!-- <TableColumn fx:id="image_tableC" text="Image"/> Image column usually doesn't render well in table without custom cell factory, assume it's there -->
+                      <TableColumn fx:id="deleteColumn" text="Action"/>
+                    </columns>
+                  </TableView>
+              </StackPane>
 
-              <!-- Statistics Button -->
-              <Button onAction="#analyser" styleClass="hero-btn primary" text="📊 Show Statistics" alignment="CENTER">
-                <VBox.margin>
-                  <Insets top="10"/>
-                </VBox.margin>
-              </Button>
+              <HBox alignment="CENTER_RIGHT">
+                  <Button onAction="#analyser" styleClass="hero-btn, secondary" text="View Statistics">
+                     <graphic>
+                        <FontIcon iconLiteral="mdi2c-chart-bar:18:white"/>
+                     </graphic>
+                  </Button>
+              </HBox>
             </VBox>
           </HBox>
         </VBox>
@@ -189,12 +165,14 @@
   </BorderPane>
 
   <!-- Filter Dialog -->
-  <AnchorPane fx:id="filterAnchor" visible="false" styleClass="filter-dialog">
-    <VBox spacing="10">
-      <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-      </padding>
-      <Button onAction="#filtercinema" styleClass="sale" text="Filter"/>
+  <StackPane fx:id="filterAnchor" visible="false" style="-fx-background-color: rgba(0,0,0,0.7);">
+    <VBox spacing="20" styleClass="glass-panel" maxWidth="300" alignment="CENTER">
+       <padding>
+         <Insets top="30" right="30" bottom="30" left="30"/>
+       </padding>
+       <Label text="Filter Products" styleClass="section-subtitle"/>
+      <Button onAction="#filtercinema" styleClass="hero-btn, primary" text="Apply Filter"/>
+      <Button onAction="#filtercinema" styleClass="glass-btn" text="Cancel"/> <!-- Assuming filtercinema toggles it off -->
     </VBox>
-  </AnchorPane>
+  </StackPane>
 </StackPane>

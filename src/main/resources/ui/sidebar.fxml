@@ -8,22 +8,14 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" spacing="20" prefWidth="200.0"
       maxWidth="200.0" xmlns="http://javafx.com/javafx/21"
       fx:controller="com.esprit.controllers.SidebarController"
-      style="-fx-background-color: linear-gradient(to bottom, #140505e6, #280a0acc, #140505e6);
-           -fx-background-radius: 0 25 25 0;
-           -fx-effect: dropshadow(gaussian, #000000cc, 25, 0, 5, 0);
-           -fx-border-color: #8b0000;
-           -fx-border-width: 0 2 0 0;
-           -fx-border-radius: 0 25 25 0;">
+      styleClass="sidebar-panel"
+      stylesheets="@styles/dashboard.css">
   <padding>
     <Insets top="30" right="20" bottom="30" left="20"/>
   </padding>
 
   <!-- Logo Section -->
-  <VBox alignment="CENTER" spacing="15"
-        style="-fx-background-color: radial-gradient(center 50% 50%, radius 70%, #8b000066, #00000033);
-               -fx-background-radius: 20;
-               -fx-effect: dropshadow(gaussian, #8b000099, 15, 0, 0, 0);
-               -fx-padding: 20;">
+  <VBox alignment="CENTER" spacing="15" styleClass="sidebar-logo-container">
     <HBox alignment="CENTER" spacing="10">
       <FontIcon iconLiteral="mdi2v-video:48:#ff4444"
                 style="-fx-effect: dropshadow(gaussian, #ff0000, 10, 0, 0, 0);"/>

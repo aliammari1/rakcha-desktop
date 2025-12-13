@@ -18,6 +18,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -66,6 +68,10 @@ public class ListOrderController {
     private TextField SearchBar;
     @FXML
     private TableColumn<Order, Void> deleteColumn;
+    @FXML
+    private StackPane filterAnchor;
+    @FXML
+    private ComboBox<String> statusComboBox;
 
     /**
      * Initializes the controller by setting up event listeners and populating the
@@ -79,35 +85,33 @@ public class ListOrderController {
     @FXML
     void initialize() {
         this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
-                this.search(newValue);
-            }
-        );
+            this.search(newValue);
+        });
         this.afficheOrder();
         this.initDeleteColumn();
     }
 
-
     /**
-     * Populates the TableView with orders and configures columns to show client and order fields.
+     * Populates the TableView with orders and configures columns to show client and
+     * order fields.
      * <p>
-     * Configures columns for client first name, client last name, address, phone number, date, and status;
+     * Configures columns for client first name, client last name, address, phone
+     * number, date, and status;
      * loads orders from OrderService into the table and enables cell selection.
      */
     void afficheOrder() {
         this.idnom.setCellValueFactory(cellData -> {
-                final Order order = cellData.getValue();
-                final UserService userService = new UserService();
-                final Client client = (Client) userService.getUserById(order.getClient().getId());
-                return new SimpleStringProperty(client.getFirstName());
-            }
-        );
+            final Order order = cellData.getValue();
+            final UserService userService = new UserService();
+            final Client client = (Client) userService.getUserById(order.getClient().getId());
+            return new SimpleStringProperty(client.getFirstName());
+        });
         this.idprenom.setCellValueFactory(cellData -> {
-                final Order order = cellData.getValue();
-                final UserService userService = new UserService();
-                final Client client = (Client) userService.getUserById(order.getClient().getId());
-                return new SimpleStringProperty(client.getLastName());
-            }
-        );
+            final Order order = cellData.getValue();
+            final UserService userService = new UserService();
+            final Client client = (Client) userService.getUserById(order.getClient().getId());
+            return new SimpleStringProperty(client.getLastName());
+        });
         this.idadresse.setCellValueFactory(new PropertyValueFactory<Order, String>("adresse"));
         this.idnumero.setCellValueFactory(new PropertyValueFactory<Order, Integer>("num_telephone"));
         this.iddate.setCellValueFactory(new PropertyValueFactory<Order, Date>("dateOrder"));
@@ -120,7 +124,6 @@ public class ListOrderController {
         // Activer la sélection de cellules
         this.orderTableView.getSelectionModel().setCellSelectionEnabled(true);
     }
-
 
     /**
      * Filter orders shown in the table by a search keyword.
@@ -140,9 +143,9 @@ public class ListOrderController {
         } else {
             for (final Order order : orderservice.read()) {
                 if (order.getShippingAddress().toLowerCase().contains(keyword.toLowerCase())
-                    || order.getClient().getLastName().toLowerCase().contains(keyword.toLowerCase())
-                    || order.getClient().getFirstName().toLowerCase().contains(keyword.toLowerCase())
-                    || order.getStatus().toLowerCase().contains(keyword.toLowerCase())) {
+                        || order.getClient().getLastName().toLowerCase().contains(keyword.toLowerCase())
+                        || order.getClient().getFirstName().toLowerCase().contains(keyword.toLowerCase())
+                        || order.getStatus().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(order);
                 }
 
@@ -153,23 +156,31 @@ public class ListOrderController {
         this.orderTableView.setItems(filteredList);
     }
 
-
     /**
-     * Add a per-row delete button to the deleteColumn that removes the corresponding order.
+     * Add a per-row delete button to the deleteColumn that removes the
+     * corresponding order.
      *
-     * <p>Each cell produced for the column contains a "Delete" button which, when pressed,
-     * deletes the Order using OrderService and updates the TableView to reflect the removal.</p>
+     * <p>
+     * Each cell produced for the column contains a "Delete" button which, when
+     * pressed,
+     * deletes the Order using OrderService and updates the TableView to reflect the
+     * removal.
+     * </p>
      */
     private void initDeleteColumn() {
         final Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {
             /**
              * Create a TableCell that renders a delete button for its Order row.
              *
-             * <p>Pressing the button deletes the corresponding Order via OrderService and removes
-             * the Order from the table view.</p>
+             * <p>
+             * Pressing the button deletes the corresponding Order via OrderService and
+             * removes
+             * the Order from the table view.
+             * </p>
              *
              * @param param the TableColumn to which the cell belongs
-             * @return a TableCell containing a delete button that removes the row's Order from the data source and table
+             * @return a TableCell containing a delete button that removes the row's Order
+             *         from the data source and table
              */
             @Override
             public TableCell<Order, Void> call(TableColumn<Order, Void> param) {
@@ -179,21 +190,21 @@ public class ListOrderController {
                     {
                         this.btnDelete.getStyleClass().add("delete-button");
                         this.btnDelete.setOnAction((final ActionEvent event) -> {
-                                final Order order = this.getTableView().getItems().get(this.getIndex());
-                                final OrderService ps = new OrderService();
-                                ps.delete(order);
-                                // Mise à jour de la TableView après la suppression de la base de données
-                                orderTableView.getItems().remove(order);
-                                orderTableView.refresh();
-                            }
-                        );
+                            final Order order = this.getTableView().getItems().get(this.getIndex());
+                            final OrderService ps = new OrderService();
+                            ps.delete(order);
+                            // Mise à jour de la TableView après la suppression de la base de données
+                            orderTableView.getItems().remove(order);
+                            orderTableView.refresh();
+                        });
                     }
 
-
                     /**
-                     * Set the cell's graphic to the row delete button when the cell contains data; clear the graphic when empty.
+                     * Set the cell's graphic to the row delete button when the cell contains data;
+                     * clear the graphic when empty.
                      *
-                     * @param item  unused placeholder for the cell value (always null for a `Void` cell)
+                     * @param item  unused placeholder for the cell value (always null for a `Void`
+                     *              cell)
                      * @param empty `true` if the cell does not contain data, `false` otherwise
                      */
                     @Override
@@ -207,14 +218,12 @@ public class ListOrderController {
 
                     }
 
-                }
-                    ;
+                };
             }
 
         };
         this.deleteColumn.setCellFactory(cellFactory);
     }
-
 
     /**
      * Opens the order statistics view in a new window.
@@ -247,6 +256,20 @@ public class ListOrderController {
             ListOrderController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
 
+    }
+
+    @FXML
+    private void toggleFilter(ActionEvent event) {
+        if (filterAnchor != null) {
+            filterAnchor.setVisible(!filterAnchor.isVisible());
+        }
+    }
+
+    @FXML
+    private void closeFilter(ActionEvent event) {
+        if (filterAnchor != null) {
+            filterAnchor.setVisible(false);
+        }
     }
 
 }

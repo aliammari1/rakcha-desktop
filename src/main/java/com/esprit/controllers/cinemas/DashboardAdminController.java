@@ -107,7 +107,15 @@ public class DashboardAdminController {
         // Configurer les cellules des colonnes pour afficher les données
         this.colCinema.setCellValueFactory(new PropertyValueFactory<>("name"));
         this.colAdresse.setCellValueFactory(new PropertyValueFactory<>("address"));
-        this.colResponsable.setCellValueFactory(new PropertyValueFactory<>("manager"));
+        this.colResponsable.setCellValueFactory(cellData -> {
+            Cinema cinema = cellData.getValue();
+            if (cinema.getManager() != null) {
+                return new SimpleObjectProperty<>(
+                        cinema.getManager().getFirstName() + " " + cinema.getManager().getLastName());
+            } else {
+                return new SimpleObjectProperty<>("No Manager");
+            }
+        });
         // Configurer la cellule de la colonne Logo pour afficher l'image
         this.colLogo.setCellValueFactory(cellData -> {
             final Cinema cinema = cellData.getValue();
@@ -246,7 +254,7 @@ public class DashboardAdminController {
         }
 
         Scene scene = new Scene(scrollPane);
-        scene.getStylesheets().add(getClass().getResource("/ui/cinemas/styles/dashboard.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/ui/styles/dashboard.css").toExternalForm());
         dialog.setScene(scene);
         dialog.show();
     }
@@ -563,7 +571,7 @@ public class DashboardAdminController {
      */
     @FXML
     void AfficherProductAdmin(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/DesignProductAdmin.fxml.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/products/DesignProduitAdmin.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

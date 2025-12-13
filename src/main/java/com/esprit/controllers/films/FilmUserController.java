@@ -273,7 +273,7 @@ public class FilmUserController {
         final AnchorPane root = fxmlLoader.load();
         final Stage stage = (Stage) this.reserver_Film.getScene().getWindow();
         final SeatSelectionController controller = fxmlLoader.getController();
-        final Client client = (Client) stage.getUserData();
+        final Client client = (Client) SessionManager.getCurrentUser();
         controller.initialize(moviesession, client);
         final Scene scene = new Scene(root);
         stage.setScene(scene);

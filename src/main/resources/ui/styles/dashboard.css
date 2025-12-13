@@ -726,7 +726,7 @@
 }
 
 
-}
+
 
 .label-light {
     -fx-text-fill: #ffffff;
@@ -1016,4 +1016,136 @@
     -fx-border-color: #ae2d3c;
     -fx-border-width: 1px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 15, 0, 0, 5);
+}
+
+/* Sidebar Styling */
+.sidebar-panel {
+    -fx-background-color: linear-gradient(to bottom, #140505e6, #280a0acc, #140505e6);
+    -fx-background-radius: 0 25 25 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 25, 0, 5, 0);
+    -fx-border-color: #8b0000;
+    -fx-border-width: 0 2 0 0;
+    -fx-border-radius: 0 25 25 0;
+}
+
+.sidebar-logo-container {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 15, 0, 0, 0);
+    -fx-padding: 20;
+}
+
+/* Product Details Styling */
+.product-details-container {
+    -fx-padding: 30;
+    -fx-background-color: transparent;
+}
+
+.product-title {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-size: 32px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 2);
+}
+
+.product-price {
+    -fx-text-fill: #ff4444;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-size: 28px;
+    -fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.4), 10, 0, 0, 0);
+}
+
+.product-description {
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 16px;
+    -fx-wrap-text: true;
+    -fx-line-spacing: 5px;
+}
+
+.product-rating-label {
+    -fx-text-fill: #ffd700;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+/* Chart Styling */
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: transparent;
+}
+
+.chart-content {
+    -fx-background-color: transparent;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.chart-legend-item {
+    -fx-text-fill: white;
+}
+
+.chart-title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.axis {
+    -fx-tick-label-fill: white;
+    -fx-label-fill: white;
+}
+
+.axis:top {
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.2) transparent;
+}
+
+.axis:right {
+    -fx-border-color: transparent transparent transparent rgba(255, 255, 255, 0.2);
+}
+
+.axis:bottom {
+    -fx-border-color: rgba(255, 255, 255, 0.2) transparent transparent transparent;
+}
+
+.axis:left {
+    -fx-border-color: transparent rgba(255, 255, 255, 0.2) transparent transparent;
+}
+
+.chart-vertical-grid-lines,
+.chart-horizontal-grid-lines {
+    -fx-stroke: rgba(255, 255, 255, 0.1);
+}
+
+.chart-alternative-column-fill {
+    -fx-fill: transparent;
+}
+
+.chart-alternative-row-fill {
+    -fx-fill: transparent;
+}
+
+.default-color0.chart-series-line {
+    -fx-stroke: #ff4444;
+}
+
+.default-color0.chart-line-symbol {
+    -fx-background-color: #ff4444, white;
+}
+
+.default-color1.chart-series-line {
+    -fx-stroke: #00d2ff;
+}
+
+.default-color1.chart-line-symbol {
+    -fx-background-color: #00d2ff, white;
+}
+
+.default-color0.chart-bar {
+    -fx-bar-fill: #ff4444;
+}
+
+.default-color1.chart-bar {
+    -fx-bar-fill: #00d2ff;
 }

@@ -350,7 +350,7 @@ public class DashboardClientController {
 
         // Ajout d'un écouteur pour la notation
         rating.ratingProperty().addListener((observable, oldValue, newValue) -> {
-            final Client client = (Client) this.AnchorComments.getScene().getWindow().getUserData();
+            final Client client = (Client) SessionManager.getCurrentUser();
             // Enregistrez le nouveau taux dans la base de données
             final Review ratingCinema = new Review(cinema, client, newValue.intValue());
             ratingService.create(ratingCinema);
@@ -680,12 +680,7 @@ public class DashboardClientController {
                 // context
                 // For now, using the same method as used elsewhere in this controller (e.g.
                 // rating)
-                Client client = (Client) cardContainer.getScene().getWindow().getUserData();
-                // If client is null (e.g. testing), we might need a fallback or check
-                if (client == null) {
-                    // Fallback using SessionManager
-                    client = (Client) SessionManager.getCurrentUser();
-                }
+                Client client = (Client) SessionManager.getCurrentUser();
 
                 controller.initialize(moviesession, client);
 

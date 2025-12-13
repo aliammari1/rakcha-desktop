@@ -419,30 +419,4 @@ public class NavigationManager {
         }
     }
 
-    /**
-     * Callback interface for configuring controllers during navigation.
-     */
-    @FunctionalInterface
-    public interface ControllerCallback {
-
-        /**
-         * Called to configure the loaded controller.
-         *
-         * @param controller the loaded controller instance
-         */
-        void configure(Object controller);
-    }
-
-    /**
-     * Interface for controllers that accept data during navigation.
-     */
-    public interface IDataProvider {
-
-        /**
-         * Sets data on the controller.
-         *
-         * @param data the data to set
-         */
-        void setData(Object data);
-    }
 }

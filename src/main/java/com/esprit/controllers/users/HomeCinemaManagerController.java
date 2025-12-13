@@ -11,6 +11,7 @@ import com.esprit.services.films.ActorService;
 import com.esprit.services.films.FilmService;
 import com.esprit.utils.Page;
 import com.esprit.utils.PageRequest;
+import com.esprit.utils.SessionManager;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -113,10 +114,10 @@ public class HomeCinemaManagerController implements Initializable {
                 try {
                     if (rootContainer != null && rootContainer.getScene() != null) {
                         Stage stage = (Stage) rootContainer.getScene().getWindow();
-                        if (stage != null && stage.getUserData() instanceof User) {
-                            User currentUser = (User) stage.getUserData();
+                        if (SessionManager.getCurrentUser() != null) {
+                            User currentUser = SessionManager.getCurrentUser();
                             welcomeLabel.setText("Welcome, " + currentUser.getFirstName() + " "
-                                + currentUser.getLastName() + "!");
+                                    + currentUser.getLastName() + "!");
                         } else {
                             welcomeLabel.setText("Welcome, Cinema Manager!");
                         }
@@ -130,8 +131,7 @@ public class HomeCinemaManagerController implements Initializable {
                     welcomeLabel.setText("Welcome, Cinema Manager!");
                 }
 
-            }
-            ));
+            }));
             delayedInit.play();
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error initializing cinema manager dashboard: " + e.getMessage(), e);
@@ -139,9 +139,9 @@ public class HomeCinemaManagerController implements Initializable {
 
     }
 
-
     /**
-     * Populates the dashboard statistic labels with counts retrieved from the cinema and session services.
+     * Populates the dashboard statistic labels with counts retrieved from the
+     * cinema and session services.
      */
     private void loadDashboardStatistics() {
         try {
@@ -170,14 +170,17 @@ public class HomeCinemaManagerController implements Initializable {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading dashboard statistics: " + e.getMessage(), e);
             // Set default values in case of error
-            if (cinemaCountLabel != null) cinemaCountLabel.setText("0");
-            if (sessionCountLabel != null) sessionCountLabel.setText("0");
-            if (revenueLabel != null) revenueLabel.setText("$0");
-            if (bookingCountLabel != null) bookingCountLabel.setText("0");
+            if (cinemaCountLabel != null)
+                cinemaCountLabel.setText("0");
+            if (sessionCountLabel != null)
+                sessionCountLabel.setText("0");
+            if (revenueLabel != null)
+                revenueLabel.setText("$0");
+            if (bookingCountLabel != null)
+                bookingCountLabel.setText("0");
         }
 
     }
-
 
     /**
      * Loads today's movie sessions.
@@ -200,14 +203,13 @@ public class HomeCinemaManagerController implements Initializable {
 
     }
 
-
     /**
      * Adds a session item to the sessions container.
      */
     private void addSessionItem(String movieTitle, String time, String hall) {
         HBox sessionItem = new HBox(10);
         sessionItem
-            .setStyle("-fx-padding: 10; -fx-background-color: rgba(60, 60, 60, 0.5); -fx-background-radius: 10;");
+                .setStyle("-fx-padding: 10; -fx-background-color: rgba(60, 60, 60, 0.5); -fx-background-radius: 10;");
 
         Label movieLabel = new Label(movieTitle);
         movieLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
@@ -225,12 +227,13 @@ public class HomeCinemaManagerController implements Initializable {
         todaySessionsContainer.getChildren().add(sessionItem);
     }
 
-
     /**
      * Populate the recent activity section of the dashboard.
      * <p>
-     * Clears the activity container and appends recent activity entries for display.
-     * If an error occurs while loading entries, a warning is logged and the container remains cleared.
+     * Clears the activity container and appends recent activity entries for
+     * display.
+     * If an error occurs while loading entries, a warning is logged and the
+     * container remains cleared.
      */
     private void loadRecentActivity() {
         try {
@@ -250,9 +253,9 @@ public class HomeCinemaManagerController implements Initializable {
 
     }
 
-
     /**
-     * Appends a styled activity entry (description and timestamp) to the recent activity list.
+     * Appends a styled activity entry (description and timestamp) to the recent
+     * activity list.
      *
      * @param activity  human-readable description of the activity
      * @param timestamp text representing when the activity occurred
@@ -260,7 +263,7 @@ public class HomeCinemaManagerController implements Initializable {
     private void addActivityItem(String activity, String timestamp) {
         HBox activityItem = new HBox(10);
         activityItem
-            .setStyle("-fx-padding: 10; -fx-background-color: rgba(60, 60, 60, 0.5); -fx-background-radius: 10;");
+                .setStyle("-fx-padding: 10; -fx-background-color: rgba(60, 60, 60, 0.5); -fx-background-radius: 10;");
 
         Label activityLabel = new Label(activity);
         activityLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
@@ -275,7 +278,6 @@ public class HomeCinemaManagerController implements Initializable {
         activityContainer.getChildren().add(activityItem);
     }
 
-
     /**
      * Starts the dashboard's background animations.
      * <p>
@@ -286,26 +288,25 @@ public class HomeCinemaManagerController implements Initializable {
         if (particle1 != null && particle2 != null) {
             // Floating animation for particles
             Timeline particleAnimation = new Timeline(
-                new KeyFrame(Duration.seconds(0),
-                    new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX())),
-                new KeyFrame(Duration.seconds(3),
-                    new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX() + 50)),
-                new KeyFrame(Duration.seconds(6),
-                    new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX())));
+                    new KeyFrame(Duration.seconds(0),
+                            new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX())),
+                    new KeyFrame(Duration.seconds(3),
+                            new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX() + 50)),
+                    new KeyFrame(Duration.seconds(6),
+                            new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX())));
             particleAnimation.setCycleCount(Timeline.INDEFINITE);
             particleAnimation.play();
 
             Timeline particle2Animation = new Timeline(
-                new KeyFrame(Duration.seconds(0),
-                    new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY())),
-                new KeyFrame(Duration.seconds(4),
-                    new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY() - 30)),
-                new KeyFrame(Duration.seconds(8),
-                    new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY())));
+                    new KeyFrame(Duration.seconds(0),
+                            new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY())),
+                    new KeyFrame(Duration.seconds(4),
+                            new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY() - 30)),
+                    new KeyFrame(Duration.seconds(8),
+                            new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY())));
             particle2Animation.setCycleCount(Timeline.INDEFINITE);
             particle2Animation.play();
         }
-
 
         // Add fade-in animation to root container
         if (rootContainer != null) {
@@ -317,9 +318,9 @@ public class HomeCinemaManagerController implements Initializable {
 
     }
 
-
     /**
-     * Navigate to the film management screen by replacing the current window's scene with the film management UI.
+     * Navigate to the film management screen by replacing the current window's
+     * scene with the film management UI.
      */
 
     @FXML
@@ -335,11 +336,11 @@ public class HomeCinemaManagerController implements Initializable {
 
     }
 
-
     /**
      * Navigates the application to the session management dashboard.
      * <p>
-     * Loads the FXML at "/ui/cinemas/DashboardResponsable.fxml" and replaces the current stage's scene with the loaded root.
+     * Loads the FXML at "/ui/cinemas/DashboardResponsable.fxml" and replaces the
+     * current stage's scene with the loaded root.
      */
     @FXML
     void manageSessions(ActionEvent event) {
@@ -353,7 +354,6 @@ public class HomeCinemaManagerController implements Initializable {
         }
 
     }
-
 
     /**
      * Navigate the application to the actor management screen.
@@ -373,9 +373,9 @@ public class HomeCinemaManagerController implements Initializable {
 
     }
 
-
     /**
-     * Loads the statistics view FXML and replaces the current window's scene with it.
+     * Loads the statistics view FXML and replaces the current window's scene with
+     * it.
      */
     @FXML
     void viewStatistics(ActionEvent event) {
@@ -390,17 +390,17 @@ public class HomeCinemaManagerController implements Initializable {
 
     }
 
-
     /**
-     * Redirects the user to the session management view (which includes cinema management).
+     * Redirects the user to the session management view (which includes cinema
+     * management).
      *
-     * @param event the action event triggered by the UI control invoking this handler
+     * @param event the action event triggered by the UI control invoking this
+     *              handler
      */
     @FXML
     void manageCinemas(ActionEvent event) {
         manageSessions(event); // Redirect to session management which includes cinema management
     }
-
 
     /**
      * Navigate to the statistics view.
@@ -409,7 +409,6 @@ public class HomeCinemaManagerController implements Initializable {
     void viewAnalytics(ActionEvent event) {
         viewStatistics(event); // Redirect to statistics view
     }
-
 
     /**
      * Navigate to the statistics view.

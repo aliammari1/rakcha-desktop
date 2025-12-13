@@ -53,7 +53,6 @@ public class TableCreator {
         return DatabaseType.UNKNOWN;
     }
 
-
     /**
      * Creates all tables from the SQL file for the detected database type
      */
@@ -67,7 +66,6 @@ public class TableCreator {
             log.error("SQLite is not supported yet");
         }
     }
-
 
     /**
      * Loads and executes SQL from a file
@@ -153,8 +151,8 @@ public class TableCreator {
 
                 // Remove comment prefixes added by converters
                 trimmed = trimmed.replaceAll("(?m)^\\s*--\\s*SQLINES.*$", "")
-                    .replaceAll("(?m)^\\s*/\\*\\s*SQLINES.*?\\*/", "")
-                    .trim();
+                        .replaceAll("(?m)^\\s*/\\*\\s*SQLINES.*?\\*/", "")
+                        .trim();
 
                 if (!trimmed.isEmpty()) {
                     try {
@@ -162,7 +160,7 @@ public class TableCreator {
                         log.debug("Executed SQL statement successfully");
                     } catch (SQLException e) {
                         // Log but continue with next statement
-                        log.warn("SQL execution warning (continuing): {}", e.getMessage());
+                        log.warn("SQL execution warning (continuing): {} | SQL: {}", e.getMessage(), trimmed);
                     }
                 }
             }
@@ -173,10 +171,8 @@ public class TableCreator {
         }
     }
 
-
     public enum DatabaseType {
         MYSQL, POSTGRESQL, UNKNOWN
     }
 
 }
-

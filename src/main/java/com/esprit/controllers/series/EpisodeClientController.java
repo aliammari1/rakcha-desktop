@@ -6,6 +6,7 @@ import com.esprit.models.series.Series;
 import com.esprit.models.users.Client;
 import com.esprit.services.common.ReviewService;
 import com.esprit.services.series.EpisodeService;
+import com.esprit.utils.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -167,7 +168,7 @@ public class EpisodeClientController implements Initializable {
                     }
 
                     this.setText("\n   Title :" + item.getTitle() + "\n  Number: " + item.getEpisodeNumber()
-                        + "\n   Season : " + item.getSeasonId());
+                            + "\n   Season : " + item.getSeasonId());
                     this.setStyle("-fx-font-size: 14; -fx-font-family: 'Arial'; -fx-font-weight: bold;");
                     idep = item.getId();
                 }
@@ -214,7 +215,7 @@ public class EpisodeClientController implements Initializable {
             EpisodeClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         final ReviewService sf = new ReviewService();
-        final Client client = (Client) this.txtDescriptionFeedBack.getScene().getWindow().getUserData();
+        final Client client = (Client) SessionManager.getCurrentUser();
         if (client != null) {
             sf.create(new Review(client, this.selectedSerie, description));
         }
@@ -224,7 +225,7 @@ public class EpisodeClientController implements Initializable {
     @FXML
     public void afficherserie(final MouseEvent event) throws IOException {
         final Parent root = FXMLLoader
-            .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/SeriesClient.fxml")));
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/SeriesClient.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);

@@ -506,7 +506,12 @@ public class SidebarController implements Initializable {
 
     private void switchToMovieSessions() {
         Stage stage = (Stage) moviesessionButton.getScene().getWindow();
-        NavigationManager.navigate(stage, "/ui/cinemas/DashboardResponsableCinema.fxml");
+
+        NavigationManager.navigate(stage, "/ui/cinemas/DashboardResponsableCinema.fxml", controller -> {
+            if (controller instanceof com.esprit.controllers.cinemas.DashboardResponsableController) {
+                ((com.esprit.controllers.cinemas.DashboardResponsableController) controller).showSessionsView();
+            }
+        });
     }
 
     private void switchToStatistics() {

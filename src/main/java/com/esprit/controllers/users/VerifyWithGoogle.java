@@ -4,6 +4,7 @@ import com.esprit.enums.UserRole;
 import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
+import com.esprit.utils.SessionManager;
 import com.esprit.utils.SignInGoogle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -50,7 +51,41 @@ public class VerifyWithGoogle {
     @FXML
     void initialize() throws IOException, ExecutionException, InterruptedException {
         final String link = SignInGoogle.signInWithGoogle();
-        Desktop.getDesktop().browse(URI.create(link));
+        openWebpage(link);
+    }
+
+    /**
+     * Opens a URL in the system browser with cross-platform support
+     */
+    private void openWebpage(String url) {
+        try {
+            // Try Desktop API first (Windows/Mac/Some Linux)
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(URI.create(url));
+                return;
+            }
+        } catch (Exception e) {
+            // Ignore and fall back
+        }
+
+        // Fallback for Linux/Unix (xdg-open)
+        String os = System.getProperty("os.name").toLowerCase();
+        try {
+            if (os.contains("nix") || os.contains("nux")) {
+                new ProcessBuilder("xdg-open", url).start();
+            } else if (os.contains("mac")) {
+                new ProcessBuilder("open", url).start();
+            } else {
+                VerifyWithGoogle.LOGGER.warning("Could not open browser: Desktop not supported and no fallback found.");
+                VerifyWithGoogle.LOGGER.info("Please open the following URL manually: " + url);
+                System.out.println("Please open the following URL manually: " + url);
+            }
+        } catch (IOException e) {
+            VerifyWithGoogle.LOGGER.warning(
+                    "Browser automation failed (xdg-open/open not found). This is expected on some Linux environments.");
+            VerifyWithGoogle.LOGGER.info("Please open the following URL manually: " + url);
+            System.out.println("Please open the following URL manually: " + url);
+        }
     }
 
     /**
@@ -76,6 +111,9 @@ public class VerifyWithGoogle {
                 if (googleUserInfo != null) {
                     // Create or get user from database
                     User user = createOrGetUserFromGoogle(googleUserInfo);
+
+                    // Set the session user
+                    SessionManager.setCurrentUser(user);
 
                     // Load the Profile FXML
                     final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));

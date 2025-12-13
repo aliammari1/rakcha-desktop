@@ -8,6 +8,7 @@ import com.esprit.models.products.ShoppingCart;
 import com.esprit.models.users.Client;
 import com.esprit.services.products.ProductService;
 import com.esprit.services.products.ShoppingCartService;
+import com.esprit.utils.SessionManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -141,7 +142,7 @@ public class ShoppingCartProductControllers implements Initializable {
                 return;
             }
 
-            final Client client = (Client) this.cartFlowPane.getScene().getWindow().getUserData();
+            final Client client = (Client) SessionManager.getCurrentUser();
             if (client == null) {
                 LOGGER.log(Level.WARNING, "Client user data not found");
                 return;
@@ -205,7 +206,7 @@ public class ShoppingCartProductControllers implements Initializable {
      *                     the UI
      *                     elements in the `generateProductCard()` function.
      * @returns a VBox container that displays a product's details and allows users
-     * to select it for their order.
+     *          to select it for their order.
      */
     private VBox createProductVBox(final ShoppingCart ShoppingCart) {
         final VBox produitVBox = new VBox();
@@ -260,7 +261,7 @@ public class ShoppingCartProductControllers implements Initializable {
         quantityTextField.setEditable(false); // Empêcher l'édition manuelle
         final int totalQuantiteProduct = Integer.parseInt(quantityTextField.getText());
         final Label sommeTotaleLabel = new Label(
-            "Somme totale : " + this.prixProduct(ShoppingCart.getProduct().getId(), totalQuantiteProduct) + " DT");
+                "Somme totale : " + this.prixProduct(ShoppingCart.getProduct().getId(), totalQuantiteProduct) + " DT");
         sommeTotaleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         sommeTotaleLabel.setLayoutX(550);
         sommeTotaleLabel.setLayoutY(60);
@@ -298,9 +299,9 @@ public class ShoppingCartProductControllers implements Initializable {
             if (MouseButton.PRIMARY == event.getButton()) {
                 this.decreaseQuantity(quantityTextField, ShoppingCart);
                 sommeTotaleLabel.setText("Somme totale : " + this.prixProduct(ShoppingCart.getProduct().getId(),
-                    Integer.parseInt(quantityTextField.getText())) + " DT");
+                        Integer.parseInt(quantityTextField.getText())) + " DT");
                 this.order.getOrderItems().get(this.order.getOrderItems().indexOf(orderItem))
-                    .setQuantity(Integer.parseInt(quantityTextField.getText()));
+                        .setQuantity(Integer.parseInt(quantityTextField.getText()));
                 this.updatePrixTotal();
             }
         });
@@ -313,9 +314,9 @@ public class ShoppingCartProductControllers implements Initializable {
             if (MouseButton.PRIMARY == event.getButton()) {
                 this.increaseQuantity(quantityTextField, ShoppingCart);
                 sommeTotaleLabel.setText("Somme totale : " + this.prixProduct(ShoppingCart.getProduct().getId(),
-                    Integer.parseInt(quantityTextField.getText())) + " DT");
+                        Integer.parseInt(quantityTextField.getText())) + " DT");
                 this.order.getOrderItems().get(this.order.getOrderItems().indexOf(orderItem))
-                    .setQuantity(Integer.parseInt(quantityTextField.getText()));
+                        .setQuantity(Integer.parseInt(quantityTextField.getText()));
                 this.updatePrixTotal();
             }
         });
@@ -339,18 +340,18 @@ public class ShoppingCartProductControllers implements Initializable {
             }
         });
         card.setStyle("""
-            -fx-background-color:#F6F2F2;
-             -fx-text-fill: #FFFFFF;
-                -fx-font-size: 12px;
-                -fx-font-weight: bold;
-                -fx-padding: 10px;
-                -fx-border-color:  #ae2d3c;/* Couleur de la bordure */
-                -fx-border-width: 2px; /* Largeur de la bordure */
-                -fx-border-radius: 5px; /* Rayon de la bordure pour arrondir les coins */\
-            """);
+                -fx-background-color:#F6F2F2;
+                 -fx-text-fill: #FFFFFF;
+                    -fx-font-size: 12px;
+                    -fx-font-weight: bold;
+                    -fx-padding: 10px;
+                    -fx-border-color:  #ae2d3c;/* Couleur de la bordure */
+                    -fx-border-width: 2px; /* Largeur de la bordure */
+                    -fx-border-radius: 5px; /* Rayon de la bordure pour arrondir les coins */\
+                """);
         // Ajouter tous les éléments au VBox
         card.getChildren().addAll(imageView, nameLabel, priceLabel, decreaseIcon, quantityTextField, increaseIcon,
-            sommeTotaleLabel, checkBox, deleteIcon);
+                sommeTotaleLabel, checkBox, deleteIcon);
         this.produitVBoxMap.put(ShoppingCart.getProduct().getId().intValue(), produitVBox);
         produitVBox.getChildren().add(card);
         return produitVBox;
@@ -401,7 +402,7 @@ public class ShoppingCartProductControllers implements Initializable {
      *                 user, which is compared with the available stock quantity to
      *                 determine if the product is available for purchase.
      * @returns a boolean value indicating whether the requested quantity of stock
-     * is available or not.
+     *          is available or not.
      */
     private boolean isStockAvailable(final Product produit, final int quantity) {
         // Comparer la quantité demandée avec la quantité disponible en stock
@@ -518,7 +519,7 @@ public class ShoppingCartProductControllers implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/products/CommentaireProduit.fxml"));
+                    this.getClass().getResource("/ui/products/CommentaireProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -551,7 +552,7 @@ public class ShoppingCartProductControllers implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/AffichageEvenementClient.fxml"));
+                    this.getClass().getResource("/ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -583,7 +584,7 @@ public class ShoppingCartProductControllers implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/products/AfficherProduitClient.fxml"));
+                    this.getClass().getResource("/ui/products/AfficherProduitClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -691,7 +692,7 @@ public class ShoppingCartProductControllers implements Initializable {
         final Window previousWindow = this.retour.getScene().getWindow();
         // Charger le fichier FXML de la page "/ui/products/AfficherProduitClient.fxml"
         final FXMLLoader fxmlLoader = new FXMLLoader(
-            this.getClass().getResource("/ui/products/AfficherProduitClient.fxml"));
+                this.getClass().getResource("/ui/products/AfficherProduitClient.fxml"));
         try {
             final Parent rootNode = fxmlLoader.load();
             final Scene scene = new Scene(rootNode);

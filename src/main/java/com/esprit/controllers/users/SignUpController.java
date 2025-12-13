@@ -6,6 +6,7 @@ import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.CloudinaryStorage;
+import com.esprit.utils.SessionManager;
 import com.esprit.utils.validators.EmailValidator;
 import com.esprit.utils.validators.PasswordValidator;
 import javafx.animation.Animation;
@@ -211,30 +212,30 @@ public class SignUpController implements Initializable {
         this.nomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                final String newValue) {
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck().dependsOn("firstName", nomTextField.textProperty())
-                    .withMethod(c -> {
-                        final String userName = c.get("firstName");
-                        if (null != userName && !userName.toLowerCase().equals(userName)) {
-                            c.error("Please use only lowercase letters.");
-                        } else if (userName.isEmpty()) {
-                            c.error("the string is empty");
-                        }
-                    }).decorates(nomTextField).immediate();
+                        .withMethod(c -> {
+                            final String userName = c.get("firstName");
+                            if (null != userName && !userName.toLowerCase().equals(userName)) {
+                                c.error("Please use only lowercase letters.");
+                            } else if (userName.isEmpty()) {
+                                c.error("the string is empty");
+                            }
+                        }).decorates(nomTextField).immediate();
                 final Window window = nomTextField.getScene().getWindow();
                 final Bounds bounds = nomTextField
-                    .localToScreen(nomTextField.getBoundsInLocal());
+                        .localToScreen(nomTextField.getBoundsInLocal());
                 nomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             nomTextField.setTooltip(tooltip);
                             nomTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                bounds.getMinY() + 30);
+                                    bounds.getMinY() + 30);
                         } else {
                             if (null != nomTextField.getTooltip()) {
                                 nomTextField.getTooltip().hide();
@@ -259,30 +260,30 @@ public class SignUpController implements Initializable {
         this.prenomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                final String newValue) {
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck().dependsOn("lastName", prenomTextField.textProperty())
-                    .withMethod(c -> {
-                        final String userName = c.get("lastName");
-                        if (null != userName && !userName.toLowerCase().equals(userName)) {
-                            c.error("Please use only lowercase letters.");
-                        } else if (userName.isEmpty()) {
-                            c.error("the string is empty");
-                        }
-                    }).decorates(prenomTextField).immediate();
+                        .withMethod(c -> {
+                            final String userName = c.get("lastName");
+                            if (null != userName && !userName.toLowerCase().equals(userName)) {
+                                c.error("Please use only lowercase letters.");
+                            } else if (userName.isEmpty()) {
+                                c.error("the string is empty");
+                            }
+                        }).decorates(prenomTextField).immediate();
                 final Window window = prenomTextField.getScene().getWindow();
                 final Bounds bounds = prenomTextField
-                    .localToScreen(prenomTextField.getBoundsInLocal());
+                        .localToScreen(prenomTextField.getBoundsInLocal());
                 prenomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             prenomTextField.setTooltip(tooltip);
                             prenomTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                bounds.getMinY() + 30);
+                                    bounds.getMinY() + 30);
                         } else {
                             if (null != prenomTextField.getTooltip()) {
                                 prenomTextField.getTooltip().hide();
@@ -291,16 +292,16 @@ public class SignUpController implements Initializable {
                     }
                 });
                 prenomTextField.addEventFilter(KeyEvent.KEY_PRESSED,
-                    new EventHandler<KeyEvent>() {
-                        @Override
-                        public void handle(final KeyEvent event) {
-                            if (KeyCode.ENTER == event.getCode()) {
-                                if (validator.containsErrors()) {
-                                    event.consume();
+                        new EventHandler<KeyEvent>() {
+                            @Override
+                            public void handle(final KeyEvent event) {
+                                if (KeyCode.ENTER == event.getCode()) {
+                                    if (validator.containsErrors()) {
+                                        event.consume();
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
             }
         });
 
@@ -308,30 +309,30 @@ public class SignUpController implements Initializable {
         this.adresseTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                final String newValue) {
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck().dependsOn("address", adresseTextField.textProperty())
-                    .withMethod(c -> {
-                        final String userName = c.get("address");
-                        if (null != userName && !userName.toLowerCase().equals(userName)) {
-                            c.error("Please use only lowercase letters.");
-                        } else if (userName.isEmpty()) {
-                            c.error("the string is empty");
-                        }
-                    }).decorates(adresseTextField).immediate();
+                        .withMethod(c -> {
+                            final String userName = c.get("address");
+                            if (null != userName && !userName.toLowerCase().equals(userName)) {
+                                c.error("Please use only lowercase letters.");
+                            } else if (userName.isEmpty()) {
+                                c.error("the string is empty");
+                            }
+                        }).decorates(adresseTextField).immediate();
                 final Window window = adresseTextField.getScene().getWindow();
                 final Bounds bounds = adresseTextField
-                    .localToScreen(adresseTextField.getBoundsInLocal());
+                        .localToScreen(adresseTextField.getBoundsInLocal());
                 adresseTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             adresseTextField.setTooltip(tooltip);
                             adresseTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                bounds.getMinY() + 30);
+                                    bounds.getMinY() + 30);
                         } else {
                             if (null != adresseTextField.getTooltip()) {
                                 adresseTextField.getTooltip().hide();
@@ -340,16 +341,16 @@ public class SignUpController implements Initializable {
                     }
                 });
                 adresseTextField.addEventFilter(KeyEvent.KEY_PRESSED,
-                    new EventHandler<KeyEvent>() {
-                        @Override
-                        public void handle(final KeyEvent event) {
-                            if (KeyCode.ENTER == event.getCode()) {
-                                if (validator.containsErrors()) {
-                                    event.consume();
+                        new EventHandler<KeyEvent>() {
+                            @Override
+                            public void handle(final KeyEvent event) {
+                                if (KeyCode.ENTER == event.getCode()) {
+                                    if (validator.containsErrors()) {
+                                        event.consume();
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
             }
         });
 
@@ -357,33 +358,33 @@ public class SignUpController implements Initializable {
         this.emailTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                final String newValue) {
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck().dependsOn("email", emailTextField.textProperty())
-                    .withMethod(c -> {
-                        final String userName = c.get("email");
-                        if (null != userName) {
-                            final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-                            if (!userName.matches(emailRegex)) {
-                                c.error("Invalid email format.");
+                        .withMethod(c -> {
+                            final String userName = c.get("email");
+                            if (null != userName) {
+                                final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+                                if (!userName.matches(emailRegex)) {
+                                    c.error("Invalid email format.");
+                                }
+                            } else if (userName.isEmpty()) {
+                                c.error("the string is empty");
                             }
-                        } else if (userName.isEmpty()) {
-                            c.error("the string is empty");
-                        }
-                    }).decorates(emailTextField).immediate();
+                        }).decorates(emailTextField).immediate();
                 final Window window = emailTextField.getScene().getWindow();
                 final Bounds bounds = emailTextField
-                    .localToScreen(emailTextField.getBoundsInLocal());
+                        .localToScreen(emailTextField.getBoundsInLocal());
                 emailTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             emailTextField.setTooltip(tooltip);
                             emailTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                bounds.getMinY() + 30);
+                                    bounds.getMinY() + 30);
                         } else {
                             if (null != emailTextField.getTooltip()) {
                                 emailTextField.getTooltip().hide();
@@ -408,30 +409,30 @@ public class SignUpController implements Initializable {
         this.passwordTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                final String newValue) {
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck().dependsOn("password", passwordTextField.textProperty())
-                    .withMethod(c -> {
-                        final String userName = c.get("password");
-                        if (null != userName && !userName.toLowerCase().equals(userName)) {
-                            c.error("Please use only lowercase letters.");
-                        } else if (userName.isEmpty()) {
-                            c.error("the string is empty");
-                        }
-                    }).decorates(passwordTextField).immediate();
+                        .withMethod(c -> {
+                            final String userName = c.get("password");
+                            if (null != userName && !userName.toLowerCase().equals(userName)) {
+                                c.error("Please use only lowercase letters.");
+                            } else if (userName.isEmpty()) {
+                                c.error("the string is empty");
+                            }
+                        }).decorates(passwordTextField).immediate();
                 final Window window = passwordTextField.getScene().getWindow();
                 final Bounds bounds = passwordTextField
-                    .localToScreen(passwordTextField.getBoundsInLocal());
+                        .localToScreen(passwordTextField.getBoundsInLocal());
                 passwordTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             passwordTextField.setTooltip(tooltip);
                             passwordTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                bounds.getMinY() + 30);
+                                    bounds.getMinY() + 30);
                         } else {
                             if (null != passwordTextField.getTooltip()) {
                                 passwordTextField.getTooltip().hide();
@@ -440,16 +441,16 @@ public class SignUpController implements Initializable {
                     }
                 });
                 passwordTextField.addEventFilter(KeyEvent.KEY_PRESSED,
-                    new EventHandler<KeyEvent>() {
-                        @Override
-                        public void handle(final KeyEvent event) {
-                            if (KeyCode.ENTER == event.getCode()) {
-                                if (validator.containsErrors()) {
-                                    event.consume();
+                        new EventHandler<KeyEvent>() {
+                            @Override
+                            public void handle(final KeyEvent event) {
+                                if (KeyCode.ENTER == event.getCode()) {
+                                    if (validator.containsErrors()) {
+                                        event.consume();
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
             }
         });
 
@@ -457,34 +458,34 @@ public class SignUpController implements Initializable {
         this.num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                final String newValue) {
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck()
-                    .dependsOn("phoneNumber", num_telephoneTextField.textProperty())
-                    .withMethod(c -> {
-                        final String userName = c.get("phoneNumber");
-                        if (null != userName) {
-                            final String numberRegex = "\\d*";
-                            if (!userName.matches(numberRegex)) {
-                                c.error("Please use only numbers.");
+                        .dependsOn("phoneNumber", num_telephoneTextField.textProperty())
+                        .withMethod(c -> {
+                            final String userName = c.get("phoneNumber");
+                            if (null != userName) {
+                                final String numberRegex = "\\d*";
+                                if (!userName.matches(numberRegex)) {
+                                    c.error("Please use only numbers.");
+                                }
+                            } else if (userName.isEmpty()) {
+                                c.error("the string is empty");
                             }
-                        } else if (userName.isEmpty()) {
-                            c.error("the string is empty");
-                        }
-                    }).decorates(num_telephoneTextField).immediate();
+                        }).decorates(num_telephoneTextField).immediate();
                 final Window window = num_telephoneTextField.getScene().getWindow();
                 final Bounds bounds = num_telephoneTextField
-                    .localToScreen(num_telephoneTextField.getBoundsInLocal());
+                        .localToScreen(num_telephoneTextField.getBoundsInLocal());
                 num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             num_telephoneTextField.setTooltip(tooltip);
                             num_telephoneTextField.getTooltip().show(window,
-                                bounds.getMinX() - 10, bounds.getMinY() + 30);
+                                    bounds.getMinX() - 10, bounds.getMinY() + 30);
                         } else {
                             if (null != num_telephoneTextField.getTooltip()) {
                                 num_telephoneTextField.getTooltip().hide();
@@ -493,16 +494,16 @@ public class SignUpController implements Initializable {
                     }
                 });
                 num_telephoneTextField.addEventFilter(KeyEvent.KEY_PRESSED,
-                    new EventHandler<KeyEvent>() {
-                        @Override
-                        public void handle(final KeyEvent event) {
-                            if (KeyCode.ENTER == event.getCode()) {
-                                if (validator.containsErrors()) {
-                                    event.consume();
+                        new EventHandler<KeyEvent>() {
+                            @Override
+                            public void handle(final KeyEvent event) {
+                                if (KeyCode.ENTER == event.getCode()) {
+                                    if (validator.containsErrors()) {
+                                        event.consume();
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
             }
         });
 
@@ -520,8 +521,8 @@ public class SignUpController implements Initializable {
     void importImage(final ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("PNG", "*.png"),
-            new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"));
         fileChooser.setTitle("Sélectionner une image");
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
@@ -557,9 +558,9 @@ public class SignUpController implements Initializable {
         final String email = this.emailTextField.getText();
         final LocalDate dateDeNaissance = this.dateDeNaissanceDatePicker.getValue();
         if (nom.isEmpty() || prenom.isEmpty() || num_telephone.isEmpty() || password.isEmpty() || role.name().isEmpty()
-            || email.isEmpty() || null == dateDeNaissance) {
+                || email.isEmpty() || null == dateDeNaissance) {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields",
-                ButtonType.CLOSE);
+                    ButtonType.CLOSE);
             alert.show();
             return;
         }
@@ -573,7 +574,7 @@ public class SignUpController implements Initializable {
         if (!EmailValidator.isValid(email)) {
             String errorMessage = EmailValidator.getValidationMessage(email);
             final Alert alert = new Alert(Alert.AlertType.ERROR,
-                errorMessage != null ? errorMessage : "Invalid email format", ButtonType.CLOSE);
+                    errorMessage != null ? errorMessage : "Invalid email format", ButtonType.CLOSE);
             alert.show();
             return;
         }
@@ -582,8 +583,8 @@ public class SignUpController implements Initializable {
         List<String> passwordErrors = PasswordValidator.getValidationErrors(password);
         if (!passwordErrors.isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.ERROR,
-                "Password validation failed:\n" + String.join("\n", passwordErrors),
-                ButtonType.CLOSE);
+                    "Password validation failed:\n" + String.join("\n", passwordErrors),
+                    ButtonType.CLOSE);
             alert.show();
             return;
         }
@@ -592,8 +593,8 @@ public class SignUpController implements Initializable {
         final UserService userService = new UserService();
         if (userService.checkEmailFound(email)) {
             final Alert alert = new Alert(Alert.AlertType.ERROR,
-                "This email is already registered. Please use a different email or login.",
-                ButtonType.CLOSE);
+                    "This email is already registered. Please use a different email or login.",
+                    ButtonType.CLOSE);
             alert.show();
             return;
         }
@@ -601,21 +602,21 @@ public class SignUpController implements Initializable {
         switch (role) {
             case UserRole.CINEMA_MANAGER:
                 user = new CinemaManager(this.nomTextField.getText(), this.prenomTextField.getText(),
-                    this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
-                    UserRole.valueOf(this.roleComboBox.getValue()), this.emailTextField.getText(),
-                    Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
-                    cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
+                        this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
+                        UserRole.valueOf(this.roleComboBox.getValue()), this.emailTextField.getText(),
+                        Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
+                        cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
                 break;
             case UserRole.CLIENT:
                 user = new Client(this.nomTextField.getText(), this.prenomTextField.getText(),
-                    this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
-                    UserRole.valueOf(this.roleComboBox.getValue()), this.emailTextField.getText(),
-                    Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
-                    cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
+                        this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
+                        UserRole.valueOf(this.roleComboBox.getValue()), this.emailTextField.getText(),
+                        Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
+                        cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
                 break;
             default:
                 final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available",
-                    ButtonType.CLOSE);
+                        ButtonType.CLOSE);
                 alert.show();
                 return;
         }
@@ -625,6 +626,14 @@ public class SignUpController implements Initializable {
             stopAllAnimations();
 
             userService.create(user);
+
+            // Retrieve the full user object (with ID) and set session
+            User createdUser = userService.getUserByEmail(email);
+            if (createdUser != null) {
+                user = createdUser;
+            }
+            SessionManager.setCurrentUser(user);
+
             final Stage stage = (Stage) this.nomTextField.getScene().getWindow();
             final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
             final Parent root = loader.load();
@@ -718,14 +727,14 @@ public class SignUpController implements Initializable {
      * Initializes the particle animation for floating red particles
      */
     private void initializeParticleAnimation() {
-        Circle[] particles = {particle1, particle2, particle3, particle4, particle5, particle6,
-            particle7, particle8, particle9, particle10, particle11, particle12};
+        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6,
+                particle7, particle8, particle9, particle10, particle11, particle12 };
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
                 // Floating X movement
                 TranslateTransition particleFloatX = new TranslateTransition(Duration.seconds(3 + i * 0.3),
-                    particles[i]);
+                        particles[i]);
                 particleFloatX.setFromX(0);
                 particleFloatX.setToX(30 - i * 5);
                 particleFloatX.setCycleCount(Animation.INDEFINITE);
@@ -734,7 +743,7 @@ public class SignUpController implements Initializable {
 
                 // Floating Y movement
                 TranslateTransition particleFloatY = new TranslateTransition(Duration.seconds(4 + i * 0.2),
-                    particles[i]);
+                        particles[i]);
                 particleFloatY.setFromY(0);
                 particleFloatY.setToY(25 - i * 3);
                 particleFloatY.setCycleCount(Animation.INDEFINITE);
@@ -777,7 +786,7 @@ public class SignUpController implements Initializable {
      */
     private void initializeShapeAnimation() {
         // Array of all existing shapes
-        Object[] shapes = {shape1, shape2, shape3, shape4, shape5, shape6};
+        Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 };
 
         for (int i = 0; i < shapes.length; i++) {
             if (shapes[i] != null) {
@@ -922,11 +931,11 @@ public class SignUpController implements Initializable {
             int red = 180 + RANDOM.nextInt(75);
             int darkRed = 80 + RANDOM.nextInt(100);
             particle.setStyle("-fx-fill: radial-gradient(center 50% 50%, radius 50%, #" +
-                String.format("%02X", red) + "2222, #" + String.format("%02X", darkRed) + "0000); " +
-                "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) +
-                String.format("%02X", red) + ", " + (10 + RANDOM.nextInt(15)) + ", 0, 0, 0); " +
-                "-fx-opacity: " + (0.6 + RANDOM.nextDouble() * 0.4) + ";" +
-                "-fx-z-index: " + (250 + i) + ";");
+                    String.format("%02X", red) + "2222, #" + String.format("%02X", darkRed) + "0000); " +
+                    "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) +
+                    String.format("%02X", red) + ", " + (10 + RANDOM.nextInt(15)) + ", 0, 0, 0); " +
+                    "-fx-opacity: " + (0.6 + RANDOM.nextDouble() * 0.4) + ";" +
+                    "-fx-z-index: " + (250 + i) + ";");
 
             // Add to parent and store reference
             foregroundPane.getChildren().add(particle);
@@ -960,12 +969,12 @@ public class SignUpController implements Initializable {
             int red = 100 + RANDOM.nextInt(100);
             int darkRed = 40 + RANDOM.nextInt(60);
             shape.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", 0, 0, 0.5), rgba(" + darkRed
-                + ", 0, 0, 0.3)); " +
-                "-fx-stroke: #" + String.format("%02X", red) + "0000; " +
-                "-fx-stroke-width: " + (1 + RANDOM.nextInt(2)) + "; " +
-                "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10))
-                + ", 0, 0, 0); " +
-                "-fx-z-index: " + (300 + i) + ";");
+                    + ", 0, 0, 0.3)); " +
+                    "-fx-stroke: #" + String.format("%02X", red) + "0000; " +
+                    "-fx-stroke-width: " + (1 + RANDOM.nextInt(2)) + "; " +
+                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10))
+                    + ", 0, 0, 0); " +
+                    "-fx-z-index: " + (300 + i) + ";");
             shape.setOpacity(0.4 + RANDOM.nextDouble() * 0.4);
 
             // Add to parent and store reference
@@ -990,12 +999,12 @@ public class SignUpController implements Initializable {
             int red = 150 + RANDOM.nextInt(100);
             int darkRed = 60 + RANDOM.nextInt(80);
             rect.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", " + (red / 4) + ", " + (red / 4)
-                + ", 0.6), rgba(" + darkRed + ", " + (darkRed / 6) + ", " + (darkRed / 6) + ", 0.4)); " +
-                "-fx-stroke: #" + String.format("%02X", red) + "2222; " +
-                "-fx-stroke-width: " + (RANDOM.nextDouble() * 2) + "; " +
-                "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red / 4) + ", " + (red / 4) + ", 0.6), "
-                + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
-                "-fx-z-index: " + (330 + i) + ";");
+                    + ", 0.6), rgba(" + darkRed + ", " + (darkRed / 6) + ", " + (darkRed / 6) + ", 0.4)); " +
+                    "-fx-stroke: #" + String.format("%02X", red) + "2222; " +
+                    "-fx-stroke-width: " + (RANDOM.nextDouble() * 2) + "; " +
+                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red / 4) + ", " + (red / 4) + ", 0.6), "
+                    + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
+                    "-fx-z-index: " + (330 + i) + ";");
             rect.setOpacity(0.3 + RANDOM.nextDouble() * 0.5);
 
             // Add to parent and store reference

@@ -178,7 +178,7 @@ public class ProfileController {
      * Initializes floating particle animations for the cinematic effect.
      */
     private void initializeParticleAnimations() {
-        Circle[] particles = {particle1, particle2, particle3, particle4, particle5};
+        Circle[] particles = { particle1, particle2, particle3, particle4, particle5 };
 
         for (Circle particle : particles) {
             if (particle != null) {
@@ -206,9 +206,9 @@ public class ProfileController {
 
         // Add pulsing opacity effect
         Timeline opacityTimeline = new Timeline(
-            new KeyFrame(Duration.ZERO, new KeyValue(particle.opacityProperty(), 0.4)),
-            new KeyFrame(Duration.seconds(durationSeconds / 2), new KeyValue(particle.opacityProperty(), 0.9)),
-            new KeyFrame(Duration.seconds(durationSeconds), new KeyValue(particle.opacityProperty(), 0.4)));
+                new KeyFrame(Duration.ZERO, new KeyValue(particle.opacityProperty(), 0.4)),
+                new KeyFrame(Duration.seconds(durationSeconds / 2), new KeyValue(particle.opacityProperty(), 0.9)),
+                new KeyFrame(Duration.seconds(durationSeconds), new KeyValue(particle.opacityProperty(), 0.4)));
         opacityTimeline.setCycleCount(Animation.INDEFINITE);
         opacityTimeline.play();
     }
@@ -307,11 +307,11 @@ public class ProfileController {
             // Create image with explicit size and background loading disabled
             LOGGER.info("Creating image object for URL: " + imageUrl);
             Image image = new Image(imageUrl,
-                140, // width
-                140, // height
-                true, // preserve ratio
-                true, // smooth
-                false); // no background loading for immediate error detection
+                    140, // width
+                    140, // height
+                    true, // preserve ratio
+                    true, // smooth
+                    false); // no background loading for immediate error detection
 
             // Wait for the image to load and check for errors
             image.progressProperty().addListener((obs, oldVal, newVal) -> {
@@ -344,9 +344,9 @@ public class ProfileController {
                     photoDeProfilImageView.setImage(image);
                     // Make the ImageView circular by setting a clip
                     Circle clip = new Circle(photoDeProfilImageView.getFitWidth() / 2,
-                        photoDeProfilImageView.getFitHeight() / 2,
-                        Math.min(photoDeProfilImageView.getFitWidth(),
-                            photoDeProfilImageView.getFitHeight()) / 2);
+                            photoDeProfilImageView.getFitHeight() / 2,
+                            Math.min(photoDeProfilImageView.getFitWidth(),
+                                    photoDeProfilImageView.getFitHeight()) / 2);
                     photoDeProfilImageView.setClip(clip);
                     photoDeProfilImageView.setPreserveRatio(true);
                     LOGGER.info("Image set to ImageView successfully");
@@ -376,9 +376,9 @@ public class ProfileController {
     private void useGradientFallback() {
         // Create a more visually appealing gradient fallback
         LinearGradient gradient = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
-            new Stop(0, Color.valueOf("#e74141")),
-            new Stop(0.5, Color.valueOf("#F1644B")),
-            new Stop(1, Color.valueOf("#2D3A66")));
+                new Stop(0, Color.valueOf("#e74141")),
+                new Stop(0.5, Color.valueOf("#F1644B")),
+                new Stop(1, Color.valueOf("#2D3A66")));
 
         imageCircle.setFill(gradient);
 
@@ -476,11 +476,11 @@ public class ProfileController {
 
         // AI-powered insights based on user profile
         String[] insights = {
-            "Based on your profile, you might enjoy exploring new cinema experiences! Try our VIP seating for your next movie.",
-            "Your viewing preferences suggest you love action and sci-fi. Check out our upcoming blockbuster releases!",
-            "We noticed you haven't updated your preferences in a while. Complete your profile for better recommendations!",
-            "You're a valued member! Unlock exclusive discounts by keeping your profile up to date.",
-            "Based on trending movies in your area, we think you'd love the new thriller releases this month!"
+                "Based on your profile, you might enjoy exploring new cinema experiences! Try our VIP seating for your next movie.",
+                "Your viewing preferences suggest you love action and sci-fi. Check out our upcoming blockbuster releases!",
+                "We noticed you haven't updated your preferences in a while. Complete your profile for better recommendations!",
+                "You're a valued member! Unlock exclusive discounts by keeping your profile up to date.",
+                "Based on trending movies in your area, we think you'd love the new thriller releases this month!"
         };
 
         // Select a random insight for now (in real app, this would use actual user
@@ -599,7 +599,7 @@ public class ProfileController {
      */
     public void deleteAccount(final ActionEvent event) throws IOException {
         final Stage stage = (Stage) this.firstNameTextField.getScene().getWindow();
-        final User user = (User) stage.getUserData();
+        final User user = SessionManager.getCurrentUser();
         final UserService userService = new UserService();
         userService.delete(user);
         final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/SignUp.fxml"));
@@ -690,7 +690,7 @@ public class ProfileController {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select Profile Picture");
             fileChooser.getExtensionFilters()
-                .addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+                    .addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
 
             File selectedFile = fileChooser.showOpenDialog(imageCircle.getScene().getWindow());
             if (selectedFile != null) {
@@ -720,17 +720,17 @@ public class ProfileController {
                         } catch (Exception e) {
                             LOGGER.log(Level.WARNING, "Failed to update user profile in database", e);
                             showAlert("Warning", "Image uploaded but profile not saved. Please save your profile.",
-                                Alert.AlertType.WARNING);
+                                    Alert.AlertType.WARNING);
                         }
                     } else {
                         LOGGER.warning("User object is null, cannot update profile image URL");
                         showAlert("Warning", "Image uploaded but couldn't update your profile. Try again later.",
-                            Alert.AlertType.WARNING);
+                                Alert.AlertType.WARNING);
                     }
                 } catch (IOException e) {
                     LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
                     showAlert("Upload Error", "Could not upload image to cloud storage: " + e.getMessage(),
-                        Alert.AlertType.ERROR);
+                            Alert.AlertType.ERROR);
                     loadAndSetImage(DEFAULT_PROFILE_GIF);
                 }
             } else {
@@ -826,7 +826,8 @@ public class ProfileController {
             LOGGER.info("Navigated to " + screenName);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error navigating to " + screenName, e);
-            showAlert("Navigation Error", "Could not open " + screenName + ": " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Navigation Error", "Could not open " + screenName + ": " + e.getMessage(),
+                    Alert.AlertType.ERROR);
         }
     }
 }

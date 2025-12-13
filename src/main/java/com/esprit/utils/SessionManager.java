@@ -14,8 +14,10 @@ import java.util.concurrent.TimeUnit;
  * password flow and managing the current logged-in user session.
  * Enhanced with automatic session cleanup and thread-safe storage.
  *
- * <p>This class implements the Singleton pattern to ensure only one instance
- * exists throughout the application lifecycle.</p>
+ * <p>
+ * This class implements the Singleton pattern to ensure only one instance
+ * exists throughout the application lifecycle.
+ * </p>
  *
  * @author RAKCHA Team
  * @version 3.0.0
@@ -114,7 +116,8 @@ public class SessionManager {
 
     /**
      * Logs out the current user and clears all session data.
-     * This is a complete logout operation that clears user session and related data.
+     * This is a complete logout operation that clears user session and related
+     * data.
      */
     public static void logout() {
         SessionManager manager = getInstance();
@@ -352,10 +355,10 @@ public class SessionManager {
      */
     private void startCleanupScheduler() {
         cleanupScheduler.scheduleAtFixedRate(
-            this::cleanupExpiredSessionsInternal,
-            CLEANUP_INTERVAL_MINUTES,
-            CLEANUP_INTERVAL_MINUTES,
-            TimeUnit.MINUTES);
+                this::cleanupExpiredSessionsInternal,
+                CLEANUP_INTERVAL_MINUTES,
+                CLEANUP_INTERVAL_MINUTES,
+                TimeUnit.MINUTES);
         log.info("SessionManager cleanup scheduler started (runs every {} minutes)", CLEANUP_INTERVAL_MINUTES);
     }
 

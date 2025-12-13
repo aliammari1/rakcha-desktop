@@ -56,7 +56,7 @@ public class Cinema {
      * @param status  the current status of the cinema
      */
     public Cinema(final String name, final String address, final CinemaManager manager, final String logoUrl,
-                  final String status) {
+            final String status) {
         this.name = name;
         this.address = address;
         this.manager = manager;
@@ -70,7 +70,7 @@ public class Cinema {
      * Retrieve all movie sessions for this cinema across all halls.
      *
      * @return a list of all MovieSession objects for this cinema; the list will be
-     * empty if there are no sessions
+     *         empty if there are no sessions
      */
     public List<MovieSession> getMovieSessions() {
         List<MovieSession> allSessions = new ArrayList<>();
@@ -124,4 +124,3 @@ public class Cinema {
     }
 
 }
-

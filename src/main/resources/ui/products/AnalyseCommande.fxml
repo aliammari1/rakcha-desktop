@@ -1,45 +1,85 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.products.AnalyseOrder"
+           styleClass="immersive-root"
+           stylesheets="@../styles/dashboard.css, @../styles/film-animations.css">
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
-      prefWidth="1507.0"
-      xmlns="http://javafx.com/javafx/21"
-      fx:controller="com.esprit.controllers.products.AnalyseOrder">
+  <!-- Cinematic Background -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg">
+    <Circle radius="300" layoutX="200" layoutY="200" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="400" layoutX="1400" layoutY="700" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
 
-  <HBox VBox.vgrow="ALWAYS">
-    <!-- SideBar -->
-    <fx:include source="/ui/sidebar.fxml"/>
+    <!-- Floating Elements -->
+    <FontIcon iconLiteral="mdi2c-chart-bar:100" layoutX="100" layoutY="500" styleClass="floating-icon" opacity="0.05"/>
+  </AnchorPane>
 
-    <!-- Main Content -->
-    <VBox spacing="20" HBox.hgrow="ALWAYS">
-      <padding>
-        <Insets top="25" right="25" bottom="25" left="25"/>
-      </padding>
+  <!-- Main Shell -->
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="/ui/sidebar.fxml"/>
+    </left>
 
-      <!-- Charts Grid -->
-      <GridPane hgap="20" vgap="20">
-        <!-- Order Rate Chart -->
-        <LineChart fx:id="TauxOrder" prefHeight="335.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
-          <xAxis>
-            <CategoryAxis fx:id="xAxis"/>
-          </xAxis>
-          <yAxis>
-            <NumberAxis/>
-          </yAxis>
-        </LineChart>
+    <center>
+      <VBox spacing="20">
+        <padding>
+          <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
 
-        <!-- Category Rate Chart -->
-        <StackedBarChart fx:id="TauxCategorie" prefHeight="346.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
-          <xAxis>
-            <CategoryAxis side="BOTTOM" fx:id="xOrderAxis"/>
-          </xAxis>
-          <yAxis>
-            <NumberAxis side="LEFT"/>
-          </yAxis>
-        </StackedBarChart>
-      </GridPane>
-    </VBox>
-  </HBox>
-</VBox>
+        <!-- Header -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="immersive-header">
+          <Label text="Order Analysis" styleClass="brand-title" style="-fx-text-fill: white;">
+             <font>
+               <Font name="Arial Rounded MT Bold" size="32.0"/>
+             </font>
+             <graphic>
+               <FontIcon iconLiteral="mdi2c-chart-line:32:white" />
+             </graphic>
+          </Label>
+        </HBox>
+
+        <!-- Charts Grid -->
+        <GridPane hgap="25" vgap="25" VBox.vgrow="ALWAYS">
+          <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints vgrow="ALWAYS" />
+          </rowConstraints>
+
+          <!-- Order Rate Chart -->
+          <VBox spacing="10" styleClass="glass-panel" GridPane.columnIndex="0">
+             <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+             </padding>
+             <Label text="Order Growth Over Time" styleClass="section-subtitle" style="-fx-text-fill: white;"/>
+             <LineChart fx:id="TauxOrder" VBox.vgrow="ALWAYS" legendVisible="false">
+              <xAxis>
+                <CategoryAxis fx:id="xAxis" label="Date" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis label="Orders" side="LEFT" />
+              </yAxis>
+            </LineChart>
+          </VBox>
+
+          <!-- Category Rate Chart -->
+          <VBox spacing="10" styleClass="glass-panel" GridPane.columnIndex="1">
+             <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+             </padding>
+             <Label text="Orders by Category" styleClass="section-subtitle" style="-fx-text-fill: white;"/>
+             <StackedBarChart fx:id="TauxCategorie" VBox.vgrow="ALWAYS" legendVisible="true">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" fx:id="xOrderAxis" label="Category"/>
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" label="Count"/>
+              </yAxis>
+            </StackedBarChart>
+          </VBox>
+
+        </GridPane>
+      </VBox>
+    </center>
+  </BorderPane>
+</StackPane>

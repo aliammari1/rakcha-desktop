@@ -10,8 +10,10 @@ import com.esprit.services.cinemas.CinemaHallService;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.films.FilmService;
+import com.esprit.utils.SessionManager;
 import com.esprit.utils.CloudinaryStorage;
 import com.esprit.utils.PageRequest;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -37,6 +39,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Priority;
+import com.esprit.utils.NavigationManager;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -55,6 +61,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
@@ -67,44 +74,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import lombok.extern.log4j.Log4j2;
 
-/**
- * Controller responsible for handling cinema manager dashboard operations.
- *
- * <p>
- * This controller provides functionality for cinema managers to manage their
- * cinemas,
- * including adding new cinemas, managing cinema halls, scheduling movie
- * sessions,
- * and publishing to social media. It handles the cinema management interface
- * for
- * responsible users.
- * </p>
- *
- * <p>
- * Key features include:
- * - Cinema creation and management
- * - Cinema hall management with capacity tracking
- * - Movie session scheduling and pricing
- * - Image selection and upload for cinema logos
- * - Facebook integration for social media posting
- * </p>
- *
- * @author Esprit Team
- * @version 1.0
- * @see com.esprit.models.cinemas.Cinema
- * @see com.esprit.models.cinemas.CinemaHall
- * @see com.esprit.models.cinemas.MovieSession
- * @see com.esprit.models.users.CinemaManager
- * @since 1.0
- */
+@Log4j2
 public class DashboardResponsableController implements Initializable {
-
-    private static final Logger LOGGER = Logger.getLogger(DashboardResponsableController.class.getName());
-
     CinemaManager cinemaManager;
     private String cloudinaryImageUrl;
     @FXML
@@ -129,6 +103,26 @@ public class DashboardResponsableController implements Initializable {
     private ComboBox<String> comboRoom;
     @FXML
     private DatePicker dpDate;
+
+    @FXML
+    public void showSessionsView() {
+        this.cinemaListPane.setVisible(false);
+        this.cinemaFormPane.setVisible(false);
+        this.addRoomForm.setVisible(false);
+        this.RoomTableView.setVisible(false);
+
+        this.SessionTableView.setVisible(true);
+        this.sessionFormPane.setVisible(true);
+        this.backSession.setVisible(true);
+
+        // Load sessions for the first accepted cinema if available
+        HashSet<Cinema> cinemas = loadAcceptedCinemas();
+        if (!cinemas.isEmpty()) {
+            Cinema firstCinema = cinemas.iterator().next();
+            // populate tables if needed
+        }
+    }
+
     @FXML
     private TextField tfDepartureTime;
     @FXML
@@ -154,11 +148,11 @@ public class DashboardResponsableController implements Initializable {
     @FXML
     private TableColumn<MovieSession, Double> colPrice;
     @FXML
-    private AnchorPane addRoomForm;
+    private VBox addRoomForm;
     @FXML
     private TextField tfNbrPlaces;
     @FXML
-    private TextField tfNomCinemaHall;
+    private TextField tfNomSalle;
     private Long cinemaId;
     @FXML
     private TableView<CinemaHall> RoomTableView;
@@ -217,9 +211,12 @@ public class DashboardResponsableController implements Initializable {
             this.showAlert("Please complete all fields!");
             return;
         }
-        final String defaultStatut = CinemaStatus.PENDING.getStatus();
-        // Fetch the responsible cinema by its ID
-        final CinemaManager cinemaManager = (CinemaManager) this.tfNom.getScene().getWindow().getUserData();
+        final CinemaManager cinemaManager = (CinemaManager) SessionManager.getCurrentUser();
+        if (cinemaManager == null) {
+            log.warn("Attempted to add cinema but no user is logged in.");
+            this.showAlert("Session error: User not identified. Please re-login.");
+            return;
+        }
 
         String logoPath = "";
         if (cloudinaryImageUrl != null && !cloudinaryImageUrl.isEmpty()) {
@@ -228,6 +225,7 @@ public class DashboardResponsableController implements Initializable {
             logoPath = this.image.getImage().getUrl();
         }
 
+        final String defaultStatut = CinemaStatus.PENDING.getStatus();
         // Create the cinema object
         final Cinema cinema = new Cinema(this.tfNom.getText(), this.tfAdresse.getText(), cinemaManager,
                 logoPath,
@@ -262,7 +260,7 @@ public class DashboardResponsableController implements Initializable {
                 final Image selectedImage = new Image(cloudinaryImageUrl);
                 this.image.setImage(selectedImage);
             } catch (final IOException e) {
-                DashboardResponsableController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
 
         }
@@ -308,6 +306,7 @@ public class DashboardResponsableController implements Initializable {
                     }
 
                 });
+        showSessionForm();
     }
 
     /**
@@ -319,11 +318,11 @@ public class DashboardResponsableController implements Initializable {
      */
     private void loadMoviesForCinema(final Long cinemaId) {
         this.comboMovie.getItems().clear();
-        // Get films that have sessions at this specific cinema
-        MovieSessionService sessionService = new MovieSessionService();
-        List<Film> moviesForCinema = sessionService.getFilmsByCinemaId(cinemaId);
+        // Load all available films so providing a new session is possible
+        FilmService filmService = new FilmService();
+        List<Film> allMovies = filmService.getAllFilms();
 
-        for (final Film f : moviesForCinema) {
+        for (final Film f : allMovies) {
             this.comboMovie.getItems().add(f.getTitle());
         }
 
@@ -399,441 +398,193 @@ public class DashboardResponsableController implements Initializable {
      */
     private HBox createCinemaCard(final Cinema cinema) {
         final HBox cardContainer = new HBox();
-        cardContainer.setStyle("-fx-padding: 10px 0 0  25px;");
-        final AnchorPane card = new AnchorPane();
+        cardContainer.setStyle("-fx-padding: 10px;");
+
+        final HBox card = new HBox(15);
         card.setStyle(
-                "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
-        card.setPrefWidth(400);
+                "-fx-background-color: rgba(30,30,35,0.8); -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 5); -fx-padding: 15; -fx-border-color: rgba(255,255,255,0.1); -fx-border-radius: 15;");
+        card.setPrefWidth(550);
+        card.setAlignment(Pos.CENTER_LEFT);
+
+        // Logo Section
         final ImageView logoImageView = new ImageView();
-        logoImageView.setFitWidth(70);
-        logoImageView.setFitHeight(70);
-        logoImageView.setLayoutX(15);
-        logoImageView.setLayoutY(15);
-        logoImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
-        Image image = null;
+        logoImageView.setFitWidth(80);
+        logoImageView.setFitHeight(80);
+        logoImageView.setPreserveRatio(true);
+
+        // Circular clip for logo
+        javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(80, 80);
+        clip.setArcWidth(20);
+        clip.setArcHeight(20);
+        logoImageView.setClip(clip);
+
+        Image image;
         try {
-            if (!cinema.getLogoUrl().isEmpty()) {
-                image = new Image(cinema.getLogoUrl());
+            if (cinema.getLogoUrl() != null && !cinema.getLogoUrl().isEmpty()) {
+                image = new Image(cinema.getLogoUrl(), 80, 80, true, true);
             } else {
-                image = new Image("Logo.png");
+                image = new Image(getClass().getResource("/assets/img/default-cinema.png").toExternalForm());
             }
-
-        } catch (final Exception e) {
-            DashboardResponsableController.LOGGER.info("line 335 " + e.getMessage());
-            image = new Image("Logo.png");
+        } catch (Exception e) {
+            try {
+                image = new Image(getClass().getResource("/assets/img/default-cinema.png").toExternalForm());
+            } catch (Exception ex) {
+                // Fallback if even default image fails
+                image = null;
+            }
         }
+        if (image != null)
+            logoImageView.setImage(image);
 
-        logoImageView.setImage(image);
-        card.getChildren().add(logoImageView);
         logoImageView.setOnMouseClicked(event -> {
-            if (2 == event.getClickCount()) {
+            if (event.getClickCount() == 2) {
                 final FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Choose a new image");
                 fileChooser.getExtensionFilters()
                         .addAll(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif"));
                 final File selectedFile = fileChooser.showOpenDialog(null);
-                if (null != selectedFile) {
+                if (selectedFile != null) {
                     try {
                         CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
                         String newUrl = cloudinaryStorage.uploadImage(selectedFile);
-
                         cinema.setLogoUrl(newUrl);
-                        final CinemaService cinemaService = new CinemaService();
-                        cinemaService.update(cinema);
-
-                        final Image newImage = new Image(newUrl);
-                        logoImageView.setImage(newImage);
+                        new CinemaService().update(cinema);
+                        logoImageView.setImage(new Image(newUrl, 80, 80, true, true));
                     } catch (IOException e) {
-                        DashboardResponsableController.LOGGER.log(Level.SEVERE, "Error uploading image", e);
+                        log.error("Error uploading image", e);
                     }
                 }
             }
         });
-        final Label NomLabel = new Label("Name: ");
-        NomLabel.setLayoutX(115);
-        NomLabel.setLayoutY(25);
-        NomLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
-        card.getChildren().add(NomLabel);
-        final Label nameLabel = new Label(cinema.getName());
-        nameLabel.setLayoutX(160);
-        nameLabel.setLayoutY(25);
-        nameLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
-        card.getChildren().add(nameLabel);
+
+        // Info Section
+        VBox infoBox = new VBox(8);
+        infoBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(infoBox, Priority.ALWAYS);
+
+        Label nameLabel = new Label(cinema.getName());
+        nameLabel.setStyle(
+                "-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Arial Rounded MT Bold';");
+        nameLabel.setWrapText(true);
+
+        Label addressLabel = new Label(cinema.getAddress());
+        addressLabel.setStyle("-fx-text-fill: #aaaaaa; -fx-font-size: 13px; -fx-font-family: 'Arial';");
+        addressLabel.setWrapText(true);
+
+        // Edit functionality for Name
         nameLabel.setOnMouseClicked(event -> {
-            if (2 == event.getClickCount()) {
-                final TextField nameTextField = new TextField(nameLabel.getText());
-                nameTextField.setLayoutX(nameLabel.getLayoutX());
-                nameTextField.setLayoutY(nameLabel.getLayoutY());
-                nameTextField.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
-                nameTextField.setPrefWidth(nameLabel.getWidth());
-                nameTextField.setOnAction(e -> {
-                    nameLabel.setText(nameTextField.getText());
-                    cinema.setName(nameTextField.getText());
-                    final CinemaService cinemaService = new CinemaService();
-                    cinemaService.update(cinema);
-                    card.getChildren().remove(nameTextField);
+            if (event.getClickCount() == 2) {
+                TextField nameField = new TextField(nameLabel.getText());
+                nameField.setStyle("-fx-background-color: #333; -fx-text-fill: white;");
+                infoBox.getChildren().set(0, nameField);
+                nameField.setOnAction(e -> {
+                    cinema.setName(nameField.getText());
+                    new CinemaService().update(cinema);
+                    nameLabel.setText(nameField.getText());
+                    infoBox.getChildren().set(0, nameLabel);
                 });
-                card.getChildren().add(nameTextField);
-                nameTextField.requestFocus();
-                nameTextField.selectAll();
+                nameField.requestFocus();
             }
         });
 
-        final Label AdrsLabel = new Label(
-                "Address: ");
-        AdrsLabel.setLayoutX(115);
-        AdrsLabel.setLayoutY(50);
-        AdrsLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
-        card.getChildren().add(AdrsLabel);
-        final Label adresseLabel = new Label(cinema
-                .getAddress());
-        adresseLabel.setLayoutX(180);
-        adresseLabel.setLayoutY(50);
-        adresseLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
-        card.getChildren().add(adresseLabel);
-        adresseLabel.setOnMouseClicked(event -> {
-            if (2 == event.getClickCount()) {
-                final TextField adresseTextField = new TextField(adresseLabel.getText());
-                adresseTextField.setLayoutX(adresseLabel.getLayoutX());
-                adresseTextField.setLayoutY(adresseLabel.getLayoutY());
-                adresseTextField.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
-                adresseTextField.setPrefWidth(adresseLabel.getWidth());
-                adresseTextField.setOnAction(e -> {
-                    adresseLabel.setText(adresseTextField.getText());
-                    cinema.setAddress(adresseTextField.getText());
-                    final CinemaService cinemaService = new CinemaService();
-                    cinemaService.update(cinema);
-                    card.getChildren().remove(adresseTextField);
+        // Edit functionality for Address
+        addressLabel.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                TextField addressField = new TextField(addressLabel.getText());
+                addressField.setStyle("-fx-background-color: #333; -fx-text-fill: white;");
+                infoBox.getChildren().set(1, addressField);
+                addressField.setOnAction(e -> {
+                    cinema.setAddress(addressField.getText());
+                    new CinemaService().update(cinema);
+                    addressLabel.setText(addressField.getText());
+                    infoBox.getChildren().set(1, addressLabel);
                 });
-                card.getChildren().add(adresseTextField);
-                adresseTextField.requestFocus();
-                adresseTextField.selectAll();
+                addressField.requestFocus();
             }
-
         });
-        final Line verticalLine = new Line();
-        verticalLine.setStartX(240);
-        verticalLine.setStartY(10);
-        verticalLine.setEndX(240);
-        verticalLine.setEndY(110);
-        verticalLine.setStroke(Color.BLACK);
-        verticalLine.setStrokeWidth(3);
-        card.getChildren().add(verticalLine);
-        final Circle circle = new Circle();
-        circle.setRadius(30);
-        circle.setLayoutX(285);
-        circle.setLayoutY(45);
-        circle.setFill(Color.web("#ae2d3c"));
-        final org.kordamp.ikonli.javafx.FontIcon deleteIcon = new org.kordamp.ikonli.javafx.FontIcon();
-        deleteIcon.setIconLiteral("mdi2t-trash");
-        deleteIcon.setIconSize(56);
-        deleteIcon.setLayoutX(270);
-        deleteIcon.setLayoutY(57);
-        deleteIcon.setIconColor(Color.WHITE);
-        deleteIcon.setOnMouseClicked(event -> {
-            final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation de suppression");
-            alert.setHeaderText(null);
-            alert.setContentText("Voulez-vous vraiment supprimer ce cinéma ?");
-            final Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                final CinemaService cinemaService = new CinemaService();
-                cinemaService.delete(cinema);
+
+        infoBox.getChildren().addAll(nameLabel, addressLabel);
+
+        // Actions Section (Buttons)
+        HBox actionsBox = new HBox(10);
+        actionsBox.setAlignment(Pos.CENTER_RIGHT);
+
+        // Styling helper for buttons
+        String buttonStyle = "-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 50; -fx-cursor: hand; -fx-padding: 8;";
+        String hoverStyle = "-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 50; -fx-cursor: hand; -fx-padding: 8;";
+
+        // Delete Button
+        Button deleteBtn = new Button();
+        org.kordamp.ikonli.javafx.FontIcon deleteIcon = new org.kordamp.ikonli.javafx.FontIcon("mdi2d-delete");
+        deleteIcon.setIconColor(Color.web("#ff4444"));
+        deleteIcon.setIconSize(24);
+        deleteBtn.setGraphic(deleteIcon);
+        deleteBtn.setStyle(buttonStyle);
+        deleteBtn.setOnMouseEntered(e -> deleteBtn.setStyle(hoverStyle));
+        deleteBtn.setOnMouseExited(e -> deleteBtn.setStyle(buttonStyle));
+        deleteBtn.setTooltip(new Tooltip("Delete Cinema"));
+        deleteBtn.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Cinema");
+            alert.setHeaderText("Delete " + cinema.getName() + "?");
+            alert.setContentText("Are you sure you want to delete this cinema?");
+            alert.getDialogPane().getStylesheets()
+                    .add(getClass().getResource("/styles/dashboard.css").toExternalForm());
+            if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                new CinemaService().delete(cinema);
                 cardContainer.getChildren().remove(card);
+                loadAcceptedCinemas(); // Reload to refresh view
             }
-
         });
-        card.getChildren().addAll(circle, deleteIcon);
-        final Circle CinemaHallCircle = new Circle();
-        CinemaHallCircle.setRadius(30);
-        CinemaHallCircle.setLayoutX(360);
-        CinemaHallCircle.setLayoutY(45);
-        CinemaHallCircle.setFill(Color.web("#ae2d3c"));
-        final org.kordamp.ikonli.javafx.FontIcon cinemahallIcon = new org.kordamp.ikonli.javafx.FontIcon();
-        cinemahallIcon.setIconLiteral("mdi2a-account-multiple");
-        cinemahallIcon.setIconSize(48);
-        cinemahallIcon.setLayoutX(340);
-        cinemahallIcon.setLayoutY(57);
-        cinemahallIcon.setIconColor(Color.WHITE);
-        cinemahallIcon.setOnMouseClicked(event -> {
+
+        // Manage Halls Button
+        Button hallsBtn = new Button();
+        org.kordamp.ikonli.javafx.FontIcon hallsIcon = new org.kordamp.ikonli.javafx.FontIcon("mdi2t-theater");
+        hallsIcon.setIconColor(Color.web("#44aaff"));
+        hallsIcon.setIconSize(24);
+        hallsBtn.setGraphic(hallsIcon);
+        hallsBtn.setStyle(buttonStyle);
+        hallsBtn.setOnMouseEntered(e -> hallsBtn.setStyle(hoverStyle));
+        hallsBtn.setOnMouseExited(e -> hallsBtn.setStyle(buttonStyle));
+        hallsBtn.setTooltip(new Tooltip("Manage Halls"));
+        hallsBtn.setOnAction(event -> {
             this.cinemaId = cinema.getId();
-            this.cinemaFormPane.setVisible(false);
+
+            // Switch view
             this.cinemaListPane.setVisible(false);
-            this.addRoomForm.setVisible(true);
+            this.cinemaFormPane.setVisible(false);
             this.RoomTableView.setVisible(true);
+            this.addRoomForm.setVisible(true);
+
             this.backButton.setVisible(true);
             this.sessionButton.setVisible(false);
-            this.colNameRoom.setCellValueFactory(new PropertyValueFactory<>("name"));
-            this.colNbrPlaces.setCellValueFactory(new PropertyValueFactory<>("seatCapacity"));
-            this.colActionRoom
-                    .setCellFactory(new Callback<TableColumn<CinemaHall, Void>, TableCell<CinemaHall, Void>>() {
-                        /**
-                         * Create a table cell that shows a "Delete" button and removes the cell's
-                         * CinemaHall from storage and the table when pressed.
-                         *
-                         * @param param the TableColumn for which this cell factory is created
-                         * @return a TableCell containing a delete control that deletes its associated
-                         *         CinemaHall from persistent storage and from the table view
-                         */
-                        @Override
-                        /**
-                         * Performs call operation.
-                         *
-                         * @return the result of the operation
-                         */
-                        public TableCell<CinemaHall, Void> call(final TableColumn<CinemaHall, Void> param) {
-                            return new TableCell<CinemaHall, Void>() {
-                                private final Button deleteRoomButton = new Button("Delete");
 
-                                {
-                                    this.deleteRoomButton.getStyleClass().add("delete-btn");
-                                    this.deleteRoomButton.setOnAction(event -> {
-                                        final CinemaHall cinemahall = this.getTableView().getItems()
-                                                .get(this.getIndex());
-                                        final CinemaHallService cinemahallService = new CinemaHallService();
-                                        cinemahallService.delete(cinemahall);
-                                        this.getTableView().getItems().remove(cinemahall);
-                                    });
-                                }
-
-                                /**
-                                 * Updates the table cell's graphic to show the deleteRoomButton when the cell
-                                 * is not empty.
-                                 *
-                                 * When `empty` is true the cell's graphic is cleared; otherwise the cell's
-                                 * graphic is set to an HBox
-                                 * containing the deleteRoomButton.
-                                 *
-                                 * @param item  the cell item (ignored for this cell type)
-                                 * @param empty true if the cell does not contain data and should be displayed
-                                 *              empty
-                                 */
-                                @Override
-                                protected void updateItem(final Void item, final boolean empty) {
-                                    super.updateItem(item, empty);
-                                    if (empty) {
-                                        this.setGraphic(null);
-                                    } else {
-                                        this.setGraphic(new HBox(this.deleteRoomButton));
-                                    }
-
-                                }
-
-                            };
-                        }
-
-                    });
-            this.RoomTableView.setEditable(true);
-            this.colNbrPlaces.setCellFactory(tc -> new TableCell<CinemaHall, Integer>() {
-                /**
-                 * Displays the number of places for the cell or clears the cell when it is
-                 * empty.
-                 *
-                 * If the cell is empty or `nb_cinemahalls` is null, the cell text is cleared;
-                 * otherwise the text
-                 * is set to "`<n> places`".
-                 *
-                 * @param nb_cinemahalls the number of places to display; may be null
-                 * @param empty          true if the cell should be treated as empty
-                 */
-                @Override
-                protected void updateItem(final Integer nb_cinemahalls, final boolean empty) {
-                    super.updateItem(nb_cinemahalls, empty);
-                    if (empty || null == nb_cinemahalls) {
-                        this.setText(null);
-                    } else {
-                        this.setText(nb_cinemahalls + " places");
-                    }
-
-                }
-
-                /**
-                 * Enters edit mode and replaces the cell content with an inline TextField for
-                 * editing the integer value.
-                 *
-                 * <p>
-                 * If the cell is empty, editing is not started. The TextField is initialized
-                 * with the cell's current
-                 * value; when the user submits the field (e.g., presses Enter), the entered
-                 * text is parsed as an
-                 * Integer and committed as the new cell value.
-                 *
-                 * @throws NumberFormatException if the entered text is not a valid integer
-                 */
-                @Override
-                /**
-                 * Performs startEdit operation.
-                 *
-                 * @return the result of the operation
-                 */
-                public void startEdit() {
-                    super.startEdit();
-                    if (this.isEmpty()) {
-                        return;
-                    }
-
-                    final TextField textField = new TextField(this.getItem().toString());
-                    textField.setOnAction(event -> {
-                        this.commitEdit(Integer.parseInt(textField.getText()));
-                    });
-                    this.setGraphic(textField);
-                    this.setText(null);
-                }
-
-                /**
-                 * Restore the cell to its non-editing state and display the current item
-                 * suffixed with " places".
-                 *
-                 * Updates the cell text to the cell's current item followed by " places" and
-                 * removes any graphic used for editing.
-                 */
-                @Override
-                /**
-                 * Performs cancelEdit operation.
-                 *
-                 * @return the result of the operation
-                 */
-                public void cancelEdit() {
-                    super.cancelEdit();
-                    this.setText(this.getItem() + " places");
-                    this.setGraphic(null);
-                }
-
-                /**
-                 * Commit edited seat capacity for the table row's CinemaHall and persist the
-                 * change.
-                 *
-                 * Updates the model with the provided seat count, persists the change, and
-                 * updates the cell text to display the new value.
-                 *
-                 * @param newValue the new seat capacity for the CinemaHall
-                 */
-                @Override
-                /**
-                 * Performs commitEdit operation.
-                 *
-                 * @return the result of the operation
-                 */
-                public void commitEdit(final Integer newValue) {
-                    super.commitEdit(newValue);
-                    final CinemaHall cinemahall = this.getTableView().getItems().get(this.getIndex());
-                    cinemahall.setSeatCapacity(newValue);
-                    final CinemaHallService cinemahallService = new CinemaHallService();
-                    cinemahallService.update(cinemahall);
-                    this.setText(newValue + " places");
-                    this.setGraphic(null);
-                }
-
-            });
-            this.colNameRoom.setCellFactory(tc -> new TableCell<CinemaHall, String>() {
-                /**
-                 * Sets the cell's text to the provided cinema hall name, or clears the text
-                 * when the cell is empty or the name is null.
-                 *
-                 * @param nom_cinemahall the cinema hall name to display in the cell; ignored
-                 *                       when null
-                 * @param empty          true if the cell is empty and should be cleared
-                 */
-                @Override
-                protected void updateItem(final String nom_cinemahall, final boolean empty) {
-                    super.updateItem(nom_cinemahall, empty);
-                    if (empty || null == nom_cinemahall) {
-                        this.setText(null);
-                    } else {
-                        this.setText(nom_cinemahall);
-                    }
-
-                }
-
-                /**
-                 * Enter edit mode by replacing the cell's content with an editable TextField.
-                 *
-                 * If the cell is empty, no edit is started. The TextField is initialized with
-                 * the
-                 * cell's current value and commits the edited string when the user triggers its
-                 * action (for example, presses Enter).
-                 */
-                @Override
-                /**
-                 * Performs startEdit operation.
-                 *
-                 * @return the result of the operation
-                 */
-                public void startEdit() {
-                    super.startEdit();
-                    if (this.isEmpty()) {
-                        return;
-                    }
-
-                    final TextField textField = new TextField(this.getItem());
-                    textField.setOnAction(event -> {
-                        this.commitEdit((textField.getText()));
-                    });
-                    this.setGraphic(textField);
-                    this.setText(null);
-                }
-
-                /**
-                 * Restore the cell's display after an edit is cancelled.
-                 *
-                 * Replaces the editing UI with the cell's current text and clears any graphic.
-                 */
-                @Override
-                /**
-                 * Performs cancelEdit operation.
-                 *
-                 * @return the result of the operation
-                 */
-                public void cancelEdit() {
-                    super.cancelEdit();
-                    this.setText(this.getItem());
-                    this.setGraphic(null);
-                }
-
-                /**
-                 * Commit the edited cinema hall name and persist the change.
-                 *
-                 * Updates the CinemaHall for the current table row with the provided name and
-                 * saves the updated entity.
-                 *
-                 * @param newValue the new name to set for the cinema hall
-                 */
-                @Override
-                /**
-                 * Performs commitEdit operation.
-                 *
-                 * @return the result of the operation
-                 */
-                public void commitEdit(final String newValue) {
-                    super.commitEdit(newValue);
-                    final CinemaHall cinemahall = this.getTableView().getItems().get(this.getIndex());
-                    cinemahall.setName(newValue);
-                    final CinemaHallService cinemahallService = new CinemaHallService();
-                    cinemahallService.update(cinemahall);
-                    this.setText(newValue);
-                    this.setGraphic(null);
-                }
-
-            });
             this.loadcinemahalls();
         });
-        final Circle circlefacebook = new Circle();
-        circlefacebook.setRadius(30);
-        circlefacebook.setLayoutX(320);
-        circlefacebook.setLayoutY(100);
-        circlefacebook.setFill(Color.web("#ae2d3c"));
-        final org.kordamp.ikonli.javafx.FontIcon facebookIcon = new org.kordamp.ikonli.javafx.FontIcon();
-        facebookIcon.setIconLiteral("mdi2f-facebook");
-        facebookIcon.setIconSize(56);
-        facebookIcon.setLayoutX(310);
-        facebookIcon.setLayoutY(120);
-        facebookIcon.setIconColor(Color.WHITE);
-        facebookIcon.setOnMouseClicked(event -> {
-            this.facebookAnchor.setVisible(true);
+
+        // Facebook Button
+        Button fbBtn = new Button();
+        org.kordamp.ikonli.javafx.FontIcon fbIcon = new org.kordamp.ikonli.javafx.FontIcon("mdi2f-facebook");
+        fbIcon.setIconColor(Color.web("#1877F2"));
+        fbIcon.setIconSize(24);
+        fbBtn.setGraphic(fbIcon);
+        fbBtn.setStyle(buttonStyle);
+        fbBtn.setOnMouseEntered(e -> fbBtn.setStyle(hoverStyle));
+        fbBtn.setOnMouseExited(e -> fbBtn.setStyle(buttonStyle));
+        fbBtn.setTooltip(new Tooltip("Visit Facebook Page"));
+        fbBtn.setOnAction(event -> {
+            try {
+                java.awt.Desktop.getDesktop().browse(new java.net.URI("https://www.facebook.com/khalil.fakhfakh.169/"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
-        card.getChildren().addAll(circlefacebook, facebookIcon);
-        card.getChildren().addAll(CinemaHallCircle, cinemahallIcon);
+
+        actionsBox.getChildren().addAll(hallsBtn, fbBtn, deleteBtn);
+
+        card.getChildren().addAll(logoImageView, infoBox, actionsBox);
         cardContainer.getChildren().add(card);
+
         return cardContainer;
     }
 
@@ -916,10 +667,38 @@ public class DashboardResponsableController implements Initializable {
                     }
 
                 });
-        this.colMovieRoom.setCellValueFactory(new PropertyValueFactory<>("cinemaHall"));
-        this.colDate.setCellValueFactory(new PropertyValueFactory<>("sessionDate"));
-        this.colDepartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-        this.colEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        this.colMovieRoom.setCellValueFactory(
+                cellData -> new SimpleStringProperty(cellData.getValue().getCinemaHall().getName()));
+        this.colDate.setCellValueFactory(cellData -> {
+            try {
+                java.sql.Date date = java.sql.Date.valueOf(cellData.getValue().getStartTime().toLocalDate());
+                log.info("colDate value: " + date);
+                return new SimpleObjectProperty<>(date);
+            } catch (Exception e) {
+                log.error("Error in colDate factory", e);
+                return null;
+            }
+        });
+        this.colDepartTime.setCellValueFactory(cellData -> {
+            try {
+                java.sql.Time time = java.sql.Time.valueOf(cellData.getValue().getStartTime().toLocalTime());
+                log.info("colDepartTime value: " + time);
+                return new SimpleObjectProperty<>(time);
+            } catch (Exception e) {
+                log.error("Error in colDepartTime factory", e);
+                return null;
+            }
+        });
+        this.colEndTime.setCellValueFactory(cellData -> {
+            try {
+                java.sql.Time time = java.sql.Time.valueOf(cellData.getValue().getEndTime().toLocalTime());
+                log.info("colEndTime value: " + time);
+                return new SimpleObjectProperty<>(time);
+            } catch (Exception e) {
+                log.error("Error in colEndTime factory", e);
+                return null;
+            }
+        });
         this.colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         this.colAction.setCellFactory(new Callback<TableColumn<MovieSession, Void>, TableCell<MovieSession, Void>>() {
             /**
@@ -1628,6 +1407,7 @@ public class DashboardResponsableController implements Initializable {
         final MovieSessionService moviesessionService = new MovieSessionService();
         PageRequest pageRequest = PageRequest.defaultPage();
         final List<MovieSession> moviesessions = moviesessionService.read(pageRequest).getContent();
+        log.info("Loaded " + moviesessions.size() + " movie sessions.");
         final ObservableList<MovieSession> moviesessionObservableList = FXCollections
                 .observableArrayList(moviesessions);
         this.SessionTableView.setItems(moviesessionObservableList);
@@ -1646,7 +1426,7 @@ public class DashboardResponsableController implements Initializable {
     @FXML
     void AjouterCinemaHall(final ActionEvent event) {
         // Vérifier que tous les champs sont remplis
-        if (this.tfNbrPlaces.getText().isEmpty() || this.tfNomCinemaHall.getText().isEmpty()) {
+        if (this.tfNbrPlaces.getText().isEmpty() || this.tfNomSalle.getText().isEmpty()) {
             this.showAlert("please complete all fields!");
             return;
         }
@@ -1666,7 +1446,7 @@ public class DashboardResponsableController implements Initializable {
         final CinemaHallService ss = new CinemaHallService();
         final CinemaService cinemaService = new CinemaService();
         final Cinema cinema = cinemaService.getCinemaById(this.cinemaId);
-        ss.create(new CinemaHall(cinema, Integer.parseInt(this.tfNbrPlaces.getText()), this.tfNomCinemaHall.getText()));
+        ss.create(new CinemaHall(cinema, Integer.parseInt(this.tfNbrPlaces.getText()), this.tfNomSalle.getText()));
         final Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Added room");
         alert.setContentText("Added room!");
@@ -1721,7 +1501,7 @@ public class DashboardResponsableController implements Initializable {
         final String url = "https://graph.facebook.com/v19.0/me/feed";
         final String data = "message=" + message + "&access_token=" + accessToken;
         try {
-            final URL obj = new URL(url);
+            final URL obj = (new URI(url)).toURL();
             final HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -1730,8 +1510,8 @@ public class DashboardResponsableController implements Initializable {
             os.write(data.getBytes(StandardCharsets.UTF_8));
             os.flush();
             os.close();
-        } catch (final IOException e) {
-            DashboardResponsableController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            log.error(e.getMessage(), e);
         }
 
     }
