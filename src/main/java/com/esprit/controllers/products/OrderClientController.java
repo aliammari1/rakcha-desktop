@@ -10,6 +10,7 @@ import com.esprit.services.products.OrderItemService;
 import com.esprit.services.products.OrderService;
 import com.esprit.services.products.ProductService;
 import com.esprit.services.users.UserService;
+import com.esprit.utils.SessionManager;
 import com.paypal.api.payments.Amount;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payer;
@@ -96,10 +97,15 @@ public class OrderClientController implements Initializable {
     private Button idpaymentenligne;
 
     /**
-     * Initializes the controller with the selected order and prepares the UI's total-price label.
+     * Initializes the controller with the selected order and prepares the UI's
+     * total-price label.
      *
-     * <p>Stores the provided order, schedules retrieval of the connected user on the JavaFX application thread
-     * (logging the user's email), and creates and adds a label showing the total price to the UI.</p>
+     * <p>
+     * Stores the provided order, schedules retrieval of the connected user on the
+     * JavaFX application thread
+     * (logging the user's email), and creates and adds a label showing the total
+     * price to the UI.
+     * </p>
      *
      * @param orderselectionner the selected order to process and display
      */
@@ -107,43 +113,51 @@ public class OrderClientController implements Initializable {
     void initialize(final Order orderselectionner) {
         this.order = orderselectionner;
         Platform.runLater(new Runnable() {
-                              /**
-                               * Loads the connected user's information (user id = 4) and assigns it to {@code connectedUser}.
-                               *
-                               * <p>After retrieving the user, logs the user's email address.</p>
-                               */
-                              @Override
-                              public void run() {
-                                  connectedUser = usersService.getUserById(4L);
-                                  OrderClientController.LOGGER
-                                      .info("User connected: " + connectedUser.getEmail());
-                              }
+            /**
+             * Loads the connected user's information (user id = 4) and assigns it to
+             * {@code connectedUser}.
+             *
+             * <p>
+             * After retrieving the user, logs the user's email address.
+             * </p>
+             */
+            @Override
+            public void run() {
+                connectedUser = SessionManager.getCurrentUser();
+                if (connectedUser != null) {
+                    OrderClientController.LOGGER
+                            .info("User connected: " + connectedUser.getEmail());
+                }
+            }
 
-                          }
-        );
+        });
         // Récupérer le prix total depuis SharedData et créer le Label correspondant
         final Label prixTotalLabel = this.createPrixTotalLabel(this.totalPrix);
         // Ajouter le Label au FlowPane
         this.prixtotaleFlowPane.getChildren().add(prixTotalLabel);
     }
 
-
     /**
-     * No-op implementation of Initializable.initialize; retained to satisfy the interface.
+     * No-op implementation of Initializable.initialize; retained to satisfy the
+     * interface.
      *
-     * <p>Controller initialization is performed by the overloaded {@code initialize(Order)}
-     * method instead.</p>
+     * <p>
+     * Controller initialization is performed by the overloaded
+     * {@code initialize(Order)}
+     * method instead.
+     * </p>
      */
     @Override
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
     }
 
-
     /**
-     * Create a Label that displays the total price with the "DT" currency suffix and prominent styling.
+     * Create a Label that displays the total price with the "DT" currency suffix
+     * and prominent styling.
      *
      * @param prixTotal the total price value to display (in DT)
-     * @return the Label showing the formatted price with Verdana 25 font and red text color
+     * @return the Label showing the formatted price with Verdana 25 font and red
+     *         text color
      */
     private Label createPrixTotalLabel(final double prixTotal) {
         final Label prixTotalLabel = new Label(prixTotal + " DT");
@@ -152,11 +166,15 @@ public class OrderClientController implements Initializable {
         return prixTotalLabel;
     }
 
-
     /**
-     * Handle order submission: validate contact details, persist the order and its items, update inventory, and show the payment pane.
+     * Handle order submission: validate contact details, persist the order and its
+     * items, update inventory, and show the payment pane.
      *
-     * <p>Validates the phone number and address, sets order metadata (client, phone, address, date), saves the order and each order item, decrements corresponding product stock, and makes the online payment section visible.</p>
+     * <p>
+     * Validates the phone number and address, sets order metadata (client, phone,
+     * address, date), saves the order and each order item, decrements corresponding
+     * product stock, and makes the online payment section visible.
+     * </p>
      */
     @FXML
     void order(final ActionEvent event) {
@@ -165,7 +183,7 @@ public class OrderClientController implements Initializable {
         final String numTelephone = this.numTelephoneTextField.getText();
         if (!this.isValidPhoneNumber(numTelephone)) {
             this.showAlert("Numéro de téléphone invalide",
-                "Veuillez entrer un numéro de téléphone valide (8 chiffres).");
+                    "Veuillez entrer un numéro de téléphone valide (8 chiffres).");
             return;
         }
 
@@ -197,7 +215,6 @@ public class OrderClientController implements Initializable {
         this.paimenet.setVisible(true);
     }
 
-
     /**
      * Displays an alert dialog with the specified title and content.
      *
@@ -217,7 +234,6 @@ public class OrderClientController implements Initializable {
         alert.showAndWait();
     }
 
-
     /**
      * Validates if a given string represents a valid phone number.
      *
@@ -234,9 +250,9 @@ public class OrderClientController implements Initializable {
         return phoneNumber.matches("\\d{8}");
     }
 
-
     /**
-     * Reduce a product's available quantity by the specified amount and persist the change.
+     * Reduce a product's available quantity by the specified amount and persist the
+     * change.
      *
      * @param produit  the product to update
      * @param quantity the number of units to subtract from the product's quantity
@@ -249,18 +265,20 @@ public class OrderClientController implements Initializable {
         // jour
     }
 
-
     /**
      * Opens the shopping cart UI in a new window and closes the current window.
      *
-     * <p>Loads /ui/produits/ShoppingCartProduct.fxml, displays it in a new Stage, and closes the originating Stage.</p>
+     * <p>
+     * Loads /ui/produits/ShoppingCartProduct.fxml, displays it in a new Stage, and
+     * closes the originating Stage.
+     * </p>
      */
     @FXML
     void shoppingcart(final MouseEvent event) {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/products/PanierProduit.fxml"));
+                    this.getClass().getResource("/ui/products/PanierProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -279,19 +297,23 @@ public class OrderClientController implements Initializable {
 
     }
 
-
     /**
-     * Initiates a PayPal payment for the controller's total price and navigates the user to PayPal's approval page.
+     * Initiates a PayPal payment for the controller's total price and navigates the
+     * user to PayPal's approval page.
      *
-     * <p>Builds a PayPal payment using the controller's totalPrix as the transaction amount, requests an approval URL,
-     * and, if obtained, opens the approval page for the user to authorize the payment. Logs errors if payment creation fails.</p>
+     * <p>
+     * Builds a PayPal payment using the controller's totalPrix as the transaction
+     * amount, requests an approval URL,
+     * and, if obtained, opens the approval page for the user to authorize the
+     * payment. Logs errors if payment creation fails.
+     * </p>
      *
      * @param event the UI action event that triggered the payment flow
      */
     @FXML
     void payment(final ActionEvent event) {
         final APIContext apiContext = new APIContext(OrderClientController.CLIENT_ID,
-            OrderClientController.CLIENT_SECRET, "sandbox");
+                OrderClientController.CLIENT_SECRET, "sandbox");
         final Amount amount = new Amount();
         amount.setCurrency("USD");
         amount.setTotal(String.valueOf(this.totalPrix)); // totalPrix should be set to the total price of the order
@@ -314,7 +336,7 @@ public class OrderClientController implements Initializable {
         try {
             final Payment createdPayment = payment.create(apiContext);
             OrderClientController.LOGGER.info("Created payment with id = " + createdPayment.getId() + " and status = "
-                + createdPayment.getState());
+                    + createdPayment.getState());
             // Extract approval URL
             String approvalUrl = null;
             final List<Links> links = createdPayment.getLinks();
@@ -337,7 +359,6 @@ public class OrderClientController implements Initializable {
 
     }
 
-
     /**
      * Redirects the user to PayPal for payment approval.
      *
@@ -350,61 +371,56 @@ public class OrderClientController implements Initializable {
      */
     private void redirectToPayPal(final String approvalLink) {
         Platform.runLater(() -> {
-                final Stage stage = new Stage();
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initStyle(StageStyle.UTILITY);
-                stage.setTitle("PayPal Payment");
-                final WebView webView = new WebView();
-                webView.getEngine().load(approvalLink);
-                // Listen for URL changes to detect when payment is approved or canceled
-                webView.getEngine().locationProperty().addListener((observable, oldValue, newValue) -> {
-                        if (newValue.startsWith("http://localhost/success")) {
-                            // Payment was approved
-                            OrderClientController.LOGGER.info("Payment approved. URL: " + newValue);
-                            final String paymentId = this.extractQueryParameter(newValue, "paymentId");
-                            final String payerId = this.extractQueryParameter(newValue, "PayerID");
-                            if (null != paymentId && null != payerId) {
-                                this.completePayment(paymentId, payerId);
-                            }
+            final Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.setTitle("PayPal Payment");
+            final WebView webView = new WebView();
+            webView.getEngine().load(approvalLink);
+            // Listen for URL changes to detect when payment is approved or canceled
+            webView.getEngine().locationProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.startsWith("http://localhost/success")) {
+                    // Payment was approved
+                    OrderClientController.LOGGER.info("Payment approved. URL: " + newValue);
+                    final String paymentId = this.extractQueryParameter(newValue, "paymentId");
+                    final String payerId = this.extractQueryParameter(newValue, "PayerID");
+                    if (null != paymentId && null != payerId) {
+                        this.completePayment(paymentId, payerId);
+                    }
 
-                            webView.getEngine().loadContent(OrderClientController.SUCCESS_URL);
-                            // Close the window after a delay
-                            new Thread(() -> {
-                                try {
-                                    Thread.sleep(5000);
-                                    Platform.runLater(stage::close);
-                                } catch (final InterruptedException e) {
-                                    Thread.currentThread().interrupt();
-                                }
-
-                            }
-                            ).start();
-                        } else if (newValue.startsWith("http://localhost/cancel")) {
-                            // Payment was canceled
-                            OrderClientController.LOGGER.info("Payment canceled");
-                            webView.getEngine().loadContent(OrderClientController.CANCEL_URL);
-                            // Close the window after a delay
-                            new Thread(() -> {
-                                try {
-                                    Thread.sleep(5000);
-                                    Platform.runLater(stage::close);
-                                } catch (final InterruptedException e) {
-                                    Thread.currentThread().interrupt();
-                                }
-
-                            }
-                            ).start();
+                    webView.getEngine().loadContent(OrderClientController.SUCCESS_URL);
+                    // Close the window after a delay
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(5000);
+                            Platform.runLater(stage::close);
+                        } catch (final InterruptedException e) {
+                            Thread.currentThread().interrupt();
                         }
 
-                    }
-                );
-                final Scene scene = new Scene(webView, 1024, 768);
-                stage.setScene(scene);
-                stage.show();
-            }
-        );
-    }
+                    }).start();
+                } else if (newValue.startsWith("http://localhost/cancel")) {
+                    // Payment was canceled
+                    OrderClientController.LOGGER.info("Payment canceled");
+                    webView.getEngine().loadContent(OrderClientController.CANCEL_URL);
+                    // Close the window after a delay
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(5000);
+                            Platform.runLater(stage::close);
+                        } catch (final InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
 
+                    }).start();
+                }
+
+            });
+            final Scene scene = new Scene(webView, 1024, 768);
+            stage.setScene(scene);
+            stage.show();
+        });
+    }
 
     /**
      * Extracts a query parameter from a URL.
@@ -434,16 +450,16 @@ public class OrderClientController implements Initializable {
         return null;
     }
 
-
     /**
-     * Finalize a PayPal payment and update the associated order's status when the payment is approved.
+     * Finalize a PayPal payment and update the associated order's status when the
+     * payment is approved.
      *
      * @param paymentId the PayPal payment identifier
      * @param payerId   the PayPal payer identifier
      */
     private void completePayment(final String paymentId, final String payerId) {
         final APIContext apiContext = new APIContext(OrderClientController.CLIENT_ID,
-            OrderClientController.CLIENT_SECRET, "sandbox");
+                OrderClientController.CLIENT_SECRET, "sandbox");
         final Payment payment = new Payment();
         payment.setId(paymentId);
         final PaymentExecution paymentExecution = new PaymentExecution();
@@ -464,9 +480,9 @@ public class OrderClientController implements Initializable {
 
     }
 
-
     /**
-     * Opens the CommentaireProduct view in a new window and closes the current window.
+     * Opens the CommentaireProduct view in a new window and closes the current
+     * window.
      *
      * @param event the ActionEvent that triggered the navigation
      */
@@ -475,7 +491,7 @@ public class OrderClientController implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/products/CommentaireProduit.fxml"));
+                    this.getClass().getResource("/ui/products/CommentaireProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -494,18 +510,18 @@ public class OrderClientController implements Initializable {
 
     }
 
-
     /**
      * Open the event client UI in a new window and close the originating window.
      *
-     * @param event the ActionEvent that triggered this navigation; used to obtain and close the current window
+     * @param event the ActionEvent that triggered this navigation; used to obtain
+     *              and close the current window
      */
     @FXML
     void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/products/AfficherProduitClient.fxml"));
+                    this.getClass().getResource("/ui/products/AfficherProduitClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -524,7 +540,6 @@ public class OrderClientController implements Initializable {
 
     }
 
-
     /**
      * Open the product client view in a new window and close the current window.
      *
@@ -535,7 +550,7 @@ public class OrderClientController implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/products/AfficherProduitClient.fxml"));
+                    this.getClass().getResource("/ui/products/AfficherProduitClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -554,16 +569,15 @@ public class OrderClientController implements Initializable {
 
     }
 
-
     /**
-     * Reserved handler for client profile actions; currently no behavior is implemented.
+     * Reserved handler for client profile actions; currently no behavior is
+     * implemented.
      *
      * @param event the action event that triggered this handler
      */
     @FXML
     void profilclient(final ActionEvent event) {
     }
-
 
     /**
      * Opens the cinema view.
@@ -572,22 +586,21 @@ public class OrderClientController implements Initializable {
     void showcinema(final ActionEvent event) {
     }
 
-
     /**
-     * No-op placeholder reserved for future implementation of the event-view navigation.
+     * No-op placeholder reserved for future implementation of the event-view
+     * navigation.
      */
     @FXML
     void showevenement(final ActionEvent event) {
     }
 
-
     /**
-     * Placeholder method intended to show the product view; currently has no implementation.
+     * Placeholder method intended to show the product view; currently has no
+     * implementation.
      */
     @FXML
     void showproduit(final ActionEvent event) {
     }
-
 
     /**
      * Open the movie client UI in a new window and close the current window.
@@ -617,11 +630,13 @@ public class OrderClientController implements Initializable {
 
     }
 
-
     /**
      * Opens the Series client view in a new window and closes the current window.
      *
-     * <p>Loads /ui/ui/Series-view.fxml, creates and shows a new stage containing that scene, then closes the originating stage.</p>
+     * <p>
+     * Loads /ui/ui/Series-view.fxml, creates and shows a new stage containing that
+     * scene, then closes the originating stage.
+     * </p>
      */
     @FXML
     void SerieClient(final ActionEvent event) {

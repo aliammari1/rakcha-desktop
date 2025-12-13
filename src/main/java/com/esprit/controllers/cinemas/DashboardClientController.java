@@ -11,6 +11,7 @@ import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.common.ReviewService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.PageRequest;
+import com.esprit.utils.SessionManager;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
@@ -340,8 +341,8 @@ public class DashboardClientController {
         rating.setLayoutX(100);
         rating.setLayoutY(100);
         rating.setMax(5);
-        // Obtenez le taux spécifique pour ce client et ce cinéma
-        final double specificRating = ratingService.getAverageRating(2L);
+        // Obtenez le taux spécifique pour ce cinéma
+        final double specificRating = ratingService.getAverageRating(cinema.getId());
         // Si le taux spécifique est disponible, définissez le taux affiché
         if (0 <= specificRating) {
             rating.setRating(specificRating);
@@ -682,10 +683,8 @@ public class DashboardClientController {
                 Client client = (Client) cardContainer.getScene().getWindow().getUserData();
                 // If client is null (e.g. testing), we might need a fallback or check
                 if (client == null) {
-                    // Fallback for testing or if not set
-                    // You might want to handle this better in a real app
-                    com.esprit.services.users.UserService us = new com.esprit.services.users.UserService();
-                    client = (Client) us.getUserById(2L); // Temporary fallback as seen in other methods
+                    // Fallback using SessionManager
+                    client = (Client) SessionManager.getCurrentUser();
                 }
 
                 controller.initialize(moviesession, client);
@@ -1022,8 +1021,8 @@ public class DashboardClientController {
             DashboardClientController.LOGGER
                     .info(this.cinemaId + " " + new CinemaService().getCinemaById(this.cinemaId));
             final Review commentaire = new Review(new CinemaService().getCinemaById(this.cinemaId),
-                    (Client) new UserService().getUserById(2L), message, sentimentResult);
-            DashboardClientController.LOGGER.info(commentaire + " " + new UserService().getUserById(2L));
+                    (Client) SessionManager.getCurrentUser(), message, sentimentResult);
+            DashboardClientController.LOGGER.info(commentaire + " " + SessionManager.getCurrentUser());
             final ReviewService cinemaCommentService = new ReviewService();
             cinemaCommentService.create(commentaire);
             this.txtAreaComments.clear();

@@ -8,6 +8,7 @@ import com.esprit.services.products.ProductService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.Chat;
 import com.esprit.utils.PageRequest;
+import com.esprit.utils.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,8 +66,11 @@ public class CommentProductController implements Initializable {
     /**
      * Handle submission of a new product comment from the UI.
      *
-     * <p>Validates the entered text for prohibited words; if valid, creates and persists a Comment,
-     * otherwise shows a warning alert to the user.</p>
+     * <p>
+     * Validates the entered text for prohibited words; if valid, creates and
+     * persists a Comment,
+     * otherwise shows a warning alert to the user.
+     * </p>
      *
      * @param actionEvent the ActionEvent that triggered the submission
      */
@@ -94,8 +98,8 @@ public class CommentProductController implements Initializable {
                 alert.showAndWait();
             } else {
                 // Créez un objet Comment
-                final Review comment = new Review((Client) new UserService().getUserById(4L), userMessage,
-                    produitService.getProductById(produit.getId()));
+                final Review comment = new Review((Client) SessionManager.getCurrentUser(), userMessage,
+                        produitService.getProductById(produit.getId()));
                 final ReviewService commentService = new ReviewService();
                 // Ajoutez le comment à la base de données
                 commentService.create(comment);
@@ -110,11 +114,12 @@ public class CommentProductController implements Initializable {
 
     }
 
-
     /**
-     * Populate the CommentFlowPane with accepted product comments when the controller is initialized.
+     * Populate the CommentFlowPane with accepted product comments when the
+     * controller is initialized.
      *
-     * @param location  the location used to resolve relative paths for the root object, may be null
+     * @param location  the location used to resolve relative paths for the root
+     *                  object, may be null
      * @param resources the resources used to localize the root object, may be null
      */
     @Override
@@ -126,11 +131,11 @@ public class CommentProductController implements Initializable {
         this.loadAcceptedComment();
     }
 
-
     /**
      * Load and display accepted comments in the CommentFlowPane.
      * <p>
-     * Retrieves comments from CommentService, creates a UI card for each comment via
+     * Retrieves comments from CommentService, creates a UI card for each comment
+     * via
      * createcommentcard(Comment), and adds those cards to the CommentFlowPane.
      */
     private void loadAcceptedComment() {
@@ -145,12 +150,13 @@ public class CommentProductController implements Initializable {
 
     }
 
-
     /**
      * Create an HBox card that displays a comment's author and text.
      *
-     * @param comm the Comment to render; the client's first and last name and the comment text are used
-     * @return an HBox whose children form a styled card showing the comment author's name and the comment text
+     * @param comm the Comment to render; the client's first and last name and the
+     *             comment text are used
+     * @return an HBox whose children form a styled card showing the comment
+     *         author's name and the comment text
      */
     public HBox createcommentcard(final Review comm) {
         // Créer une VBox pour chaque comment
@@ -185,7 +191,6 @@ public class CommentProductController implements Initializable {
         return commentVBox;
     }
 
-
     /**
      * Open the cinema client view in a new window and close the current window.
      *
@@ -215,7 +220,6 @@ public class CommentProductController implements Initializable {
 
     }
 
-
     /**
      * Navigate to the event client interface.
      *
@@ -226,7 +230,7 @@ public class CommentProductController implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/AffichageEvenementClient.fxml"));
+                    this.getClass().getResource("/ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -246,7 +250,6 @@ public class CommentProductController implements Initializable {
 
     }
 
-
     /**
      * Opens the product client view in a new window and closes the current window.
      *
@@ -257,7 +260,7 @@ public class CommentProductController implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/produits/AfficherProductClient.fxml"));
+                    this.getClass().getResource("/ui/produits/AfficherProductClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -277,7 +280,6 @@ public class CommentProductController implements Initializable {
 
     }
 
-
     /**
      * No-op handler for client profile action.
      * <p>
@@ -286,7 +288,6 @@ public class CommentProductController implements Initializable {
     @FXML
     void profilclient(final ActionEvent event) {
     }
-
 
     /**
      * Open the movie client view in a new window and close the current window.
@@ -316,7 +317,6 @@ public class CommentProductController implements Initializable {
         }
 
     }
-
 
     /**
      * Open the series client view and replace the current window with it.
