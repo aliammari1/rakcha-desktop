@@ -53,6 +53,7 @@
 
           <ComboBox fx:id="cinemaFilter" styleClass="glass-combo" promptText="All Cinemas" prefWidth="150"/>
           <ComboBox fx:id="genreFilter" styleClass="glass-combo" promptText="All Genres" prefWidth="130"/>
+          <ComboBox fx:id="formatFilter" styleClass="glass-combo" promptText="All Formats" prefWidth="130"/>
 
           <Button fx:id="refreshBtn" onAction="#refreshSessions" styleClass="glass-btn">
             <graphic>

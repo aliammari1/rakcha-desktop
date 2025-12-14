@@ -48,6 +48,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -258,18 +260,48 @@ public class DashboardClientController {
      */
     private HBox createCinemaCard(final Cinema cinema) {
         final HBox cardContainer = new HBox();
-        cardContainer.setStyle("-fx-padding: 25px 0 0 8px ;");
+        cardContainer.setStyle("-fx-padding: 15px;");
+
         final AnchorPane card = new AnchorPane();
         card.setStyle(
-                "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;  ");
-        card.setPrefWidth(450);
-        card.setPrefHeight(150);
+                "-fx-background-color: linear-gradient(to bottom, rgba(30, 15, 18, 0.95), rgba(20, 10, 12, 0.98));" +
+                        "-fx-background-radius: 20px;" +
+                        "-fx-border-color: rgba(139, 0, 0, 0.4);" +
+                        "-fx-border-radius: 20px;" +
+                        "-fx-border-width: 2px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 15, 0, 0, 5);" +
+                        "-fx-cursor: hand;");
+        card.setPrefWidth(480);
+        card.setPrefHeight(180);
+
+        // Hover effect
+        card.setOnMouseEntered(e -> card.setStyle(
+                "-fx-background-color: linear-gradient(to bottom, rgba(45, 22, 28, 0.98), rgba(30, 15, 18, 0.98));" +
+                        "-fx-background-radius: 20px;" +
+                        "-fx-border-color: #ff4444;" +
+                        "-fx-border-radius: 20px;" +
+                        "-fx-border-width: 2px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.6), 25, 0, 0, 8);" +
+                        "-fx-cursor: hand;" +
+                        "-fx-scale-x: 1.02;" +
+                        "-fx-scale-y: 1.02;"));
+        card.setOnMouseExited(e -> card.setStyle(
+                "-fx-background-color: linear-gradient(to bottom, rgba(30, 15, 18, 0.95), rgba(20, 10, 12, 0.98));" +
+                        "-fx-background-radius: 20px;" +
+                        "-fx-border-color: rgba(139, 0, 0, 0.4);" +
+                        "-fx-border-radius: 20px;" +
+                        "-fx-border-width: 2px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 15, 0, 0, 5);" +
+                        "-fx-cursor: hand;"));
+
+        // Logo ImageView with enhanced styling
         final ImageView logoImageView = new ImageView();
         logoImageView.setFitWidth(140);
-        logoImageView.setFitHeight(100);
-        logoImageView.setLayoutX(15);
-        logoImageView.setLayoutY(15);
-        logoImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
+        logoImageView.setFitHeight(120);
+        logoImageView.setLayoutX(20);
+        logoImageView.setLayoutY(30);
+        logoImageView.setStyle(
+                "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.5), 10, 0, 0, 3);");
         try {
             final String logoString = cinema.getLogoUrl();
             if (logoString != null && !logoString.isEmpty()) {
@@ -279,54 +311,132 @@ public class DashboardClientController {
         } catch (final Exception e) {
             DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
         card.getChildren().add(logoImageView);
-        final Label NomLabel = new Label("Name: ");
-        NomLabel.setLayoutX(155);
-        NomLabel.setLayoutY(45);
-        NomLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
-        card.getChildren().add(NomLabel);
+
+        // Name Label with premium styling
         final Label nameLabel = new Label(cinema.getName() != null ? cinema.getName() : "Unknown");
-        nameLabel.setLayoutX(210);
-        nameLabel.setLayoutY(45);
-        nameLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
+        nameLabel.setLayoutX(180);
+        nameLabel.setLayoutY(30);
+        nameLabel.setStyle(
+                "-fx-text-fill: #ffffff;" +
+                        "-fx-font-family: 'Arial Black';" +
+                        "-fx-font-size: 18px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.5), 5, 0, 1, 1);");
         card.getChildren().add(nameLabel);
-        final Label AdrsLabel = new Label("Adresse: ");
-        AdrsLabel.setLayoutX(155);
-        AdrsLabel.setLayoutY(85);
-        AdrsLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
-        card.getChildren().add(AdrsLabel);
+
+        // Address Label
         final Label adresseLabel = new Label(cinema.getAddress() != null ? cinema.getAddress() : "Unknown");
-        adresseLabel.setLayoutX(220);
-        adresseLabel.setLayoutY(85);
-        adresseLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        adresseLabel.setLayoutX(180);
+        adresseLabel.setLayoutY(58);
+        adresseLabel.setStyle(
+                "-fx-text-fill: #aaaaaa;" +
+                        "-fx-font-size: 12px;");
+        adresseLabel.setMaxWidth(280);
         card.getChildren().add(adresseLabel);
-        final Line verticalLine = new Line();
-        verticalLine.setStartX(290);
-        verticalLine.setStartY(10);
-        verticalLine.setEndX(290);
-        verticalLine.setEndY(140);
-        verticalLine.setStroke(Color.BLACK);
-        verticalLine.setStrokeWidth(3);
-        card.getChildren().add(verticalLine);
-        final Button moviesButton = new Button("Show Movies");
-        moviesButton.setLayoutX(310);
-        moviesButton.setLayoutY(35);
-        moviesButton.getStyleClass().add("instert-btn");
-        card.getChildren().add(moviesButton);
-        final Button planningButton = new Button("Show Planning");
-        planningButton.setLayoutX(302);
-        planningButton.setLayoutY(77);
-        planningButton.getStyleClass().add("instert-btn");
+
+        // Action Buttons Container
+        final HBox buttonContainer = new HBox(12);
+        buttonContainer.setLayoutX(180);
+        buttonContainer.setLayoutY(90);
+
+        // Show Planning Button
+        final Button planningButton = new Button("Schedule");
+        planningButton.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, #8b0000, #550000);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 11px;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #ff4444;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.5), 8, 0, 0, 2);" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 8 16;");
         planningButton.setUserData(cinema);
         planningButton.setOnAction(event -> this.showPlanning(cinema));
-        card.getChildren().add(planningButton);
-        logoImageView.setOnMouseClicked(event -> this.geocodeAddress(cinema.getAddress()));
-        final FontIcon CommentIcon = new FontIcon("mdi2c-comment");
-        CommentIcon.setIconSize(40);
-        CommentIcon.setLayoutX(250);
-        CommentIcon.setLayoutY(35);
-        CommentIcon.setFill(Color.BLACK);
+        planningButton.setOnMouseEntered(e -> planningButton.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, #aa0000, #660000);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 11px;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #ff6666;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.7), 12, 0, 0, 3);" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 8 16;"));
+        planningButton.setOnMouseExited(e -> planningButton.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, #8b0000, #550000);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 11px;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #ff4444;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.5), 8, 0, 0, 2);" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 8 16;"));
+        buttonContainer.getChildren().add(planningButton);
+
+        // Map Button - Improved with text label and better styling
+        final Button mapButton = new Button("Map");
+        final FontIcon mapIcon = new FontIcon("mdi2m-map-marker");
+        mapIcon.setIconSize(14);
+        mapIcon.setIconColor(javafx.scene.paint.Color.web("#ffffff"));
+        mapButton.setGraphic(mapIcon);
+        mapButton.setTooltip(new javafx.scene.control.Tooltip("View location on map"));
+        mapButton.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, #2a6496, #1a4f7a);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 11px;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #4a9fd4;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(42, 100, 150, 0.5), 8, 0, 0, 2);" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 8 14;");
+        mapButton.setOnAction(event -> this.geocodeAddress(cinema.getAddress()));
+        mapButton.setOnMouseEntered(e -> mapButton.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, #3a7db6, #2a6496);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 11px;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #6abfe8;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(74, 159, 212, 0.7), 12, 0, 0, 3);" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 8 14;"));
+        mapButton.setOnMouseExited(e -> mapButton.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, #2a6496, #1a4f7a);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 11px;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #4a9fd4;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(42, 100, 150, 0.5), 8, 0, 0, 2);" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 8 14;"));
+        buttonContainer.getChildren().add(mapButton);
+
+        card.getChildren().add(buttonContainer);
+
+        // Comment Icon with new styling
+        final FontIcon CommentIcon = new FontIcon("mdi2c-comment-text-outline");
+        CommentIcon.setIconSize(28);
+        CommentIcon.setLayoutX(430);
+        CommentIcon.setLayoutY(45);
+        CommentIcon.setIconColor(javafx.scene.paint.Color.web("#ff6666"));
+        CommentIcon.setStyle("-fx-cursor: hand;");
         card.getChildren().add(CommentIcon);
         CommentIcon.setOnMouseClicked(mouseEvent -> {
             this.cinemaId = cinema.getId();
@@ -335,27 +445,36 @@ public class DashboardClientController {
             this.displayAllComments(this.cinemaId);
             DashboardClientController.LOGGER.info(String.valueOf(this.cinemaId));
         });
-        // Ajout du composant de notation (Rating)
+
+        // Rating widget with styling
         final ReviewService ratingService = new ReviewService();
         final Rating rating = new Rating();
-        rating.setLayoutX(100);
-        rating.setLayoutY(100);
+        rating.setLayoutX(180);
+        rating.setLayoutY(130);
         rating.setMax(5);
-        // Obtenez le taux spécifique pour ce cinéma
+
         final double specificRating = ratingService.getAverageRating(cinema.getId());
-        // Si le taux spécifique est disponible, définissez le taux affiché
         if (0 <= specificRating) {
             rating.setRating(specificRating);
         }
 
-        // Ajout d'un écouteur pour la notation
         rating.ratingProperty().addListener((observable, oldValue, newValue) -> {
             final Client client = (Client) SessionManager.getCurrentUser();
-            // Enregistrez le nouveau taux dans la base de données
             final Review ratingCinema = new Review(cinema, client, newValue.intValue());
             ratingService.create(ratingCinema);
         });
         card.getChildren().add(rating);
+
+        // Rating Display Label
+        final Label ratingLabel = new Label(String.format("★ %.1f", specificRating > 0 ? specificRating : 0));
+        ratingLabel.setLayoutX(430);
+        ratingLabel.setLayoutY(130);
+        ratingLabel.setStyle(
+                "-fx-text-fill: #ffc800;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-font-weight: bold;");
+        card.getChildren().add(ratingLabel);
+
         cardContainer.getChildren().add(card);
         return cardContainer;
     }
@@ -372,54 +491,125 @@ public class DashboardClientController {
         final ReviewService ratingCinemaService = new ReviewService();
         // Get actual top rated cinemas from reviews
         final var topRatedReviews = ratingCinemaService.getTopRatedCinemas(3);
-        final double cardHeight = 100; // Hauteur de chaque carte
-        final double cardSpacing = 50; // Espacement entre chaque carte
-        double currentY = 10; // Position Y de la première carte
+        final double cardHeight = 110;
+        final double cardSpacing = 15;
+        double currentY = 10;
+        int rank = 1;
+
         for (final var review : topRatedReviews) {
             final Cinema cinema = review.getCinema();
             if (cinema == null)
                 continue;
-            // Création de la carte pour le cinéma
-            final AnchorPane card = new AnchorPane();
+
+            // Create the card with premium styling
+            final HBox card = new HBox(15);
             card.setStyle(
-                    "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
-            card.setPrefWidth(350);
+                    "-fx-background-color: linear-gradient(to bottom right, rgba(50, 25, 30, 0.9), rgba(35, 18, 22, 0.95));"
+                            +
+                            "-fx-background-radius: 15px;" +
+                            "-fx-border-color: rgba(255, 200, 0, 0.3);" +
+                            "-fx-border-width: 1px;" +
+                            "-fx-border-radius: 15px;" +
+                            "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 10, 0, 0, 3);" +
+                            "-fx-cursor: hand;" +
+                            "-fx-padding: 12px;");
+            card.setPrefWidth(340);
             card.setPrefHeight(cardHeight);
-            // Création et positionnement des éléments de la carte (nom, adresse, logo,
-            // etc.)
+            card.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+            // Hover effects
+            card.setOnMouseEntered(e -> card.setStyle(
+                    "-fx-background-color: linear-gradient(to bottom right, rgba(70, 35, 42, 0.95), rgba(50, 25, 30, 0.98));"
+                            +
+                            "-fx-background-radius: 15px;" +
+                            "-fx-border-color: #ffc800;" +
+                            "-fx-border-width: 1px;" +
+                            "-fx-border-radius: 15px;" +
+                            "-fx-effect: dropshadow(gaussian, rgba(255, 200, 0, 0.4), 15, 0, 0, 5);" +
+                            "-fx-cursor: hand;" +
+                            "-fx-padding: 12px;"));
+            card.setOnMouseExited(e -> card.setStyle(
+                    "-fx-background-color: linear-gradient(to bottom right, rgba(50, 25, 30, 0.9), rgba(35, 18, 22, 0.95));"
+                            +
+                            "-fx-background-radius: 15px;" +
+                            "-fx-border-color: rgba(255, 200, 0, 0.3);" +
+                            "-fx-border-width: 1px;" +
+                            "-fx-border-radius: 15px;" +
+                            "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 10, 0, 0, 3);" +
+                            "-fx-cursor: hand;" +
+                            "-fx-padding: 12px;"));
+
+            // Rank Badge
+            final StackPane rankBadge = new StackPane();
+            final javafx.scene.shape.Circle rankCircle = new javafx.scene.shape.Circle(18);
+            rankCircle.setStyle(
+                    "-fx-fill: linear-gradient(to bottom, #ffc800, #cc9900);" +
+                            "-fx-stroke: #ffdd44;" +
+                            "-fx-stroke-width: 2;");
+            final Label rankLabel = new Label("#" + rank);
+            rankLabel.setStyle(
+                    "-fx-text-fill: #1a0808;" +
+                            "-fx-font-family: 'Arial Black';" +
+                            "-fx-font-size: 14px;" +
+                            "-fx-font-weight: bold;");
+            rankBadge.getChildren().addAll(rankCircle, rankLabel);
+            card.getChildren().add(rankBadge);
+
+            // Logo ImageView
             final ImageView logoImageView = new ImageView();
-            logoImageView.setFitWidth(140);
-            logoImageView.setFitHeight(100);
-            logoImageView.setLayoutX(15);
-            logoImageView.setLayoutY(15);
-            logoImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
+            logoImageView.setFitWidth(70);
+            logoImageView.setFitHeight(70);
+            logoImageView.setStyle(
+                    "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 8, 0, 0, 2);");
             try {
                 final String logoString = cinema.getLogoUrl();
-                final Image logoImage = new Image(logoString);
-                logoImageView.setImage(logoImage);
+                if (logoString != null && !logoString.isEmpty()) {
+                    final Image logoImage = new Image(logoString);
+                    logoImageView.setImage(logoImage);
+                }
             } catch (final Exception e) {
                 DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
-
             card.getChildren().add(logoImageView);
-            final Label nomLabel = new Label("Nom: " + cinema.getName());
-            nomLabel.setLayoutX(200);
-            nomLabel.setLayoutY(10);
-            card.getChildren().add(nomLabel);
-            final Label adresseLabel = new Label("Adresse: " + cinema.getAddress());
-            adresseLabel.setLayoutX(200);
-            adresseLabel.setLayoutY(40);
-            card.getChildren().add(adresseLabel);
-            // Vous pouvez ajouter d'autres éléments comme le logo, le bouton de
-            // réservation, etc.
-            // Positionnement de la carte dans Anchortop3
-            AnchorPane.setTopAnchor(card, currentY);
-            AnchorPane.setLeftAnchor(card, 30.0);
-            Anchortop3.getChildren().add(card);
-            // Mise à jour de la position Y pour la prochaine carte
-            currentY += cardHeight + cardSpacing;
-        }
 
+            // Info Container
+            final VBox infoContainer = new VBox(5);
+            infoContainer.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+            final Label nomLabel = new Label(cinema.getName() != null ? cinema.getName() : "Unknown");
+            nomLabel.setStyle(
+                    "-fx-text-fill: #ffffff;" +
+                            "-fx-font-family: 'Arial Black';" +
+                            "-fx-font-size: 14px;" +
+                            "-fx-font-weight: bold;");
+
+            final Label adresseLabel = new Label(cinema.getAddress() != null ? cinema.getAddress() : "Unknown");
+            adresseLabel.setStyle(
+                    "-fx-text-fill: #aaaaaa;" +
+                            "-fx-font-size: 11px;");
+            adresseLabel.setMaxWidth(150);
+            adresseLabel.setWrapText(true);
+
+            // Rating display
+            double avgRating = ratingCinemaService.getAverageRating(cinema.getId());
+            final Label ratingLabel = new Label("★ " + String.format("%.1f", avgRating > 0 ? avgRating : 0));
+            ratingLabel.setStyle(
+                    "-fx-text-fill: #ffc800;" +
+                            "-fx-font-size: 12px;" +
+                            "-fx-font-weight: bold;");
+
+            infoContainer.getChildren().addAll(nomLabel, adresseLabel, ratingLabel);
+            card.getChildren().add(infoContainer);
+
+            // Position the card
+            AnchorPane.setTopAnchor(card, currentY);
+            AnchorPane.setLeftAnchor(card, 10.0);
+            AnchorPane.setRightAnchor(card, 10.0);
+            Anchortop3.getChildren().add(card);
+
+            currentY += cardHeight + cardSpacing;
+            rank++;
+        }
     }
 
     /**
@@ -511,30 +701,106 @@ public class DashboardClientController {
         this.listCinemaClient.setVisible(false);
         this.PlanningPane.setVisible(true);
         final VBox planningContent = new VBox();
-        planningContent.setSpacing(10);
+        planningContent.setSpacing(15);
+        planningContent.setStyle("-fx-background-color: transparent;");
+
         this.tilePane = new TilePane();
         this.tilePane.setPrefColumns(7);
         this.tilePane.setPrefRows(1);
-        this.tilePane.setHgap(5);
-        this.tilePane.setVgap(5);
+        this.tilePane.setHgap(10);
+        this.tilePane.setVgap(10);
+        this.tilePane.setStyle("-fx-background-color: transparent;");
+
         final LocalDate startDateOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
+        final LocalDate today = LocalDate.now();
+
         for (int i = 0; 7 > i; i++) {
             final LocalDate date = startDateOfWeek.plusDays(i);
-            final Label dayLabel = new Label(date.format(DateTimeFormatter.ofPattern("EEE dd/MM")));
-            dayLabel.setStyle("-fx-background-color: #ae2d3c; -fx-padding: 10px; -fx-text-fill: white;");
+            final Label dayLabel = new Label(date.format(DateTimeFormatter.ofPattern("EEE\ndd/MM")));
+            dayLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+            dayLabel.setAlignment(javafx.geometry.Pos.CENTER);
+            dayLabel.setPrefWidth(85);
+            dayLabel.setPrefHeight(60);
+
+            // Highlight today's date with special styling
+            if (date.equals(today)) {
+                dayLabel.setStyle(
+                        "-fx-background-color: linear-gradient(to bottom, #ffc800, #cc9900);" +
+                                "-fx-background-radius: 12;" +
+                                "-fx-padding: 10;" +
+                                "-fx-text-fill: #1a0808;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-font-size: 12px;" +
+                                "-fx-cursor: hand;" +
+                                "-fx-effect: dropshadow(gaussian, rgba(255, 200, 0, 0.5), 8, 0, 0, 2);");
+            } else {
+                dayLabel.setStyle(
+                        "-fx-background-color: linear-gradient(to bottom, rgba(139, 0, 0, 0.6), rgba(80, 0, 0, 0.5));" +
+                                "-fx-background-radius: 12;" +
+                                "-fx-padding: 10;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-font-size: 12px;" +
+                                "-fx-border-color: rgba(255, 68, 68, 0.4);" +
+                                "-fx-border-width: 1;" +
+                                "-fx-border-radius: 12;" +
+                                "-fx-cursor: hand;");
+            }
+
             dayLabel.setOnMouseClicked(event -> this.displayMovieSessionsForDate(date, cinema));
-            dayLabel.setFont(Font.font("Arial Rounded MT Bold", FontWeight.BOLD, 14));
+
+            // Hover effects
+            final LocalDate labelDate = date;
+            dayLabel.setOnMouseEntered(e -> {
+                if (!labelDate.equals(today)) {
+                    dayLabel.setStyle(
+                            "-fx-background-color: linear-gradient(to bottom, rgba(180, 0, 0, 0.8), rgba(120, 0, 0, 0.7));"
+                                    +
+                                    "-fx-background-radius: 12;" +
+                                    "-fx-padding: 10;" +
+                                    "-fx-text-fill: white;" +
+                                    "-fx-font-weight: bold;" +
+                                    "-fx-font-size: 12px;" +
+                                    "-fx-border-color: #ff4444;" +
+                                    "-fx-border-width: 1;" +
+                                    "-fx-border-radius: 12;" +
+                                    "-fx-cursor: hand;" +
+                                    "-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.5), 10, 0, 0, 3);");
+                }
+            });
+            dayLabel.setOnMouseExited(e -> {
+                if (labelDate.equals(today)) {
+                    dayLabel.setStyle(
+                            "-fx-background-color: linear-gradient(to bottom, #ffc800, #cc9900);" +
+                                    "-fx-background-radius: 12;" +
+                                    "-fx-padding: 10;" +
+                                    "-fx-text-fill: #1a0808;" +
+                                    "-fx-font-weight: bold;" +
+                                    "-fx-font-size: 12px;" +
+                                    "-fx-cursor: hand;" +
+                                    "-fx-effect: dropshadow(gaussian, rgba(255, 200, 0, 0.5), 8, 0, 0, 2);");
+                } else {
+                    dayLabel.setStyle(
+                            "-fx-background-color: linear-gradient(to bottom, rgba(139, 0, 0, 0.6), rgba(80, 0, 0, 0.5));"
+                                    +
+                                    "-fx-background-radius: 12;" +
+                                    "-fx-padding: 10;" +
+                                    "-fx-text-fill: white;" +
+                                    "-fx-font-weight: bold;" +
+                                    "-fx-font-size: 12px;" +
+                                    "-fx-border-color: rgba(255, 68, 68, 0.4);" +
+                                    "-fx-border-width: 1;" +
+                                    "-fx-border-radius: 12;" +
+                                    "-fx-cursor: hand;");
+                }
+            });
+
             this.tilePane.getChildren().add(dayLabel);
         }
 
-        VBox.setMargin(this.tilePane, new Insets(0, 0, 0, 50));
         planningContent.getChildren().add(this.tilePane);
-        final Separator separator = new Separator(Orientation.HORIZONTAL);
-        separator.setPrefWidth(200);
-        planningContent.getChildren().add(separator);
         this.planningFlowPane.getChildren().clear();
         this.planningFlowPane.getChildren().add(planningContent);
-        AnchorPane.setTopAnchor(planningContent, 50.0);
     }
 
     /**
@@ -627,24 +893,70 @@ public class DashboardClientController {
     }
 
     /**
-     * Builds a UI card representing the given movie session.
+     * Builds a UI card representing the given movie session with premium styling.
      *
      * @param moviesession the MovieSession to represent in the card
-     * @return a StackPane containing a right-aligned card that displays the film
+     * @return a StackPane containing a premium styled card that displays the film
      *         name, cinema hall name, screening time, and price
      */
     private StackPane createMovieSessionCard(final MovieSession moviesession) {
         final StackPane cardContainer = new StackPane();
-        cardContainer.setPrefWidth(600);
-        cardContainer.setPrefHeight(100);
-        cardContainer.setStyle("-fx-padding: 10 0 0 150;");
-        final HBox card = new HBox();
+        cardContainer.setPrefWidth(650);
+        cardContainer.setPrefHeight(140);
+        cardContainer.setStyle("-fx-padding: 15;");
+
+        final HBox card = new HBox(15);
         card.setStyle(
-                "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
+                "-fx-background-color: linear-gradient(to right, rgba(30, 15, 18, 0.95), rgba(45, 22, 28, 0.9));" +
+                        "-fx-background-radius: 18;" +
+                        "-fx-border-color: rgba(139, 0, 0, 0.5);" +
+                        "-fx-border-radius: 18;" +
+                        "-fx-border-width: 1.5;" +
+                        "-fx-padding: 12;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 12, 0, 0, 4);" +
+                        "-fx-cursor: hand;");
+
+        // Hover effects
+        card.setOnMouseEntered(e -> card.setStyle(
+                "-fx-background-color: linear-gradient(to right, rgba(50, 25, 30, 0.98), rgba(70, 35, 42, 0.95));" +
+                        "-fx-background-radius: 18;" +
+                        "-fx-border-color: #ff4444;" +
+                        "-fx-border-radius: 18;" +
+                        "-fx-border-width: 2;" +
+                        "-fx-padding: 12;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.5), 20, 0, 0, 5);" +
+                        "-fx-cursor: hand;" +
+                        "-fx-scale-x: 1.02;" +
+                        "-fx-scale-y: 1.02;"));
+        card.setOnMouseExited(e -> card.setStyle(
+                "-fx-background-color: linear-gradient(to right, rgba(30, 15, 18, 0.95), rgba(45, 22, 28, 0.9));" +
+                        "-fx-background-radius: 18;" +
+                        "-fx-border-color: rgba(139, 0, 0, 0.5);" +
+                        "-fx-border-radius: 18;" +
+                        "-fx-border-width: 1.5;" +
+                        "-fx-padding: 12;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 12, 0, 0, 4);" +
+                        "-fx-cursor: hand;"));
+
+        // Film poster with rounded corners
+        final StackPane posterContainer = new StackPane();
+        posterContainer.setStyle(
+                "-fx-background-color: rgba(0, 0, 0, 0.3);" +
+                        "-fx-background-radius: 12;");
+        posterContainer.setPrefWidth(100);
+        posterContainer.setPrefHeight(120);
+
         final ImageView filmImageView = new ImageView();
-        filmImageView.setFitWidth(140);
-        filmImageView.setFitHeight(100);
-        filmImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
+        filmImageView.setFitWidth(100);
+        filmImageView.setFitHeight(120);
+        filmImageView.setPreserveRatio(true);
+        filmImageView.setStyle("-fx-background-radius: 12;");
+
+        Rectangle clip = new Rectangle(100, 120);
+        clip.setArcWidth(24);
+        clip.setArcHeight(24);
+        filmImageView.setClip(clip);
+
         try {
             if (moviesession.getFilm() != null && moviesession.getFilm().getImageUrl() != null
                     && !moviesession.getFilm().getImageUrl().isEmpty()) {
@@ -655,33 +967,91 @@ public class DashboardClientController {
         } catch (final Exception e) {
             DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+        posterContainer.getChildren().add(filmImageView);
 
-        card.getChildren().add(filmImageView);
-        final VBox labelsContainer = new VBox();
-        labelsContainer.setSpacing(5);
-        labelsContainer.setPadding(new Insets(10));
-        final Label filmNameLabel = new Label("Film: " + moviesession.getFilm().getTitle());
-        filmNameLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
-        final Label cinemahallNameLabel = new Label("CinemaHall: " + moviesession.getCinemaHall().getName());
-        cinemahallNameLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
-        final Label timeLabel = new Label("Heure: " + moviesession.getStartTime() + " - " + moviesession.getEndTime());
-        timeLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
-        final Label priceLabel = new Label("Prix: " + moviesession.getPrice());
-        priceLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
-        final Button bookButton = new Button("Reserver");
-        bookButton.getStyleClass().add("instert-btn");
+        // Info container
+        final VBox infoContainer = new VBox(8);
+        infoContainer.setPadding(new Insets(5, 10, 5, 10));
+        HBox.setHgrow(infoContainer, javafx.scene.layout.Priority.ALWAYS);
+
+        // Film title
+        final Label filmNameLabel = new Label(moviesession.getFilm().getTitle());
+        filmNameLabel.setStyle(
+                "-fx-text-fill: white;" +
+                        "-fx-font-size: 18px;" +
+                        "-fx-font-weight: bold;");
+
+        // Cinema hall with icon
+        final HBox hallBox = new HBox(8);
+        hallBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        final FontIcon hallIcon = new FontIcon("mdi2t-theater:14:#ff6666");
+        final Label hallLabel = new Label(moviesession.getCinemaHall().getName());
+        hallLabel.setStyle("-fx-text-fill: #cccccc; -fx-font-size: 13px;");
+        hallBox.getChildren().addAll(hallIcon, hallLabel);
+
+        // Time with icon
+        final HBox timeBox = new HBox(8);
+        timeBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        final FontIcon timeIcon = new FontIcon("mdi2c-clock-outline:14:#ff6666");
+        final Label timeLabel = new Label(moviesession.getStartTime() + " - " + moviesession.getEndTime());
+        timeLabel.setStyle("-fx-text-fill: #aaaaaa; -fx-font-size: 12px;");
+        timeBox.getChildren().addAll(timeIcon, timeLabel);
+
+        infoContainer.getChildren().addAll(filmNameLabel, hallBox, timeBox);
+
+        // Right side with price and book button
+        final VBox actionContainer = new VBox(10);
+        actionContainer.setAlignment(javafx.geometry.Pos.CENTER);
+        actionContainer.setPadding(new Insets(5));
+
+        // Price badge
+        final Label priceLabel = new Label(String.format("%.2f DT", moviesession.getPrice()));
+        priceLabel.setStyle(
+                "-fx-background-color: linear-gradient(to right, #ffc800, #cc9900);" +
+                        "-fx-background-radius: 12;" +
+                        "-fx-padding: 6 14;" +
+                        "-fx-text-fill: #1a0808;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;");
+
+        // Book button
+        final Button bookButton = new Button("Book Now");
+        bookButton.setStyle(
+                "-fx-background-color: linear-gradient(to bottom, #dc143c, #8b0000);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 12px;" +
+                        "-fx-background-radius: 15;" +
+                        "-fx-padding: 8 18;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(220, 20, 60, 0.4), 6, 0, 0, 2);");
+
+        bookButton.setOnMouseEntered(e -> bookButton.setStyle(
+                "-fx-background-color: linear-gradient(to bottom, #ff1a4f, #a00000);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 12px;" +
+                        "-fx-background-radius: 15;" +
+                        "-fx-padding: 8 18;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.6), 10, 0, 0, 3);"));
+        bookButton.setOnMouseExited(e -> bookButton.setStyle(
+                "-fx-background-color: linear-gradient(to bottom, #dc143c, #8b0000);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 12px;" +
+                        "-fx-background-radius: 15;" +
+                        "-fx-padding: 8 18;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(220, 20, 60, 0.4), 6, 0, 0, 2);"));
+
         bookButton.setOnAction(event -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/films/SeatSelection.fxml"));
                 Parent root = loader.load();
 
                 SeatSelectionController controller = loader.getController();
-                // Assuming we can get the current client from the scene's user data or a global
-                // context
-                // For now, using the same method as used elsewhere in this controller (e.g.
-                // rating)
                 Client client = (Client) SessionManager.getCurrentUser();
-
                 controller.initializeWithData(moviesession, client);
 
                 Stage stage = (Stage) cardContainer.getScene().getWindow();
@@ -690,10 +1060,11 @@ public class DashboardClientController {
                 DashboardClientController.LOGGER.log(Level.SEVERE, "Error loading seat selection", e);
             }
         });
-        labelsContainer.getChildren().addAll(filmNameLabel, cinemahallNameLabel, timeLabel, priceLabel, bookButton);
-        card.getChildren().add(labelsContainer);
+
+        actionContainer.getChildren().addAll(priceLabel, bookButton);
+
+        card.getChildren().addAll(posterContainer, infoContainer, actionContainer);
         cardContainer.getChildren().add(card);
-        StackPane.setAlignment(card, Pos.CENTER_RIGHT); // Positionne la carte à droite dans le conteneur StackPane
         return cardContainer;
     }
 
@@ -711,8 +1082,7 @@ public class DashboardClientController {
     public void initialize() {
         if (cinemaFlowPane != null) {
             cinemaFlowPane.getChildren().clear();
-            HashSet<Cinema> acceptedCinemas = loadAcceptedCinemas();
-            createCinemaCards(new ArrayList<>(acceptedCinemas));
+            loadAcceptedCinemas(); // This already creates the cinema cards
         }
 
         if (tricomboBox != null) {

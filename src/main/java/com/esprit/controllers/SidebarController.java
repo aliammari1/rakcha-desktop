@@ -48,6 +48,7 @@ public class SidebarController implements Initializable {
     private Button serieButton;
     private Button productButton;
     private Button cinemaButton;
+    private Button showtimesButton;
     private Button profileButton;
     private Button logoutButton;
 
@@ -212,6 +213,11 @@ public class SidebarController implements Initializable {
         cinemaButton = createNavButton("Cinema", "mdi2t-theater:24:#ff4444", NAV_BUTTON_STYLE);
         cinemaButton.setOnAction(e -> switchToCinema());
         navigationContainer.getChildren().add(cinemaButton);
+
+        // Showtimes button - for browsing movie sessions
+        showtimesButton = createNavButton("Showtimes", "mdi2c-clock-outline:24:#ff4444", NAV_BUTTON_STYLE);
+        showtimesButton.setOnAction(e -> switchToShowtimes());
+        navigationContainer.getChildren().add(showtimesButton);
     }
 
     /**
@@ -421,6 +427,11 @@ public class SidebarController implements Initializable {
         }
         Stage stage = (Stage) cinemaButton.getScene().getWindow();
         NavigationManager.navigateToCinema(stage, currentUser);
+    }
+
+    private void switchToShowtimes() {
+        Stage stage = (Stage) showtimesButton.getScene().getWindow();
+        NavigationManager.navigateToMovieSessionBrowser(stage);
     }
 
     private void switchToProfile() {

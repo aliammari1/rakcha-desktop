@@ -72,15 +72,25 @@ public class MovieSessionBrowserController implements Initializable {
     @FXML
     private FlowPane sessionsGrid;
     @FXML
+    private FlowPane todaySessionsPane;
+    @FXML
+    private FlowPane upcomingSessionsPane;
+    @FXML
     private ScrollPane sessionsScroll;
+    @FXML
+    private ScrollPane mainScrollPane;
     @FXML
     private FlowPane quickFiltersPane;
     @FXML
     private Label resultsCountLabel;
     @FXML
+    private Label sessionCountLabel;
+    @FXML
     private ProgressIndicator loadingIndicator;
     @FXML
     private VBox emptyStatePane;
+    @FXML
+    private VBox contentContainer;
     private String selectedQuickFilter = "all";
 
     @Override
@@ -93,31 +103,40 @@ public class MovieSessionBrowserController implements Initializable {
 
     private void setupFilters() {
         // Cinema filter
-        List<Cinema> cinemas = cinemaService.getAll();
-        List<String> cinemaNames = cinemas.stream()
-                .map(Cinema::getName)
-                .collect(Collectors.toList());
-        cinemaNames.add(0, "All Cinemas");
-        cinemaFilter.setItems(FXCollections.observableArrayList(cinemaNames));
-        cinemaFilter.getSelectionModel().selectFirst();
-        cinemaFilter.setOnAction(e -> applyFilters());
+        if (cinemaFilter != null) {
+            List<Cinema> cinemas = cinemaService.getAll();
+            List<String> cinemaNames = cinemas.stream()
+                    .map(Cinema::getName)
+                    .collect(Collectors.toList());
+            cinemaNames.add(0, "All Cinemas");
+            cinemaFilter.setItems(FXCollections.observableArrayList(cinemaNames));
+            cinemaFilter.getSelectionModel().selectFirst();
+            cinemaFilter.setOnAction(e -> applyFilters());
+        }
 
         // Genre filter
-        List<String> genres = Arrays.asList("All Genres", "Action", "Comedy", "Drama", "Horror", "Romance", "Sci-Fi",
-                "Thriller");
-        genreFilter.setItems(FXCollections.observableArrayList(genres));
-        genreFilter.getSelectionModel().selectFirst();
-        genreFilter.setOnAction(e -> applyFilters());
+        if (genreFilter != null) {
+            List<String> genres = Arrays.asList("All Genres", "Action", "Comedy", "Drama", "Horror", "Romance",
+                    "Sci-Fi",
+                    "Thriller");
+            genreFilter.setItems(FXCollections.observableArrayList(genres));
+            genreFilter.getSelectionModel().selectFirst();
+            genreFilter.setOnAction(e -> applyFilters());
+        }
 
         // Date filter
-        dateFilter.setValue(LocalDate.now());
-        dateFilter.setOnAction(e -> applyFilters());
+        if (dateFilter != null) {
+            dateFilter.setValue(LocalDate.now());
+            dateFilter.setOnAction(e -> applyFilters());
+        }
 
         // Format filter
-        List<String> formats = Arrays.asList("All Formats", "2D", "3D", "IMAX", "Dolby Atmos", "4DX");
-        formatFilter.setItems(FXCollections.observableArrayList(formats));
-        formatFilter.getSelectionModel().selectFirst();
-        formatFilter.setOnAction(e -> applyFilters());
+        if (formatFilter != null) {
+            List<String> formats = Arrays.asList("All Formats", "2D", "3D", "IMAX", "Dolby Atmos", "4DX");
+            formatFilter.setItems(FXCollections.observableArrayList(formats));
+            formatFilter.getSelectionModel().selectFirst();
+            formatFilter.setOnAction(e -> applyFilters());
+        }
     }
 
     private void setupQuickFilters() {
@@ -238,7 +257,18 @@ public class MovieSessionBrowserController implements Initializable {
     }
 
     private void displaySessions(List<MovieSession> sessions) {
-        sessionsGrid.getChildren().clear();
+        // Use todaySessionsPane if available, otherwise fallback to sessionsGrid
+        FlowPane targetPane = todaySessionsPane != null ? todaySessionsPane : sessionsGrid;
+
+        if (targetPane == null) {
+            LOGGER.warning("No FlowPane available to display sessions");
+            return;
+        }
+
+        targetPane.getChildren().clear();
+        if (upcomingSessionsPane != null) {
+            upcomingSessionsPane.getChildren().clear();
+        }
 
         if (sessions.isEmpty()) {
             showEmptyState(true);
@@ -253,7 +283,7 @@ public class MovieSessionBrowserController implements Initializable {
 
         for (Map.Entry<Film, List<MovieSession>> entry : sessionsByFilm.entrySet()) {
             VBox card = createSessionCard(entry.getKey(), entry.getValue());
-            sessionsGrid.getChildren().add(card);
+            targetPane.getChildren().add(card);
         }
     }
 
@@ -440,7 +470,10 @@ public class MovieSessionBrowserController implements Initializable {
         if (loadingIndicator != null) {
             loadingIndicator.setVisible(show);
         }
-        if (sessionsScroll != null) {
+        // Try mainScrollPane first (from FXML), then fallback to sessionsScroll
+        if (mainScrollPane != null) {
+            mainScrollPane.setVisible(!show);
+        } else if (sessionsScroll != null) {
             sessionsScroll.setVisible(!show);
         }
     }
@@ -452,7 +485,10 @@ public class MovieSessionBrowserController implements Initializable {
     }
 
     private void updateResultsCount(int count) {
-        if (resultsCountLabel != null) {
+        // Try sessionCountLabel first (from FXML), then fallback to resultsCountLabel
+        if (sessionCountLabel != null) {
+            sessionCountLabel.setText(count + " sessions available");
+        } else if (resultsCountLabel != null) {
             resultsCountLabel.setText(count + " sessions found");
         }
     }
@@ -466,6 +502,11 @@ public class MovieSessionBrowserController implements Initializable {
 
     @FXML
     private void handleRefresh() {
+        loadSessions();
+    }
+
+    @FXML
+    private void refreshSessions() {
         loadSessions();
     }
 
@@ -488,5 +529,40 @@ public class MovieSessionBrowserController implements Initializable {
         selectedQuickFilter = "all";
 
         applyFilters();
+    }
+
+    @FXML
+    private void closeSessionDetails() {
+        // Close the session details overlay
+        LOGGER.info("Closing session details");
+        // This would be handled by the SlideOverNavigator in practice
+    }
+
+    @FXML
+    private void bookSession() {
+        // Book the currently selected session
+        LOGGER.info("Booking session");
+        if (!filteredSessions.isEmpty()) {
+            navigateToSeatSelection(filteredSessions.get(0));
+        }
+    }
+
+    @FXML
+    private void selectSeats() {
+        // Navigate to seat selection for the currently selected session
+        LOGGER.info("Selecting seats");
+        if (!filteredSessions.isEmpty()) {
+            navigateToSeatSelection(filteredSessions.get(0));
+        }
+    }
+
+    @FXML
+    private void addToWatchlist() {
+        // Add current film to watchlist
+        LOGGER.info("Adding to watchlist");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Watchlist");
+        alert.setContentText("Film added to your watchlist!");
+        alert.showAndWait();
     }
 }

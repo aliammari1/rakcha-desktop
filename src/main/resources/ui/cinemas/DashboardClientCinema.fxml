@@ -5,120 +5,413 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0" prefWidth="1507.0"
-      stylesheets="@../styles/filmStyle.css"
-      xmlns="http://javafx.com/javafx/21"
-      fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
 
-  <HBox VBox.vgrow="ALWAYS">
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="rootContainer"
+           prefHeight="900.0" prefWidth="1500.0"
+           xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.cinemas.DashboardClientController"
+           style="-fx-background-color: linear-gradient(to bottom right, #0a0a0a, #1a0808, #120404, #0a0a0a);"
+           stylesheets="@../styles/cinema-dashboard.css, @../styles/login-animations.css">
+
+  <!-- Animated Background Layer -->
+  <AnchorPane styleClass="cinema-animated-background" mouseTransparent="true">
+
+    <!-- Geometric Shapes - Diamonds -->
+    <Polygon fx:id="shape1" points="120.0,280.0,150.0,250.0,180.0,280.0,150.0,310.0"
+             styleClass="rotating-shape, pulsing-shape"
+             style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.5), rgba(100, 0, 0, 0.3));
+                    -fx-stroke: #8b0000; -fx-stroke-width: 2;
+                    -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.7), 15, 0, 0, 0);"
+             opacity="0.6"/>
+
+    <Polygon fx:id="shape2" points="1200.0,150.0,1230.0,120.0,1270.0,145.0,1250.0,180.0,1210.0,180.0"
+             styleClass="rotating-shape"
+             style="-fx-fill: linear-gradient(to bottom right, rgba(180, 0, 0, 0.6), rgba(90, 0, 0, 0.3));
+                    -fx-stroke: #660000; -fx-stroke-width: 2;
+                    -fx-effect: dropshadow(gaussian, rgba(180, 0, 0, 0.6), 12, 0, 0, 0);"
+             opacity="0.7"/>
+
+    <Rectangle fx:id="shape3" width="40" height="40" layoutX="700" layoutY="80"
+               styleClass="rotating-shape, pulsing-shape"
+               style="-fx-fill: linear-gradient(to bottom right, rgba(255, 68, 68, 0.6), rgba(139, 0, 0, 0.4));
+                    -fx-stroke: #ff4444; -fx-stroke-width: 2; -fx-rotate: 45;
+                    -fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.7), 12, 0, 0, 0);"
+               opacity="0.7"/>
+
+    <Circle fx:id="shape4" radius="28" layoutX="1350" layoutY="450"
+            styleClass="pulsing-shape, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, rgba(255, 102, 102, 0.6), rgba(139, 0, 0, 0.2));
+                   -fx-stroke: #ff6666; -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, rgba(255, 102, 102, 0.7), 18, 0, 0, 0);"
+            opacity="0.6"/>
+
+    <Polygon fx:id="shape5" points="200.0,650.0,230.0,620.0,260.0,650.0,245.0,680.0,215.0,680.0"
+             styleClass="rotating-shape, pulsing-shape"
+             style="-fx-fill: linear-gradient(to bottom right, rgba(160, 0, 0, 0.4), rgba(80, 0, 0, 0.2));
+                    -fx-stroke: #aa0000; -fx-stroke-width: 2;
+                    -fx-effect: dropshadow(gaussian, rgba(160, 0, 0, 0.6), 10, 0, 0, 0);"
+             opacity="0.5"/>
+
+    <Rectangle fx:id="shape6" width="35" height="12" layoutX="1100" layoutY="700"
+               styleClass="rotating-shape"
+               style="-fx-fill: linear-gradient(to bottom right, rgba(220, 50, 50, 0.5), rgba(120, 0, 0, 0.3));
+                    -fx-stroke: #cc2222; -fx-stroke-width: 1; -fx-rotate: 25;
+                    -fx-effect: dropshadow(gaussian, rgba(220, 50, 50, 0.5), 8, 0, 0, 0);"
+               opacity="0.6"/>
+  </AnchorPane>
+
+  <!-- Main Layout -->
+  <HBox>
     <!-- SideBar -->
     <fx:include source="/ui/sidebar.fxml"/>
 
-    <!-- Main Content -->
-    <VBox spacing="20" HBox.hgrow="ALWAYS">
-      <padding>
-        <Insets top="25" right="25" bottom="25" left="25"/>
-      </padding>
+    <!-- Main Content Area wrapped in AnchorPane for controller compatibility -->
+    <AnchorPane fx:id="listCinemaClient" HBox.hgrow="ALWAYS"
+                style="-fx-background-color: transparent;">
+      <VBox AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+            AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+            style="-fx-background-color: transparent;">
 
-      <!-- Header Section -->
-      <HBox spacing="15" alignment="CENTER_LEFT">
-        <ImageView fitHeight="69.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-          <Image url="@Logo.png"/>
-        </ImageView>
-        <VBox>
-          <Label text="Loujain Hajlaoui"/>
-          <Label text="User"/>
-        </VBox>
+      <!-- Premium Header -->
+      <HBox spacing="20" alignment="CENTER_LEFT" styleClass="cinema-header"
+            style="-fx-background-color: linear-gradient(to right, rgba(20, 8, 10, 0.98), rgba(15, 5, 8, 0.95), rgba(20, 8, 10, 0.98));
+                   -fx-border-color: rgba(139, 0, 0, 0.4); -fx-border-width: 0 0 2 0;
+                   -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.5), 20, 0, 0, 5);
+                   -fx-padding: 20 30;">
+
+        <!-- Brand Section -->
+        <HBox spacing="15" alignment="CENTER_LEFT"
+              style="-fx-background-color: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.25), transparent);
+                     -fx-background-radius: 15; -fx-padding: 12;">
+          <StackPane>
+            <Circle radius="30"
+                    style="-fx-fill: linear-gradient(to bottom, rgba(139, 0, 0, 0.4), rgba(60, 0, 0, 0.3));
+                           -fx-stroke: #ff4444; -fx-stroke-width: 2;
+                           -fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.5), 10, 0, 0, 0);"/>
+            <FontIcon iconLiteral="mdi2m-movie-open:28:#ff4444"/>
+          </StackPane>
+          <VBox spacing="2">
+            <Label text="CINEMA EXPLORER"
+                   style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black';
+                          -fx-font-size: 20px; -fx-font-weight: bold;
+                          -fx-effect: dropshadow(gaussian, #8b0000, 6, 0, 1, 1);"/>
+            <Label text="Discover • Experience • Enjoy"
+                   style="-fx-text-fill: #999999; -fx-font-size: 11px; -fx-font-style: italic;"/>
+          </VBox>
+        </HBox>
+
         <Region HBox.hgrow="ALWAYS"/>
-        <ComboBox fx:id="tricomboBox" prefHeight="40.0" prefWidth="139.0" styleClass="sale"/>
-        <TextField fx:id="searchbar1" prefHeight="42.0" prefWidth="248.0"
-                   promptText="Search here ......................"/>
-        <Button mnemonicParsing="false" onAction="#filtrer" styleClass="sale" text="Filter"/>
-      </HBox>
 
-      <!-- Content Area -->
-      <HBox VBox.vgrow="ALWAYS" spacing="20">
-        <!-- Left Side - Cinema List -->
-        <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
-          <FlowPane fx:id="cinemaFlowPane" styleClass="bg-white" VBox.vgrow="ALWAYS"/>
-        </ScrollPane>
+        <!-- Sort ComboBox -->
+        <HBox spacing="10" alignment="CENTER"
+              style="-fx-background-color: linear-gradient(to bottom, rgba(40, 20, 25, 0.9), rgba(25, 12, 15, 0.95));
+                     -fx-background-radius: 15; -fx-border-color: rgba(139, 0, 0, 0.5);
+                     -fx-border-width: 1; -fx-border-radius: 15; -fx-padding: 8 15;">
+          <FontIcon iconLiteral="mdi2s-sort:18:#ff6666"/>
+          <ComboBox fx:id="tricomboBox" prefWidth="140" promptText="Sort by..."
+                    style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+        </HBox>
 
-        <!-- Right Side - Top 3 -->
-        <VBox spacing="15" styleClass="bg-white" maxWidth="403.0">
-          <Label text="Top 3" styleClass="section-title">
-            <font>
-              <Font name="Arial Rounded MT Bold" size="48.0"/>
-            </font>
-          </Label>
-          <AnchorPane fx:id="Anchortop3" VBox.vgrow="ALWAYS"/>
-        </VBox>
-      </HBox>
-    </VBox>
-  </HBox>
+        <!-- Search Bar -->
+        <HBox spacing="12" alignment="CENTER"
+              style="-fx-background-color: linear-gradient(to bottom, rgba(40, 20, 25, 0.9), rgba(25, 12, 15, 0.95));
+                     -fx-background-radius: 25; -fx-border-color: rgba(139, 0, 0, 0.5);
+                     -fx-border-width: 1.5; -fx-border-radius: 25; -fx-padding: 0 20;">
+          <FontIcon iconLiteral="mdi2m-magnify:20:#ff6666"/>
+          <TextField fx:id="searchbar1" prefHeight="45" prefWidth="280"
+                     promptText="Search cinemas..."
+                     style="-fx-background-color: transparent; -fx-text-fill: white;
+                            -fx-font-size: 14px; -fx-prompt-text-fill: #888888;"/>
+        </HBox>
 
-  <!-- Planning Pane -->
-  <AnchorPane fx:id="PlanningPane" visible="false" styleClass="bg-white">
-    <VBox spacing="15">
-      <HBox alignment="CENTER_RIGHT">
-        <Button fx:id="closeDetailFilm" onAction="#Planninggclose" styleClass="close">
+        <!-- Filter Button -->
+        <Button text="Filter" mnemonicParsing="false" onAction="#filtrer"
+                styleClass="animated-button"
+                style="-fx-background-color: linear-gradient(to bottom right, #8b0000, #550000);
+                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px;
+                       -fx-background-radius: 20; -fx-border-color: #ff4444;
+                       -fx-border-width: 1; -fx-border-radius: 20;
+                       -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 10, 0, 0, 2);
+                       -fx-cursor: hand; -fx-padding: 12 25;">
           <graphic>
-            <FontIcon iconLiteral="mdi2c-close" styleClass="close"/>
+            <FontIcon iconLiteral="mdi2f-filter:16:#ffffff"/>
           </graphic>
         </Button>
       </HBox>
-      <Label text="Planning: " styleClass="section-title">
-        <font>
-          <Font name="Arial Rounded MT Bold" size="48.0"/>
-        </font>
-      </Label>
-      <FlowPane fx:id="planningFlowPane" styleClass="table-view" VBox.vgrow="ALWAYS"/>
-    </VBox>
-  </AnchorPane>
 
-  <!-- Filter Anchor -->
-  <AnchorPane fx:id="filterAnchor" styleClass="bg-white" visible="false">
-    <VBox spacing="10">
-      <Button text="Apply Filter" onAction="#filtrercinema"/>
-    </VBox>
-  </AnchorPane>
+      <!-- Content Area -->
+      <HBox VBox.vgrow="ALWAYS" spacing="25" style="-fx-padding: 25;">
 
-  <!-- Comments Anchor -->
-  <AnchorPane fx:id="AnchorComments" styleClass="top-form" visible="false">
-    <VBox spacing="10">
-      <HBox alignment="CENTER_RIGHT">
-        <FontIcon iconLiteral="mdi2c-close" onMouseClicked="#closeCommets"/>
+        <!-- Cinema List ScrollPane -->
+        <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS"
+                    styleClass="cinema-scroll-pane"
+                    style="-fx-background-color: transparent; -fx-background: transparent;">
+          <FlowPane fx:id="cinemaFlowPane" styleClass="cinema-flow-pane"
+                    hgap="20" vgap="20"
+                    style="-fx-background-color: transparent;"/>
+        </ScrollPane>
+
+        <!-- Top 3 Sidebar -->
+        <VBox spacing="20" prefWidth="380" maxWidth="400"
+              style="-fx-background-color: linear-gradient(to bottom, rgba(25, 12, 15, 0.98), rgba(18, 8, 10, 0.98));
+                     -fx-background-radius: 25; -fx-border-color: rgba(139, 0, 0, 0.5);
+                     -fx-border-width: 2; -fx-border-radius: 25;
+                     -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 20, 0, 0, 8);
+                     -fx-padding: 25;">
+
+          <!-- Top 3 Header -->
+          <HBox spacing="15" alignment="CENTER_LEFT">
+            <StackPane>
+              <Circle radius="25"
+                      style="-fx-fill: linear-gradient(to bottom, rgba(255, 200, 0, 0.3), rgba(200, 150, 0, 0.2));
+                             -fx-stroke: #ffc800; -fx-stroke-width: 2;"/>
+              <FontIcon iconLiteral="mdi2c-crown:24:#ffc800"
+                        style="-fx-effect: dropshadow(gaussian, rgba(255, 200, 0, 0.6), 8, 0, 0, 0);"/>
+            </StackPane>
+            <VBox spacing="2">
+              <Label text="TOP RATED"
+                     style="-fx-text-fill: #ffc800; -fx-font-family: 'Arial Black';
+                            -fx-font-size: 24px; -fx-font-weight: bold;
+                            -fx-effect: dropshadow(gaussian, rgba(255, 200, 0, 0.5), 8, 0, 1, 1);"/>
+              <Label text="Best cinemas this week"
+                     style="-fx-text-fill: #888888; -fx-font-size: 11px; -fx-font-style: italic;"/>
+            </VBox>
+          </HBox>
+
+          <!-- Separator -->
+          <HBox alignment="CENTER" spacing="10">
+            <Rectangle width="50" height="2"
+                       style="-fx-fill: linear-gradient(to right, transparent, #8b0000);"/>
+            <FontIcon iconLiteral="mdi2s-star:16:#ffc800"/>
+            <Rectangle width="50" height="2"
+                       style="-fx-fill: linear-gradient(to left, transparent, #8b0000);"/>
+          </HBox>
+
+          <!-- Top 3 Content -->
+          <AnchorPane fx:id="Anchortop3" VBox.vgrow="ALWAYS"
+                      style="-fx-background-color: transparent;"/>
+
+          <!-- View All Button -->
+          <Button text="View All Cinemas →"
+                  styleClass="animated-button"
+                  style="-fx-background-color: transparent; -fx-text-fill: #ff6666;
+                         -fx-font-size: 12px; -fx-font-weight: bold;
+                         -fx-border-color: rgba(139, 0, 0, 0.4); -fx-border-width: 1;
+                         -fx-border-radius: 15; -fx-background-radius: 15;
+                         -fx-cursor: hand; -fx-padding: 10 20;"/>
+        </VBox>
       </HBox>
-      <ScrollPane fx:id="ScrollPaneComments" VBox.vgrow="ALWAYS">
-        <VBox spacing="5"/>
+    </VBox>
+    </AnchorPane>
+  </HBox>
+
+  <!-- Planning Pane Overlay -->
+  <AnchorPane fx:id="PlanningPane" visible="false"
+              style="-fx-background-color: rgba(5, 2, 3, 0.9);"
+              AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+    <VBox spacing="25" alignment="TOP_CENTER"
+          style="-fx-background-color: linear-gradient(to bottom, rgba(25, 12, 15, 0.98), rgba(15, 8, 10, 0.98));
+                 -fx-background-radius: 30; -fx-border-color: rgba(139, 0, 0, 0.6);
+                 -fx-border-width: 2; -fx-border-radius: 30;
+                 -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 50, 0, 0, 15);
+                 -fx-padding: 35;"
+          AnchorPane.topAnchor="50.0" AnchorPane.bottomAnchor="50.0"
+          AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
+
+      <!-- Planning Header -->
+      <HBox alignment="CENTER" spacing="20">
+        <Region HBox.hgrow="ALWAYS"/>
+        <HBox spacing="15" alignment="CENTER">
+          <FontIcon iconLiteral="mdi2c-calendar-clock:32:#ff4444"
+                    style="-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.6), 10, 0, 0, 0);"/>
+          <Label text="MOVIE SCHEDULE"
+                 style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black';
+                        -fx-font-size: 32px; -fx-font-weight: bold;
+                        -fx-effect: dropshadow(gaussian, #8b0000, 8, 0, 2, 2);"/>
+        </HBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="closeDetailFilm" onAction="#Planninggclose"
+                styleClass="animated-button"
+                style="-fx-background-color: linear-gradient(to bottom, rgba(139, 0, 0, 0.6), rgba(80, 0, 0, 0.5));
+                       -fx-background-radius: 50; -fx-border-color: #ff4444;
+                       -fx-border-width: 1; -fx-border-radius: 50;
+                       -fx-cursor: hand; -fx-padding: 12;">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:24:#ffffff"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <!-- Planning Content -->
+      <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                  styleClass="cinema-scroll-pane"
+                  style="-fx-background-color: transparent; -fx-background: transparent;">
+        <FlowPane fx:id="planningFlowPane" hgap="20" vgap="20"
+                  style="-fx-background-color: transparent; -fx-padding: 20;"/>
       </ScrollPane>
-      <HBox spacing="10" alignment="CENTER">
-        <TextArea fx:id="txtAreaComments" HBox.hgrow="ALWAYS"
-                  promptText="Write your comment..."/>
-        <FontIcon fill="#ab3a3a" iconLiteral="mdi2s-send:30" onMouseClicked="#AddComment"/>
-      </HBox>
     </VBox>
   </AnchorPane>
 
-  <!-- List Cinema Client -->
-  <AnchorPane fx:id="listCinemaClient" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
-              AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
-    <VBox spacing="20">
-      <!-- Header Section -->
+  <!-- Filter Anchor Overlay -->
+  <AnchorPane fx:id="filterAnchor" visible="false"
+              style="-fx-background-color: rgba(5, 2, 3, 0.85);">
+    <VBox spacing="20" alignment="TOP_CENTER"
+          style="-fx-background-color: linear-gradient(to bottom, rgba(25, 12, 15, 0.98), rgba(15, 8, 10, 0.98));
+                 -fx-background-radius: 25; -fx-border-color: rgba(139, 0, 0, 0.5);
+                 -fx-border-width: 2; -fx-border-radius: 25;
+                 -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 30, 0, 0, 8);
+                 -fx-padding: 30;"
+          AnchorPane.topAnchor="150.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="400.0">
+
+      <HBox spacing="15" alignment="CENTER">
+        <FontIcon iconLiteral="mdi2f-filter:24:#ff4444"/>
+        <Label text="FILTER OPTIONS"
+               style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black';
+                      -fx-font-size: 22px; -fx-font-weight: bold;"/>
+      </HBox>
+
+      <Button text="Apply Filter" onAction="#filtrercinema"
+              styleClass="animated-button"
+              style="-fx-background-color: linear-gradient(to bottom right, #8b0000, #550000);
+                     -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;
+                     -fx-background-radius: 20; -fx-border-color: #ff4444;
+                     -fx-border-width: 1; -fx-border-radius: 20;
+                     -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 10, 0, 0, 2);
+                     -fx-cursor: hand; -fx-padding: 15 40;">
+        <graphic>
+          <FontIcon iconLiteral="mdi2c-check:18:#ffffff"/>
+        </graphic>
+      </Button>
+    </VBox>
+  </AnchorPane>
+
+  <!-- Comments Overlay -->
+  <AnchorPane fx:id="AnchorComments" visible="false"
+              style="-fx-background-color: rgba(5, 2, 3, 0.85);">
+    <VBox spacing="20"
+          style="-fx-background-color: linear-gradient(to bottom, rgba(25, 12, 15, 0.98), rgba(15, 8, 10, 0.98));
+                 -fx-background-radius: 25; -fx-border-color: rgba(139, 0, 0, 0.5);
+                 -fx-border-width: 2; -fx-border-radius: 25;
+                 -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 30, 0, 0, 8);
+                 -fx-padding: 25;"
+          AnchorPane.topAnchor="100.0" AnchorPane.bottomAnchor="100.0"
+          AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0">
+
+      <!-- Comments Header -->
       <HBox spacing="15" alignment="CENTER_LEFT">
-        <ComboBox fx:id="tricomboBox" prefHeight="40.0" prefWidth="139.0" styleClass="sale"/>
-        <TextField fx:id="searchbar1" prefHeight="42.0" prefWidth="248.0"
-                   promptText="Search here ...."/>
-        <Button mnemonicParsing="false" onAction="#filtrer" styleClass="sale" text="Filter"/>
+        <FontIcon iconLiteral="mdi2c-comment-text-multiple:28:#ff4444"
+                  style="-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.5), 8, 0, 0, 0);"/>
+        <Label text="COMMENTS"
+               style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black';
+                      -fx-font-size: 24px; -fx-font-weight: bold;
+                      -fx-effect: dropshadow(gaussian, #8b0000, 6, 0, 1, 1);"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeCommets"
+                styleClass="animated-button"
+                style="-fx-background-color: linear-gradient(to bottom, rgba(139, 0, 0, 0.5), rgba(80, 0, 0, 0.4));
+                       -fx-background-radius: 50; -fx-cursor: hand; -fx-padding: 10;">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20:#ffffff"/>
+          </graphic>
+        </Button>
       </HBox>
 
-      <!-- Cinema Flow Pane -->
-      <FlowPane fx:id="cinemaFlowPane" styleClass="bg-white" VBox.vgrow="ALWAYS"/>
+      <!-- Comments List -->
+      <ScrollPane fx:id="ScrollPaneComments" VBox.vgrow="ALWAYS"
+                  styleClass="cinema-scroll-pane"
+                  style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox spacing="12" style="-fx-padding: 10;"/>
+      </ScrollPane>
 
-      <!-- Top 3 Section -->
-      <AnchorPane fx:id="Anchortop3" VBox.vgrow="ALWAYS"/>
+      <!-- Comment Input -->
+      <HBox spacing="15" alignment="CENTER"
+            style="-fx-background-color: rgba(30, 15, 18, 0.6);
+                   -fx-background-radius: 20; -fx-padding: 15;">
+        <TextArea fx:id="txtAreaComments" HBox.hgrow="ALWAYS"
+                  promptText="Write your comment..."
+                  prefRowCount="2"
+                  style="-fx-background-color: linear-gradient(to bottom, rgba(40, 20, 25, 0.9), rgba(25, 12, 15, 0.95));
+                         -fx-background-radius: 15; -fx-text-fill: white;
+                         -fx-prompt-text-fill: #666666; -fx-border-color: rgba(139, 0, 0, 0.4);
+                         -fx-border-width: 1; -fx-border-radius: 15;"/>
+        <Button onAction="#AddComment"
+                styleClass="animated-button"
+                style="-fx-background-color: linear-gradient(to bottom right, #8b0000, #550000);
+                       -fx-background-radius: 50; -fx-cursor: hand; -fx-padding: 15;
+                       -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.5), 8, 0, 0, 2);">
+          <graphic>
+            <FontIcon iconLiteral="mdi2s-send:24:#ffffff"/>
+          </graphic>
+        </Button>
+      </HBox>
     </VBox>
   </AnchorPane>
 
-</VBox>
+  <!-- Floating Particles Layer -->
+  <AnchorPane mouseTransparent="true" style="-fx-background-color: transparent;">
+    <Circle fx:id="particle1" radius="4" layoutX="250" layoutY="180"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #aa0000);
+                   -fx-effect: dropshadow(gaussian, #ff0000, 15, 0, 0, 0);
+                   -fx-opacity: 0.8;"/>
+
+    <Circle fx:id="particle2" radius="5" layoutX="900" layoutY="280"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #880000);
+                   -fx-effect: dropshadow(gaussian, #ff0000, 18, 0, 0, 0);
+                   -fx-opacity: 0.85;"/>
+
+    <Circle fx:id="particle3" radius="6" layoutX="400" layoutY="550"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666, #bb0000);
+                   -fx-effect: dropshadow(gaussian, #ff3333, 20, 0, 0, 0);
+                   -fx-opacity: 0.9;"/>
+
+    <Circle fx:id="particle4" radius="3.5" layoutX="1100" layoutY="380"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #990000);
+                   -fx-effect: dropshadow(gaussian, #ff1111, 15, 0, 0, 0);
+                   -fx-opacity: 0.8;"/>
+
+    <Circle fx:id="particle5" radius="4.5" layoutX="200" layoutY="420"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff2222, #770000);
+                   -fx-effect: dropshadow(gaussian, #ff0000, 16, 0, 0, 0);
+                   -fx-opacity: 0.95;"/>
+
+    <Circle fx:id="particle6" radius="3" layoutX="850" layoutY="520"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff7777, #aa2222);
+                   -fx-effect: dropshadow(gaussian, #ff4444, 12, 0, 0, 0);
+                   -fx-opacity: 0.8;"/>
+
+    <Circle fx:id="particle7" radius="4.5" layoutX="600" layoutY="150"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #aa2222);
+                   -fx-effect: dropshadow(gaussian, #ff2222, 17, 0, 0, 0);
+                   -fx-opacity: 0.85;"/>
+
+    <Circle fx:id="particle8" radius="3" layoutX="750" layoutY="680"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #990000);
+                   -fx-effect: dropshadow(gaussian, #ff0000, 14, 0, 0, 0);
+                   -fx-opacity: 0.8;"/>
+
+    <Circle fx:id="particle9" radius="5" layoutX="1250" layoutY="250"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666, #cc2222);
+                   -fx-effect: dropshadow(gaussian, #ff3333, 18, 0, 0, 0);
+                   -fx-opacity: 0.9;"/>
+
+    <Circle fx:id="particle10" radius="2.5" layoutX="1400" layoutY="600"
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #880000);
+                   -fx-effect: dropshadow(gaussian, #ff1111, 12, 0, 0, 0);
+                   -fx-opacity: 0.75;"/>
+  </AnchorPane>
+
+</StackPane>
