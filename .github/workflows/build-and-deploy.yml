@@ -88,7 +88,7 @@ jobs:
           ls -lh ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-linux-portable.tar.gz
 
       - name: Upload Linux artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux-distributions
           path: |
@@ -178,7 +178,7 @@ jobs:
         shell: powershell
 
       - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows-distributions
           path: |
@@ -256,7 +256,7 @@ jobs:
           ls -lh ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-portable.tar.gz
 
       - name: Upload macOS artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: macos-distributions
           path: |
@@ -286,21 +286,21 @@ jobs:
 
       - name: Download Linux artifacts
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: linux-distributions
           path: artifacts/linux/
 
       - name: Download Windows artifacts
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: windows-distributions
           path: artifacts/windows/
 
       - name: Download macOS artifacts
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: macos-distributions
           path: artifacts/macos/
@@ -368,21 +368,21 @@ jobs:
 
       - name: Download Linux artifacts
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: linux-distributions
           path: artifacts/linux/
 
       - name: Download Windows artifacts
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: windows-distributions
           path: artifacts/windows/
 
       - name: Download macOS artifacts
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: macos-distributions
           path: artifacts/macos/
